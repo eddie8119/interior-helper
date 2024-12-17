@@ -1,28 +1,28 @@
-"use client";
+'use client'
 
-import { useState } from "react";
+import { useState } from 'react'
 
 export function Sidebar() {
-  const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
+  const [isCollapsed, setIsCollapsed] = useState<boolean>(false)
 
   return (
     <aside
-      className={`bg-white border-r transition-all duration-300 ${
-        isCollapsed ? "w-16" : "w-64"
+      className={`border-r bg-white transition-all duration-300 ${
+        isCollapsed ? 'w-16' : 'w-64'
       }`}
     >
-      <div className="p-4 flex items-center">
+      <div className="flex items-center p-4">
         <div
-          className={`flex items-center ${isCollapsed ? "hidden" : "block"}`}
+          className={`flex items-center ${isCollapsed ? 'hidden' : 'block'}`}
         >
-          <div className="w-8 h-8 bg-blue-500 rounded-lg mr-2"></div>
+          <div className="mr-2 h-8 w-8 rounded-lg bg-blue-500"></div>
           <span className="font-semibold">Acme Co.</span>
         </div>
         <button
           onClick={() => setIsCollapsed(!isCollapsed)}
-          className="ml-auto p-2 hover:bg-gray-100 rounded-lg"
+          className="ml-auto rounded-lg p-2 hover:bg-gray-100"
         >
-          {isCollapsed ? "→" : "←"}
+          {isCollapsed ? '→' : '←'}
         </button>
       </div>
 
@@ -31,10 +31,10 @@ export function Sidebar() {
         <nav className="mt-2 space-y-1">
           <a
             href="/dashboard"
-            className="flex items-center px-3 py-2 text-sm rounded-lg bg-blue-50 text-blue-600"
+            className="flex items-center rounded-lg bg-blue-50 px-3 py-2 text-sm text-blue-600"
           >
             <svg
-              className="w-5 h-5 mr-2"
+              className="mr-2 h-5 w-5"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -46,23 +46,23 @@ export function Sidebar() {
                 d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
               />
             </svg>
-            <span className={isCollapsed ? "hidden" : "block"}>Home</span>
+            <span className={isCollapsed ? 'hidden' : 'block'}>Home</span>
           </a>
           {[
-            "Accounts",
-            "Payments",
-            "Balances",
-            "Customers",
-            "Products",
-            "Reports",
+            'Accounts',
+            'Payments',
+            'Balances',
+            'Customers',
+            'Products',
+            'Reports',
           ].map((item) => (
             <a
               key={item}
               href="#"
-              className="flex items-center px-3 py-2 text-sm text-gray-700 rounded-lg hover:bg-gray-100"
+              className="flex items-center rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-100"
             >
               <svg
-                className="w-5 h-5 mr-2"
+                className="mr-2 h-5 w-5"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -74,11 +74,11 @@ export function Sidebar() {
                   d="M4 6h16M4 12h16M4 18h16"
                 />
               </svg>
-              <span className={isCollapsed ? "hidden" : "block"}>{item}</span>
+              <span className={isCollapsed ? 'hidden' : 'block'}>{item}</span>
             </a>
           ))}
         </nav>
       </div>
     </aside>
-  );
+  )
 }
