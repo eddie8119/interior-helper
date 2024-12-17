@@ -11,33 +11,40 @@ type ThemeContextType = {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined)
 
-export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setTheme] = useState<Theme>('light')
-
-  useEffect(() => {
-    // Check localStorage and system preference
+// Function to get initial theme
+const getInitialTheme = (): Theme => {
+  if (typeof window !== 'undefined') {
+    // Only check localStorage
     const savedTheme = localStorage.getItem('theme') as Theme
-    const systemPrefersDark = window.matchMedia(
-      '(prefers-color-scheme: dark)'
-    ).matches
-
     if (savedTheme) {
-      setTheme(savedTheme)
-      document.documentElement.classList.toggle('dark', savedTheme === 'dark')
-    } else if (systemPrefersDark) {
-      setTheme('dark')
-      document.documentElement.classList.add('dark')
+      return savedTheme
     }
+  }
+  // default
+  return 'light'
+}
 
-    // Apply the initial theme
-    document.documentElement.classList.toggle('dark', theme === 'dark')
-  }, [])
+export function ThemeProvider({ children }: { children: React.ReactNode }) {
+  const [theme, setTheme] = useState<Theme>(() => getInitialTheme())
+  const [mounted, setMounted] = useState(false)
+
+  // Handle initial theme setup
+  useEffect(() => {
+    setMounted(true)
+    const root = window.document.documentElement
+    root.classList.remove('light', 'dark')
+    root.classList.add(theme)
+  }, [theme])
 
   const toggleTheme = () => {
     const newTheme = theme === 'light' ? 'dark' : 'light'
     setTheme(newTheme)
-    document.documentElement.classList.toggle('dark')
     localStorage.setItem('theme', newTheme)
+  }
+
+  // Avoid hydration mismatch
+  if (!mounted) {
+    return null
   }
 
   return (
