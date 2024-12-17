@@ -7,7 +7,7 @@ export function Sidebar() {
 
   return (
     <aside
-      className={`border-r bg-white transition-all duration-300 ${
+      className={`border-r border-gray-200 bg-background transition-all duration-300 dark:border-gray-700 ${
         isCollapsed ? 'w-16' : 'w-64'
       }`}
     >
@@ -16,22 +16,22 @@ export function Sidebar() {
           className={`flex items-center ${isCollapsed ? 'hidden' : 'block'}`}
         >
           <div className="mr-2 h-8 w-8 rounded-lg bg-blue-500"></div>
-          <span className="font-semibold">Acme Co.</span>
+          <span className="font-semibold text-foreground">Acme Co.</span>
         </div>
         <button
           onClick={() => setIsCollapsed(!isCollapsed)}
-          className="ml-auto rounded-lg p-2 hover:bg-gray-100"
+          className="ml-auto rounded-lg p-2 text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800"
         >
           {isCollapsed ? '→' : '←'}
         </button>
       </div>
 
-      <div className="px-3 py-2">
-        <span className="text-xs text-gray-500">Main Menu</span>
+      {/* Navigation */}
+      <div className="px-3">
         <nav className="mt-2 space-y-1">
           <a
             href="/dashboard"
-            className="flex items-center rounded-lg bg-blue-50 px-3 py-2 text-sm text-blue-600"
+            className="flex items-center rounded-lg bg-blue-50 px-3 py-2 text-sm text-blue-600 dark:bg-blue-900/50 dark:text-blue-300"
           >
             <svg
               className="mr-2 h-5 w-5"
@@ -59,7 +59,7 @@ export function Sidebar() {
             <a
               key={item}
               href="#"
-              className="flex items-center rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-100"
+              className="flex items-center rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
             >
               <svg
                 className="mr-2 h-5 w-5"
