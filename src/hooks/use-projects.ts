@@ -55,7 +55,9 @@ export function useProjects() {
   }
 
   const deleteProject = (projectId: string) => {
-    const updatedProjects = projects.filter((project) => project.id !== projectId)
+    const updatedProjects = projects.filter(
+      (project) => project.id !== projectId
+    )
     setProjects(updatedProjects)
     localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedProjects))
   }

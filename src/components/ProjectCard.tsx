@@ -1,7 +1,7 @@
 'use client'
 
 import { Project } from '@/types/project'
-import { Card } from '@/components/ui/card'
+import { Card } from '@/components/ui/Card'
 
 interface ProjectCardProps {
   project: Project

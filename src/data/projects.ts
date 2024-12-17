@@ -6,7 +6,7 @@ export const projectLists: Project[] = [
     title: '大興家',
     type: '住宅',
     progress: 60,
-    daysLeft: 2, 
+    daysLeft: 2,
     createdAt: new Date(),
   },
 ]
