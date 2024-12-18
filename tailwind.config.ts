@@ -13,7 +13,7 @@ export default {
         'sidebar-hover': 'rgb(var(--sidebar-hover) / <alpha-value>)',
       },
       colors: {
-        yellow: {          
+        yellow: {
           default: '#FFD700',
           light: '#FFF4B8',
           dark: '#B89B00',

@@ -4,21 +4,21 @@
 
 @layer base {
   :root {
-    --background: #FFFFFF;
-    --foreground: #1A1A1A;
-    --card: #FFFFFF;
-    --card-hover: #F8F8F8;
+    --background: #ffffff;
+    --foreground: #1a1a1a;
+    --card: #ffffff;
+    --card-hover: #f8f8f8;
     --sidebar: #fbfbf9;
-    --sidebar-hover: #F3F4F6;
+    --sidebar-hover: #f3f4f6;
   }
 
   .dark {
-    --background: #1A1A1A;
-    --foreground: #FFFFFF;
-    --card: #2A2A2A;
+    --background: #1a1a1a;
+    --foreground: #ffffff;
+    --card: #2a2a2a;
     --card-hover: #333333;
     --sidebar: #111827;
-    --sidebar-hover: #1F2937;
+    --sidebar-hover: #1f2937;
   }
 }
 
@@ -32,8 +32,8 @@ body {
   .btn-primary {
     /* @apply bg-yellow text-gray-900 px-4 py-2 rounded-lg hover:bg-yellow-dark transition-colors; */
   }
-  
+
   .btn-secondary {
-    @apply bg-gray-100 text-gray-900 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors dark:bg-gray-800 dark:text-gray-100 dark:hover:bg-gray-700;
+    @apply rounded-lg bg-gray-100 px-4 py-2 text-gray-900 transition-colors hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-100 dark:hover:bg-gray-700;
   }
 }
