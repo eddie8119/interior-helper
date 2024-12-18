@@ -1,0 +1,36 @@
+{
+  "layout": {
+    "sidebar": {
+      "title": "Acme Co.",
+      "menu": {
+        "dashboard": "Dashboard",
+        "projects": "Projects",
+        "tasks": "Tasks",
+        "calendar": "Calendar"
+      }
+    },
+    "header": {
+      "search": "Search...",
+      "feedback": "Send feedback",
+      "notifications": "View notifications",
+      "github": "View GitHub repository",
+      "help": "Help"
+    }
+  },
+  "dashboard": {
+    "title": "Project List",
+    "addProject": {
+      "button": "Add Project",
+      "title": "Add New Project",
+      "form": {
+        "name": "Project Name",
+        "type": "Project Type",
+        "submit": "Add Project"
+      }
+    },
+    "projectCard": {
+      "progress": "Progress",
+      "daysLeft": "{count} Days Left"
+    }
+  }
+}

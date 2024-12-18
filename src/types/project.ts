@@ -1,3 +1,8 @@
+export interface Menu {
+  id: string
+  title: string
+  link: string
+}
 export interface Project {
   id: string
   title: string

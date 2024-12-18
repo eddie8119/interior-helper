@@ -1,0 +1,42 @@
+{
+  "layout": {
+    "sidebar": {
+      "title": "儀表板",
+      "menu": {
+        "dashboard": "儀表板",
+        "projects": "專案",
+        "tasks": "任務",
+        "calendar": "行事曆",
+        "accounts": "帳戶",
+        "payments": "付款",
+        "balances": "餘額",
+        "customers": "客戶",
+        "products": "產品",
+        "reports": "報表"
+      }
+    },
+    "header": {
+      "search": "搜尋...",
+      "feedback": "傳送意見回饋",
+      "notifications": "查看通知",
+      "github": "查看 GitHub 儲存庫",
+      "help": "幫助"
+    }
+  },
+  "dashboard": {
+    "title": "工程專案列表",
+    "addProject": {
+      "button": "新增專案",
+      "title": "新增工程專案",
+      "form": {
+        "name": "專案名稱",
+        "type": "專案類型",
+        "submit": "新增專案"
+      }
+    },
+    "projectCard": {
+      "progress": "進度",
+      "daysLeft": "剩餘 {count} 天"
+    }
+  }
+}

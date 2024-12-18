@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { menuLists } from '@/config/menu'
 
 export function Sidebar() {
   const [isCollapsed, setIsCollapsed] = useState<boolean>(false)
@@ -16,7 +17,7 @@ export function Sidebar() {
           className={`flex items-center ${isCollapsed ? 'hidden' : 'block'}`}
         >
           <div className="mr-2 h-8 w-8 rounded-lg bg-blue-500"></div>
-          <span className="font-semibold text-foreground">Acme Co.</span>
+          <span className="font-semibold text-foreground">Interior Helper</span>
         </div>
         <button
           onClick={() => setIsCollapsed(!isCollapsed)}
@@ -48,17 +49,10 @@ export function Sidebar() {
             </svg>
             <span className={isCollapsed ? 'hidden' : 'block'}>Home</span>
           </a>
-          {[
-            'Accounts',
-            'Payments',
-            'Balances',
-            'Customers',
-            'Products',
-            'Reports',
-          ].map((item) => (
+          {menuLists.map((menu) => (
             <a
-              key={item}
-              href="#"
+              key={menu.id}
+              href={`/${menu.link}`}
               className="flex items-center rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
             >
               <svg
@@ -74,7 +68,9 @@ export function Sidebar() {
                   d="M4 6h16M4 12h16M4 18h16"
                 />
               </svg>
-              <span className={isCollapsed ? 'hidden' : 'block'}>{item}</span>
+              <span className={isCollapsed ? 'hidden' : 'block'}>
+                {menu.title}
+              </span>
             </a>
           ))}
         </nav>
