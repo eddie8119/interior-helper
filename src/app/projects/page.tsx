@@ -1,16 +1,17 @@
 'use client'
 
-import { ProjectCard } from '@/components/ProjectCard'
+import { AddProjectDialog } from '@/components/projects/AddProjectDialog'
+import { ProjectCard } from '@/components/projects/ProjectCard'
 import { useProjects } from '@/hooks/use-projects'
 
 export default function DashboardPage() {
-  const { projects } = useProjects()
+  const { projects, addProject } = useProjects()
 
   return (
     <div>
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-semibold">Available Balance</h1>
-        <div className="text-sm">Section</div>
+        <h1 className="text-2xl font-semibold">工程專案列表</h1>
+        <AddProjectDialog onAddProject={addProject} />
       </div>
 
       <div className="mb-8 grid grid-cols-1 gap-6 md:grid-cols-3">

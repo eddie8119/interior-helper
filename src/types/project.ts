@@ -3,7 +3,7 @@ export interface Project {
   title: string
   type: string
   progress: number
-  daysLeft: number
+  daysLeft?: number
   createdAt: Date
 }
 

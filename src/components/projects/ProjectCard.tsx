@@ -36,7 +36,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
           </div>
           <div className="mt-2 flex justify-between text-sm dark:text-gray-400">
             <span>{project.progress}%</span>
-            <span>{project.daysLeft} Days Left</span>
+            {project.daysLeft ? <span>{project.daysLeft} Days Left</span> : ''}
           </div>
         </div>
       </div>
