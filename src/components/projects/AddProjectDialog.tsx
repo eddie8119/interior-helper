@@ -37,7 +37,10 @@ export function AddProjectDialog({ onAddProject }: AddProjectDialogProps) {
 
   return (
     <>
-      <Button onClick={() => setOpen(true)} className="flex items-center gap-2">
+      <Button
+        className="btn-primary flex items-center gap-2"
+        onClick={() => setOpen(true)}
+      >
         <svg
           className="h-5 w-5"
           fill="none"
@@ -79,7 +82,12 @@ export function AddProjectDialog({ onAddProject }: AddProjectDialogProps) {
               />
             </div>
             <DialogFooter>
-              <Button type="submit">新增</Button>
+              <Button className="btn-secondary" onClick={() => setOpen(false)}>
+                取消
+              </Button>
+              <Button className="btn-primary" onClick={handleSubmit}>
+                新增
+              </Button>
             </DialogFooter>
           </form>
         </DialogContent>

@@ -22,7 +22,7 @@ interface ProjectCardProps {
 }
 
 export function ProjectCard({ project, onDelete }: ProjectCardProps) {
-  const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false)
 
   const handleDelete = () => {
     onDelete?.(project.id)
@@ -32,7 +32,7 @@ export function ProjectCard({ project, onDelete }: ProjectCardProps) {
   return (
     <div className="group relative">
       <Link href={`/projects/${project.id}`}>
-        <Card className="relative overflow-hidden rounded-xl bg-[#FFE7DE] p-6 transition-all hover:scale-[1.02] dark:bg-gray-800 dark:bg-opacity-50">
+        <Card className="relative overflow-hidden rounded-xl border bg-yellow-100 p-6 transition-all hover:scale-[1.02] dark:bg-gray-800">
           <div className="flex flex-col">
             <span className="text-sm text-gray-600 dark:text-gray-400">
               {project.createdAt.toLocaleDateString()}
@@ -50,9 +50,9 @@ export function ProjectCard({ project, onDelete }: ProjectCardProps) {
               <p className="mb-2 text-sm font-medium dark:text-gray-300">
                 Progress
               </p>
-              <div className="h-2 w-full rounded-full bg-white dark:bg-gray-700">
+              <div className="h-2 w-full rounded-full bg-yellow-200 dark:bg-gray-700">
                 <div
-                  className="h-full rounded-full bg-[#D4763B] transition-all duration-300"
+                  className="h-full rounded-full bg-yellow-500 transition-all duration-300"
                   style={{ width: `${project.progress}%` }}
                 />
               </div>
@@ -94,10 +94,7 @@ export function ProjectCard({ project, onDelete }: ProjectCardProps) {
                 取消
               </button>
             </DialogClose>
-            <button
-              onClick={handleDelete}
-              className="rounded-lg bg-red-600 px-4 py-2 text-white hover:bg-red-700"
-            >
+            <button onClick={handleDelete} className="btn-primary">
               刪除
             </button>
           </DialogFooter>
