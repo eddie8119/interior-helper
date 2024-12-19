@@ -1,5 +1,5 @@
 @mixin multi-shadow($near, $medium, $far) {
-  box-shadow: 
+  box-shadow:
     #{$shadow-near} #{$near},
     #{$shadow-medium} #{$medium},
     #{$shadow-far} #{$far};

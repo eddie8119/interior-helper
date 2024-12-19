@@ -11,7 +11,7 @@ export function MobileSidebar({ isOpen }: MobileSidebarProps) {
         isOpen ? 'translate-x-0' : '-translate-x-full'
       }`}
     >
-      <NavArea isCollapsed={false} />
+      <NavArea />
     </aside>
   )
 }

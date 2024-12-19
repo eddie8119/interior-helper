@@ -1,10 +1,11 @@
 import { FC, SVGProps } from 'react'
-
+import { ProjectMenu } from './navigation'
 export interface Menu {
   id: string
   title: string
   link: string
   icon: FC<SVGProps<SVGElement>>
+  subMenu?: ProjectMenu[]
 }
 
 export interface Project {
