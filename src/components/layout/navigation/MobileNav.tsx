@@ -10,13 +10,13 @@ export function MobileNav() {
 
   return (
     <>
-      <div className="fixed left-0 right-0 top-0 border-t border-border bg-sidebar sm:hidden">
+      <div className="nav-shadow border-border fixed left-0 right-0 top-0 border-t bg-sidebar sm:hidden">
         {/* Mobile Menu Button */}
         <div className="flex h-16 items-center justify-between px-4">
           <LogoArea width={32} height={32} />
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="rounded-lg p-2 text-icon"
+            className="text-icon rounded-lg p-2"
           >
             {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </button>
