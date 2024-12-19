@@ -38,7 +38,7 @@ export function AddProjectDialog({ onAddProject }: AddProjectDialogProps) {
   return (
     <>
       <Button
-        className="btn-primary flex items-center gap-2"
+        className="flex items-center gap-2 bg-main-light"
         onClick={() => setOpen(true)}
       >
         <svg

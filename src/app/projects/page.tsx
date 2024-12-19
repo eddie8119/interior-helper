@@ -9,15 +9,18 @@ export default function DashboardPage() {
 
   return (
     <>
-      <header className="mb-6 flex items-center justify-between">
+      <header className="mb-6 flex items-center">
         <h1 className="text-2xl font-semibold">工程專案列表</h1>
-        <AddProjectDialog onAddProject={addProject} />
       </header>
 
-      <section className="mb-8 grid grid-cols-1 gap-6 md:grid-cols-3">
-        {projects.map((project) => (
-          <ProjectCard key={project.id} project={project} />
-        ))}
+      <section>
+        <AddProjectDialog onAddProject={addProject} />
+
+        <article className="mt-3 grid grid-cols-1 gap-6 md:grid-cols-4">
+          {projects.map((project) => (
+            <ProjectCard key={project.id} project={project} />
+          ))}
+        </article>
       </section>
     </>
   )

@@ -4,7 +4,7 @@ import { HeaderRightSection } from './HeaderRightSection'
 
 export function Header() {
   return (
-    <header className="border-b border-gray-200 bg-background dark:border-gray-700">
+    <header className="hidden border-b border-border bg-background sm:block">
       <div className="flex h-16 items-center justify-between px-4">
         <div className="flex flex-1 items-center justify-between">
           {/* Search */}

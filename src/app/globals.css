@@ -4,21 +4,31 @@
 
 @layer base {
   :root {
+    --main: #facc15;
+    --main-light: #fef08a;
+    --main-dark: #b89b00;
+  }
+
+  :root {
     --background: #ffffff;
     --foreground: #1a1a1a;
-    --card: #ffffff;
+    --card: #f3f3f3;
     --card-hover: #f8f8f8;
     --sidebar: #fbfbf9;
-    --sidebar-hover: #f3f4f6;
+    --border: #e5e7eb;
+    --icon: #4b5563;
+    --gray-button: #374151;
   }
 
   .dark {
     --background: #1a1a1a;
     --foreground: #ffffff;
-    --card: #2a2a2a;
+    --card: #1f2937;
     --card-hover: #333333;
     --sidebar: #111827;
-    --sidebar-hover: #1f2937;
+    --border: #374151;
+    --icon: #9ca3af;
+    --gray-button: #d1d5db;
   }
 }
 

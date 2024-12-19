@@ -8,9 +8,22 @@ module.exports = {
   ],
   theme: {
     extend: {
+      backgroundColor: {
+        sidebar: 'var(--sidebar)',
+      },
       colors: {
+        main: {
+          DEFAULT: 'var(--main)',
+          light: 'var(--main-light)',
+          dark: 'var(--main-dark)',
+        },
         background: 'var(--background)',
         foreground: 'var(--foreground)',
+        card: 'var(--card)',
+        'card-hover': 'var(--card-hover)',
+        border: 'var(--border)',
+        icon: 'var(--icon)',
+        'gray-button': 'var(--gray-button)',
       },
     },
   },
