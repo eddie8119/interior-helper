@@ -33,7 +33,9 @@ export default function RootLayout({
       >
         <ThemeProvider>
           <div className="flex min-h-screen bg-background">
+            {/* mob */}
             <MobileNav />
+
             <Sidebar />
             <div className="flex-1">
               <Header />
