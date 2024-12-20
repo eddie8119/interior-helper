@@ -1,19 +1,19 @@
 'use client'
 
 import { useState } from 'react'
-import { Button } from '@/components/ui/Button'
+import { Plus } from 'lucide-react'
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogFooter,
 } from '@/components/ui/Dialog'
-import { Input } from '@/components/ui/Input'
-import { Project } from '@/types/project'
+import { Button, TextField } from '@mui/material'
 
 interface AddProjectDialogProps {
-  onAddProject: (project: Omit<Project, 'id' | 'createdAt'>) => void
+  onAddProject: (project: any) => void
 }
 
 export function AddProjectDialog({ onAddProject }: AddProjectDialogProps) {
@@ -25,71 +25,94 @@ export function AddProjectDialog({ onAddProject }: AddProjectDialogProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    if (newProject.title && newProject.type) {
-      onAddProject({
-        ...newProject,
-        progress: 0,
-      })
-      setNewProject({ title: '', type: '' })
-      setOpen(false)
-    }
+    onAddProject({
+      ...newProject,
+      id: Math.random().toString(),
+      progress: 0,
+      createdAt: new Date(),
+    })
+    setNewProject({ title: '', type: '' })
+    setOpen(false)
   }
 
   return (
     <>
       <Button
-        className="flex items-center gap-2 bg-main-light"
+        variant="contained"
+        sx={{
+          backgroundColor: 'var(--main)',
+          color: '#000000',
+          '&:hover': {
+            backgroundColor: 'var(--main-light)',
+            color: '#000000',
+          },
+        }}
+        startIcon={<Plus className="h-4 w-4" />}
         onClick={() => setOpen(true)}
       >
-        <svg
-          className="h-5 w-5"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-          />
-        </svg>
         新增專案
       </Button>
 
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent>
+        <DialogContent onOpenChange={setOpen}>
           <DialogHeader>
             <DialogTitle>新增專案</DialogTitle>
+            <DialogDescription>
+              新增一個工程專案到您的專案列表中。
+            </DialogDescription>
           </DialogHeader>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <Input
-                placeholder="專案名稱"
-                value={newProject.title}
-                onChange={(e) =>
-                  setNewProject({ ...newProject, title: e.target.value })
-                }
-              />
-            </div>
-            <div>
-              <Input
-                placeholder="專案類型"
-                value={newProject.type}
-                onChange={(e) =>
-                  setNewProject({ ...newProject, type: e.target.value })
-                }
-              />
-            </div>
-            <DialogFooter>
-              <Button className="btn-secondary" onClick={() => setOpen(false)}>
-                取消
-              </Button>
-              <Button className="btn-primary" onClick={handleSubmit}>
-                新增
-              </Button>
-            </DialogFooter>
+
+          <form onSubmit={handleSubmit} className="mt-4 space-y-4">
+            <TextField
+              fullWidth
+              label="專案名稱"
+              variant="outlined"
+              value={newProject.title}
+              onChange={(e) =>
+                setNewProject({ ...newProject, title: e.target.value })
+              }
+              required
+            />
+            <TextField
+              fullWidth
+              label="專案類型"
+              variant="outlined"
+              value={newProject.type}
+              onChange={(e) =>
+                setNewProject({ ...newProject, type: e.target.value })
+              }
+              required
+            />
           </form>
+
+          <DialogFooter className="mt-6">
+            <Button
+              variant="outlined"
+              onClick={() => setOpen(false)}
+              sx={{ mr: 1 }}
+            >
+              取消
+            </Button>
+            <Button
+              variant="contained"
+              onClick={handleSubmit}
+              disabled={!newProject.title || !newProject.type}
+              sx={{
+                backgroundColor: 'var(--main)',
+                color: '#000000',
+                '&:hover': {
+                  backgroundColor: 'var(--main-light)',
+                  color: '#000000',
+                },
+                '&:disabled': {
+                  backgroundColor: 'var(--main-light)',
+                  color: 'rgba(0, 0, 0, 0.38)',
+                },
+              }}
+            >
+              新增
+            </Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
     </>
