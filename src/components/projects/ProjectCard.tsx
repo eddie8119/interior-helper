@@ -33,23 +33,23 @@ export function ProjectCard({ project, deleteProject }: ProjectCardProps) {
       <Link href={`/projects/${project.id}`}>
         <Card className="relative overflow-y-auto rounded-xl border bg-card p-6 transition-all hover:scale-[1.02] dark:bg-gray-800">
           <div className="flex flex-col">
-            <span className="text-sm text-gray-600 dark:text-gray-400">
+            <span className="text-sm text-gray-400 dark:text-gray-500">
               {project.createdAt.toLocaleDateString()}
             </span>
-            <div className="mt-4">
+            <div className="mt-4 space-y-1">
               <h3
-                className="truncate text-xl font-medium dark:text-white"
+                className="truncate text-xl font-semibold text-gray-900 dark:text-white"
                 title={project.title}
               >
                 {project.title}
               </h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
+              <p className="text-sm text-gray-500 dark:text-gray-400">
                 {project.type}
               </p>
             </div>
 
             <div className="mt-6">
-              <p className="mb-2 text-sm font-medium dark:text-gray-300">
+              <p className="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">
                 工程進度
               </p>
               <div className="h-2 w-full rounded-full bg-main-light dark:bg-gray-700">
@@ -58,7 +58,7 @@ export function ProjectCard({ project, deleteProject }: ProjectCardProps) {
                   style={{ width: `${project.progress}%` }}
                 />
               </div>
-              <div className="mt-2 flex justify-between text-sm dark:text-gray-400">
+              <div className="mt-2 flex justify-between text-sm text-gray-500 dark:text-gray-400">
                 <span>{project.progress}%</span>
                 {project.daysLeft && <span>{project.daysLeft} Days Left</span>}
               </div>
