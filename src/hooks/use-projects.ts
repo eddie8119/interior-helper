@@ -1,5 +1,3 @@
-'use client'
-
 import { useState, useEffect } from 'react'
 import { Project } from '@/types/project'
 
@@ -8,9 +6,9 @@ const STORAGE_KEY = 'projectList'
 const defaultProjects: Project[] = [
   {
     id: '1',
-    title: '大興家',
+    title: '示範案例',
     type: '住宅',
-    progress: 60,
+    progress: 85,
     daysLeft: 2,
     createdAt: new Date(),
   },

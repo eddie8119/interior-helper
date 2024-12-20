@@ -5,7 +5,6 @@ import Link from 'next/link'
 import { menuLists } from '@/config/menu'
 import { usePathname } from 'next/navigation'
 import { useProjects } from '@/hooks/use-projects'
-import { ProjectMenu } from '@/types/navigation'
 import { Menu } from '@/types/project'
 
 interface NavAreaProps {
@@ -45,8 +44,7 @@ export function NavArea({ isCollapsed }: NavAreaProps) {
       {menus.map((menu) => {
         const Icon = menu.icon
         const isActive = pathname === `/${menu.link}`
-        const hasSubMenu =
-          Array.isArray(menu.subMenu) && menu.subMenu.length > 0
+        const hasSubMenu = menu.subMenu && menu.subMenu.length > 0
 
         return (
           <div key={menu.id} className="space-y-1">
@@ -71,7 +69,7 @@ export function NavArea({ isCollapsed }: NavAreaProps) {
                   <Link
                     key={subItem.id}
                     href={`/projects/${subItem.id}`}
-                    className={`hover:bg-card/50 text-gray-button block rounded-lg px-3 py-2 text-sm transition-colors ${
+                    className={`hover:bg-card/50 block rounded-lg px-3 py-2 text-sm text-gray-button transition-colors ${
                       pathname === `/projects/${subItem.id}`
                         ? 'bg-card font-medium text-foreground'
                         : ''
