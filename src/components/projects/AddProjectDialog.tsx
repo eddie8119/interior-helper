@@ -10,11 +10,25 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/Dialog'
-import { Button, TextField } from '@mui/material'
+import {
+  Button,
+  TextField,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+} from '@mui/material'
 
 interface AddProjectDialogProps {
   onAddProject: (project: any) => void
 }
+
+const PROJECT_TYPES = [
+  { value: '住宅', label: '住宅' },
+  { value: '豪宅', label: '豪宅' },
+  { value: '商空', label: '商空' },
+  { value: '辦公室', label: '辦公室' },
+]
 
 export function AddProjectDialog({ onAddProject }: AddProjectDialogProps) {
   const [open, setOpen] = useState(false)
@@ -73,16 +87,22 @@ export function AddProjectDialog({ onAddProject }: AddProjectDialogProps) {
               }
               required
             />
-            <TextField
-              fullWidth
-              label="專案類型"
-              variant="outlined"
-              value={newProject.type}
-              onChange={(e) =>
-                setNewProject({ ...newProject, type: e.target.value })
-              }
-              required
-            />
+            <FormControl fullWidth required>
+              <InputLabel>專案類型</InputLabel>
+              <Select
+                value={newProject.type}
+                label="專案類型"
+                onChange={(e) =>
+                  setNewProject({ ...newProject, type: e.target.value })
+                }
+              >
+                {PROJECT_TYPES.map((type) => (
+                  <MenuItem key={type.value} value={type.value}>
+                    {type.label}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
           </form>
 
           <DialogFooter className="mt-6">
