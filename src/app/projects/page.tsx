@@ -15,7 +15,7 @@ export default function ProjectsPage() {
       </header>
 
       <main className="flex-1 overflow-y-auto">
-        <article className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-4">
+        <article className="grid grid-cols-1 gap-6 p-2 sm:grid-cols-2 md:grid-cols-4">
           {projects.map((project) => (
             <ProjectCard key={project.id} project={project} />
           ))}
