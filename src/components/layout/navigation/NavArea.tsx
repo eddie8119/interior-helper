@@ -6,16 +6,16 @@ import { menuLists } from '@/config/menu'
 import { usePathname } from 'next/navigation'
 import { useProjects } from '@/hooks/use-projects'
 import { Menu } from '@/types/project'
-
+import { ChevronDown, ChevronRight } from 'lucide-react'
 interface NavAreaProps {
   isCollapsed?: boolean
 }
 
 export function NavArea({ isCollapsed }: NavAreaProps) {
-  const [menus, setMenus] = useState<Menu[]>(menuLists)
-
   const pathname = usePathname()
   const { projects } = useProjects()
+  const [menus, setMenus] = useState<Menu[]>(menuLists)
+  const [activeMenu, setActiveMenu] = useState<string | null>(null)
 
   useEffect(() => {
     if (!projects?.length) return
@@ -44,7 +44,9 @@ export function NavArea({ isCollapsed }: NavAreaProps) {
       {menus.map((menu) => {
         const Icon = menu.icon
         const isActive = pathname === `/${menu.link}`
-        const hasSubMenu = menu.subMenu && menu.subMenu.length > 0
+        const hasSubMenu =
+          Array.isArray(menu.subMenu) && menu.subMenu.length > 0
+        const isMenuActive = activeMenu === menu.id
 
         return (
           <div key={menu.id} className="space-y-1">
@@ -55,21 +57,31 @@ export function NavArea({ isCollapsed }: NavAreaProps) {
                   ? 'bg-card font-medium text-foreground'
                   : 'hover:bg-card/50 text-gray-button'
               }`}
+              onClick={() => setActiveMenu(menu.id)}
             >
               <Icon className="mr-2 h-5 w-5" />
               <span className={isCollapsed ? 'hidden' : 'block'}>
                 {menu.title}
               </span>
+              {hasSubMenu && !isCollapsed && (
+                <span className="ml-auto transform transition-transform duration-200">
+                  {isMenuActive ? (
+                    <ChevronDown className="text-gray-button h-4 w-4" />
+                  ) : (
+                    <ChevronRight className="text-gray-button h-4 w-4" />
+                  )}
+                </span>
+              )}
             </Link>
 
             {/* 子菜單 */}
-            {hasSubMenu && !isCollapsed && (
+            {hasSubMenu && !isCollapsed && isMenuActive && (
               <div className="ml-7 space-y-1">
                 {menu.subMenu?.map((subItem) => (
                   <Link
                     key={subItem.id}
                     href={`/projects/${subItem.id}`}
-                    className={`hover:bg-card/50 block rounded-lg px-3 py-2 text-sm text-gray-button transition-colors ${
+                    className={`hover:bg-card/50 text-gray-button block rounded-lg px-3 py-2 text-sm transition-colors ${
                       pathname === `/projects/${subItem.id}`
                         ? 'bg-card font-medium text-foreground'
                         : ''
