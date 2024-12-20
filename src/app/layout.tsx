@@ -38,7 +38,7 @@ export default function RootLayout({
             <MobileNav />
 
             <Sidebar />
-            <div className="flex h-full flex-1 flex-col">
+            <div className="mt-16 flex h-full flex-1 flex-col sm:mt-0">
               <Header />
               <main className="flex-1 overflow-y-auto p-6">
                 <div className="mx-auto max-w-7xl">{children}</div>
