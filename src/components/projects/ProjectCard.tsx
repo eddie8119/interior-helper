@@ -38,7 +38,10 @@ export function ProjectCard({ project, onDelete }: ProjectCardProps) {
               {project.createdAt.toLocaleDateString()}
             </span>
             <div className="mt-4">
-              <h3 className="text-xl font-medium dark:text-white">
+              <h3
+                className="truncate text-xl font-medium dark:text-white"
+                title={project.title}
+              >
                 {project.title}
               </h3>
               <p className="text-sm text-gray-600 dark:text-gray-400">
@@ -48,7 +51,7 @@ export function ProjectCard({ project, onDelete }: ProjectCardProps) {
 
             <div className="mt-6">
               <p className="mb-2 text-sm font-medium dark:text-gray-300">
-                Progress
+                工程進度
               </p>
               <div className="h-2 w-full rounded-full bg-main-light dark:bg-gray-700">
                 <div

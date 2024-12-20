@@ -9,11 +9,11 @@ export function Sidebar() {
 
   return (
     <aside
-      className={`nav-shadow hidden border-r border-border bg-sidebar sm:block ${
+      className={`nav-shadow border-border hidden h-screen border-r bg-sidebar transition-all duration-300 sm:block ${
         isCollapsed ? 'w-16' : 'w-64'
       }`}
     >
-      <header className="flex items-center p-4">
+      <header className="flex h-16 items-center p-4">
         <div
           className={`flex items-center ${isCollapsed ? 'hidden' : 'block'}`}
         >
@@ -21,12 +21,14 @@ export function Sidebar() {
         </div>
         <button
           onClick={() => setIsCollapsed(!isCollapsed)}
-          className="ml-auto rounded-lg p-2 text-icon"
+          className="text-icon ml-auto rounded-lg p-2"
         >
           {isCollapsed ? '→' : '←'}
         </button>
       </header>
-      <NavArea isCollapsed={isCollapsed} />
+      <div className="h-[calc(100vh-4rem)] overflow-y-auto">
+        <NavArea isCollapsed={isCollapsed} />
+      </div>
     </aside>
   )
 }
