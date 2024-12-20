@@ -5,7 +5,7 @@ import { ProjectCard } from '@/components/projects/ProjectCard'
 import { useProjects } from '@/hooks/use-projects'
 
 export default function ProjectsPage() {
-  const { projects, addProject } = useProjects()
+  const { projects, addProject, deleteProject } = useProjects()
 
   return (
     <section className="flex h-full flex-col">
@@ -17,7 +17,11 @@ export default function ProjectsPage() {
       <main className="flex-1 overflow-y-auto">
         <article className="grid grid-cols-1 gap-6 p-2 sm:grid-cols-2 md:grid-cols-4">
           {projects.map((project) => (
-            <ProjectCard key={project.id} project={project} />
+            <ProjectCard
+              key={project.id}
+              project={project}
+              deleteProject={deleteProject}
+            />
           ))}
         </article>
       </main>
