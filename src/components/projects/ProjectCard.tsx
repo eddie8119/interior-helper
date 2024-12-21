@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { Trash2 } from 'lucide-react'
-import { Project } from '@/types/project'
+import { ProjectBasic } from '@/types/project'
 import { Card } from '@/components/ui/Card'
 import { useState } from 'react'
 import {
@@ -16,7 +16,7 @@ import {
 import { Button } from '@mui/material'
 
 interface ProjectCardProps {
-  project: Project
+  project: ProjectBasic
   deleteProject: (id: string) => void
 }
 
