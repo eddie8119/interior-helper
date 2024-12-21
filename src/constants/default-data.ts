@@ -1,27 +1,50 @@
-import { ProjectBasic, Task } from '@/types/project'
+import { Task, ProjectBasic } from '@/types/project'
+
+export const constructionContainer:string[] = [
+  '拆除',
+  '機電',
+  '水電',
+  '地坪',
+  '泥做',
+  '門框',
+  '輕隔間',
+  '木做',
+  '油漆',
+]
 
 export const defaultProjects: ProjectBasic[] = [
   {
-    id: '0',
-    title: '示範案例',
-    type: '住宅',
-    progress: 85,
-    daysLeft: 2,
-    createdAt: new Date(),
+    id: '1',
+    title: '示範-台北市大安案案',
+    type: 'residential',
+    progress: 30,
+    daysLeft: 45,
+    createdAt: new Date('2024-01-01'),
+    containers: [
+      '拆除',
+      '機電',
+      '水電',
+      '地坪',
+      '泥做',
+      '門框',
+      '輕隔間',
+      '木做',
+      '油漆',
+    ],
   },
 ]
 
 export const defaultTasks: Task[] = [
   {
-    id: '0',
-    type:'拆除',
-    projectId: '0',
-    title: "示範標題",
-    content: "示範資訊",
-    status: 'todo',
-    priority: 'low',
-    dueDate: new Date(new Date().setDate(new Date().getDate() + 7)).toISOString().split('T')[0], // 7天後到期
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  }
+    id: '1',
+    projectId: '1',
+    title: '現場丈量',
+    content: '確認現場尺寸與圖面相符',
+    type: 'site-preparation',
+    status: 'done',
+    priority: 'high',
+    dueDate: new Date('2024-12-01'),
+    createdAt: new Date('2024-01-01'),
+    updatedAt: new Date('2024-01-01'),
+  },
 ]

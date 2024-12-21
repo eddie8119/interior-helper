@@ -12,21 +12,22 @@ export interface Menu {
 export interface ProjectBasic {
   id: string
   title: string
-  type: string
-  progress: number
-  daysLeft: number
+  type: 'residential' | 'luxury' | 'commercial' | 'office'
+  progress?: number
+  daysLeft?: number
   createdAt: Date
+  containers: string[]
 }
 
 export interface Task {
   id: string
-  type:string
+  type: string
   projectId: string
   title: string
   content?: string
   status: 'todo' | 'in-progress' | 'done'
   priority?: 'low' | 'medium' | 'high'
-  dueDate?: string
+  dueDate?: Date
   createdAt: Date
   updatedAt: Date
 }

@@ -24,10 +24,10 @@ interface AddProjectDialogProps {
 }
 
 const PROJECT_TYPES = [
-  { value: '住宅', label: '住宅' },
-  { value: '豪宅', label: '豪宅' },
-  { value: '商空', label: '商空' },
-  { value: '辦公室', label: '辦公室' },
+  { value: 'residential', label: '住宅' },
+  { value: 'luxury', label: '豪宅' },
+  { value: 'commercial', label: '商空' },
+  { value: 'office', label: '辦公室' },
 ]
 
 export function AddProjectDialog({ onAddProject }: AddProjectDialogProps) {

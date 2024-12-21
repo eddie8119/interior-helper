@@ -2,7 +2,11 @@
 
 import { useState, useEffect } from 'react'
 import { ProjectBasic, Task } from '@/types/project'
-import { defaultProjects, defaultTasks } from '@/constants/default-data'
+import {
+  defaultProjects,
+  defaultTasks,
+  constructionContainer,
+} from '@/constants/default-data'
 
 // Storage keys
 const STORAGE_KEYS = {
@@ -70,6 +74,7 @@ export function useProjects() {
         ...project,
         id: crypto.randomUUID(),
         createdAt: new Date(),
+        containers: constructionContainer,
       }
 
       const updatedProjects = [...projects, newProject]
