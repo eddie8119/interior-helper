@@ -66,9 +66,9 @@ export function NavArea({ isCollapsed }: NavAreaProps) {
               {hasSubMenu && !isCollapsed && (
                 <span className="ml-auto transform transition-transform duration-200">
                   {isMenuActive ? (
-                    <ChevronDown className="text-gray-button h-4 w-4" />
+                    <ChevronDown className="h-4 w-4 text-gray-button" />
                   ) : (
-                    <ChevronRight className="text-gray-button h-4 w-4" />
+                    <ChevronRight className="h-4 w-4 text-gray-button" />
                   )}
                 </span>
               )}
@@ -81,7 +81,7 @@ export function NavArea({ isCollapsed }: NavAreaProps) {
                   <Link
                     key={subItem.id}
                     href={`/projects/${subItem.id}`}
-                    className={`hover:bg-card/50 text-gray-button block truncate rounded-lg px-3 py-2 text-sm transition-colors ${
+                    className={`hover:bg-card/50 block truncate rounded-lg px-3 py-2 text-sm text-gray-button transition-colors ${
                       pathname === `/projects/${subItem.id}`
                         ? 'bg-card font-medium text-foreground'
                         : ''
