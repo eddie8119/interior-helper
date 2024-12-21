@@ -8,6 +8,12 @@ export interface Menu {
   icon: FC<SVGProps<SVGElement>>
   subMenu?: ProjectMenu[]
 }
+export interface Container {
+  id: string
+  title: string
+  type: string
+  order: number
+}
 
 export interface ProjectBasic {
   id: string
@@ -16,12 +22,12 @@ export interface ProjectBasic {
   progress?: number
   daysLeft?: number
   createdAt: Date
-  containers: string[]
+  containers: Container[]
 }
 
 export interface Task {
   id: string
-  type: string
+  constructionType: string
   projectId: string
   title: string
   content?: string
