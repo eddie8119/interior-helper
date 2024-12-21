@@ -1,31 +1,61 @@
-import { useState, useEffect } from 'react'
-import { useProjects } from './use-projects'
-import { Container } from '@/types/project'
+import { Container, ProjectBasic } from '@/types/project'
 
-export function useContainers(projectId?: string) {
-  const [containers, setContainers] = useState<Container[]>([])
+interface CreateContainerData {
+  type: string
+}
 
-  // 更新容器順序
-  const updateContainerOrder = (newContainers: Container[]) => {
-    // 更新 order
-    const updatedContainers = newContainers.map((container, index) => ({
-      ...container,
-      order: index,
-    }))
-    setContainers(updatedContainers)
+export function useContainers(
+  project: ProjectBasic | undefined,
+  onUpdateProject: (projectId: string, data: Partial<ProjectBasic>) => void
+) {
+  // 建立容器
+  const createContainer = (data: CreateContainerData) => {
+    if (!project) return
+
+    const newContainer: Container = {
+      id: data.type,
+      type: data.type,
+      order: project.containers.length,
+    }
+
+    const updatedContainers = [...project.containers, newContainer]
+
+    onUpdateProject(project.id, {
+      containers: updatedContainers,
+      editedAt: new Date(),
+    })
+
+    return newContainer
+  }
+
+  // 更新容器
+  const updateContainers = (containers: Container[]) => {
+    if (!project) return
+
+    onUpdateProject(project.id, {
+      containers,
+      editedAt: new Date(),
+    })
   }
 
   // 刪除容器
   const deleteContainer = (containerId: string) => {
-    const updatedContainers = containers.filter(
+    if (!project) return
+
+    const updatedContainers = project.containers.filter(
       (container) => container.id !== containerId
     )
-    setContainers(updatedContainers)
+
+    onUpdateProject(project.id, {
+      containers: updatedContainers,
+      editedAt: new Date(),
+    })
   }
 
   return {
-    containers,
-    updateContainerOrder,
+    containers: project?.containers || [],
+    createContainer,
+    updateContainers,
     deleteContainer,
   }
 }

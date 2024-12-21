@@ -49,6 +49,7 @@ export function useProjects() {
       id: crypto.randomUUID(),
       createdAt: new Date(),
       containers: constructionContainer,
+      editedAt: new Date(),
     }
 
     const updatedProjects = [...projects, newProject]

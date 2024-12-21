@@ -10,7 +10,6 @@ export interface Menu {
 }
 export interface Container {
   id: string
-  title: string
   type: string
   order: number
 }
@@ -22,6 +21,7 @@ export interface ProjectBasic {
   progress?: number
   daysLeft?: number
   createdAt: Date
+  editedAt: Date
   containers: Container[]
 }
 
