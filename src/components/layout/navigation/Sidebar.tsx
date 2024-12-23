@@ -1,8 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { LogoArea } from './LogoArea'
-import { NavArea } from './NavArea'
+import { LogoArea } from './logoArea'
+import { NavArea } from './navArea'
 
 export function Sidebar() {
   const [isCollapsed, setIsCollapsed] = useState<boolean>(false)

@@ -1,6 +1,6 @@
 'use client'
 
-import { HeaderRightSection } from './HeaderRightSection'
+import { HeaderRightSection } from './headerRightSection'
 
 export function Header() {
   return (

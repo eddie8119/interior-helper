@@ -1,4 +1,4 @@
-import { NavArea } from './NavArea'
+import { NavArea } from './navArea'
 
 interface MobileSidebarProps {
   isOpen: boolean

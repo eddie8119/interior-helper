@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { Trash2 } from 'lucide-react'
 import { ProjectBasic } from '@/types/project'
-import { Card } from '@/components/ui/Card'
+import { Card } from '@/components/ui/card'
 import { useState } from 'react'
 import {
   Dialog,
@@ -12,7 +12,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/Dialog'
+} from '@/components/ui/dialog'
 import { Button } from '@mui/material'
 
 interface ProjectCardProps {

@@ -3,9 +3,9 @@ import { Geist, Geist_Mono } from 'next/font/google'
 import './globals.css'
 import '../styles/main.scss'
 import { ThemeProvider } from '@/contexts/theme-context'
-import { Sidebar } from '@/components/layout/navigation/Sidebar'
-import { MobileNav } from '@/components/layout/navigation/MobileNav'
-import { Header } from '@/components/layout/Header'
+import { Sidebar } from '@/components/layout/navigation/sidebar'
+import { MobileNav } from '@/components/layout/navigation/mobileNav'
+import { Header } from '@/components/layout/header'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',

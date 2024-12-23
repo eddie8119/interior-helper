@@ -1,3 +1,3 @@
-export { HomeIcon } from './HomeIcon'
-export { ProjectIcon } from './ProjectIcon'
-export { CalendarIcon } from './CalendarIcon'
+export { HomeIcon } from './homeIcon'
+export { ProjectIcon } from './projectIcon'
+export { CalendarIcon } from './calendarIcon'

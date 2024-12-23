@@ -1,6 +1,6 @@
 'use client'
 
-import { Card } from '@/components/ui/Card'
+import { Card } from '@/components/ui/card'
 import { ProjectBasic, Task } from '@/types/project'
 import { cn } from '@/lib/utils'
 import {
@@ -11,8 +11,8 @@ import {
 } from '@hello-pangea/dnd'
 import { Trash2 } from 'lucide-react'
 import { useContainers } from '@/hooks/use-containers'
-import { AddContainer } from './AddContainer'
-import { TaskList } from './TaskList'
+import { AddContainer } from './addContainer'
+import { TaskList } from './taskList'
 
 const DROPPABLE_TYPE = {
   CONTAINER: 'container',

@@ -3,7 +3,7 @@
 import { useParams } from 'next/navigation'
 import { useProjects } from '@/hooks/use-projects'
 import { useTasks } from '@/hooks/use-tasks'
-import { DraggableContainers } from '@/components/projects/DraggableContainers'
+import { DraggableContainers } from '@/components/projects/draggableContainers'
 
 export default function ProjectDetailsPage() {
   const params = useParams()
