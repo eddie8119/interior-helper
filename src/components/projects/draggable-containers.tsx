@@ -11,8 +11,8 @@ import {
 } from '@hello-pangea/dnd'
 import { Trash2 } from 'lucide-react'
 import { useContainers } from '@/hooks/use-containers'
-import { AddContainer } from './addContainer'
-import { TaskList } from './taskList'
+import { AddContainer } from './add-container'
+import { TaskList } from './task-list'
 
 const DROPPABLE_TYPE = {
   CONTAINER: 'container',

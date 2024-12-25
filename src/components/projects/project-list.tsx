@@ -1,7 +1,7 @@
 'use client'
 
-import { AddProjectDialog } from '@/components/projects/addProjectDialog'
-import { ProjectCard } from '@/components/projects/projectCard'
+import { AddProjectDialog } from '@/components/projects/addProject-dialog'
+import { ProjectCard } from '@/components/projects/project-card'
 import { useProjects } from '@/hooks/use-projects'
 
 export function ProjectList() {

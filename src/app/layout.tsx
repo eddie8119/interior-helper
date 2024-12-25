@@ -4,7 +4,7 @@ import './globals.css'
 import '../styles/main.scss'
 import { ThemeProvider } from '@/contexts/theme-context'
 import { Sidebar } from '@/components/layout/navigation/sidebar'
-import { MobileNav } from '@/components/layout/navigation/mobileNav'
+import { MobileNav } from '@/components/layout/navigation/mobile-nav'
 import { Header } from '@/components/layout/header'
 
 const geistSans = Geist({
