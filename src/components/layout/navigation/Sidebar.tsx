@@ -9,7 +9,7 @@ export function Sidebar() {
 
   return (
     <aside
-      className={`nav-shadow border-border hidden h-screen border-r bg-sidebar transition-all duration-300 sm:block ${
+      className={`nav-shadow hidden h-screen border-r border-border bg-sidebar transition-all duration-300 sm:block ${
         isCollapsed ? 'w-16' : 'w-64'
       }`}
     >
@@ -21,7 +21,7 @@ export function Sidebar() {
         </div>
         <button
           onClick={() => setIsCollapsed(!isCollapsed)}
-          className="text-icon ml-auto rounded-lg p-2"
+          className="ml-auto rounded-lg p-2 text-icon"
         >
           {isCollapsed ? '→' : '←'}
         </button>

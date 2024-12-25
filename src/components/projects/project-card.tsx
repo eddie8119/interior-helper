@@ -1,7 +1,6 @@
 'use client'
 
 import Link from 'next/link'
-import { Trash2 } from 'lucide-react'
 import { ProjectBasic } from '@/types/project'
 import { Card } from '@/components/ui/card'
 import { useState } from 'react'
@@ -14,6 +13,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { Button } from '@mui/material'
+import { DeleteButton } from '@/components/ui/delete-button'
 
 interface ProjectCardProps {
   project: ProjectBasic
@@ -68,16 +68,7 @@ export function ProjectCard({ project, deleteProject }: ProjectCardProps) {
       </Link>
 
       {/* Delete Button */}
-      <button
-        onClick={(e) => {
-          e.preventDefault()
-          e.stopPropagation()
-          setIsDeleteDialogOpen(true)
-        }}
-        className="absolute right-4 top-4 z-50 hidden rounded-full p-2 opacity-0 transition-opacity hover:bg-red-50 group-hover:block group-hover:opacity-100 dark:bg-gray-700/80 dark:hover:bg-red-900/80"
-      >
-        <Trash2 className="h-5 w-5 text-red-500" />
-      </button>
+      <DeleteButton onDelete={() => setIsDeleteDialogOpen(true)} />
 
       {/* Delete Confirmation Dialog */}
       <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>

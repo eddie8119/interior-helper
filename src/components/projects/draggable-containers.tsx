@@ -13,6 +13,7 @@ import { Trash2 } from 'lucide-react'
 import { useContainers } from '@/hooks/use-containers'
 import { AddContainer } from './add-container'
 import { TaskList } from './task-list'
+// import { DeleteButton } from '@/components/ui/delete-button'
 
 const DROPPABLE_TYPE = {
   CONTAINER: 'container',
