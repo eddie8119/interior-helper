@@ -1,19 +1,14 @@
 'use client'
 
-import { Card } from '@/components/ui/card'
 import { ProjectBasic, Task } from '@/types/project'
 import { cn } from '@/lib/utils'
-import {
-  DragDropContext,
-  Droppable,
-  Draggable,
-  DropResult,
-} from '@hello-pangea/dnd'
-import { Trash2 } from 'lucide-react'
+import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd'
 import { useContainers } from '@/hooks/use-containers'
+import { useDragEnd } from '@/hooks/use-drag-end'
 import { AddContainer } from './add-container'
 import { TaskList } from './task-list'
-import { DeleteButton } from '@/components/ui/delete-button'
+import { DeleteButtonWithDialog } from '@/components/ui/delete-button-with-dialog'
+import { Card } from '@/components/ui/card'
 
 const DROPPABLE_TYPE = {
   CONTAINER: 'container',
@@ -38,44 +33,12 @@ export function DraggableContainers({
     onUpdateProject
   )
 
-  const onDragEnd = (result: DropResult) => {
-    const { destination, source, draggableId, type } = result
-
-    if (!destination) return
-
-    if (
-      destination.droppableId === source.droppableId &&
-      destination.index === source.index
-    ) {
-      return
-    }
-
-    // 處理容器拖拽
-    if (type === DROPPABLE_TYPE.CONTAINER) {
-      const newContainers = Array.from(project.containers)
-      const [removed] = newContainers.splice(source.index, 1)
-      newContainers.splice(destination.index, 0, removed)
-
-      // 更新容器順序
-      const updatedContainers = newContainers.map((container, index) => ({
-        ...container,
-        order: index,
-      }))
-
-      updateContainers(updatedContainers)
-      return
-    }
-
-    // 處理任務拖拽
-    const task = projectTasks.find((t) => t.id === draggableId)
-    if (!task) return
-
-    if (destination.droppableId !== source.droppableId) {
-      onUpdateTask(task.id, {
-        constructionType: destination.droppableId,
-      })
-    }
-  }
+  const onDragEnd = useDragEnd({
+    project,
+    projectTasks,
+    updateContainers,
+    onUpdateTask,
+  })
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
@@ -119,13 +82,15 @@ export function DraggableContainers({
                             'shadow-lg ring-2 ring-[#D4763B] ring-opacity-50'
                         )}
                       >
-                        <div className="mb-4 flex items-center justify-between">
+                        <div className="group relative mb-4 flex items-center justify-between">
                           <h3 className="text-lg font-semibold">
                             {container.type}({containerTasks.length})
                           </h3>
-                          <DeleteButton
-                            onDelete={() => deleteContainer(container.id)}
-                            className="!static !opacity-100"
+                          <DeleteButtonWithDialog
+                            deleteItem={() => deleteContainer(container.id)}
+                            title="確認刪除"
+                            description={`您確定要刪除此容器嗎？此操作無法復原。`}
+                            className="!relative !right-0 !top-0 !block !opacity-100"
                           />
                         </div>
 
