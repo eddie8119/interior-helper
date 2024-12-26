@@ -13,7 +13,7 @@ import { Trash2 } from 'lucide-react'
 import { useContainers } from '@/hooks/use-containers'
 import { AddContainer } from './add-container'
 import { TaskList } from './task-list'
-// import { DeleteButton } from '@/components/ui/delete-button'
+import { DeleteButton } from '@/components/ui/delete-button'
 
 const DROPPABLE_TYPE = {
   CONTAINER: 'container',
@@ -123,12 +123,10 @@ export function DraggableContainers({
                           <h3 className="text-lg font-semibold">
                             {container.type}({containerTasks.length})
                           </h3>
-                          <button
-                            onClick={() => deleteContainer(container.id)}
-                            className="text-gray-400 transition-colors hover:text-red-500"
-                          >
-                            <Trash2 className="h-5 w-5" />
-                          </button>
+                          <DeleteButton
+                            onDelete={() => deleteContainer(container.id)}
+                            className="!static !opacity-100"
+                          />
                         </div>
 
                         {/* 任務列表 */}
