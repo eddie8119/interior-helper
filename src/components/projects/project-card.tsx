@@ -1,19 +1,7 @@
-'use client'
-
 import Link from 'next/link'
 import { ProjectBasic } from '@/types/project'
 import { Card } from '@/components/ui/card'
-import { useState } from 'react'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog'
-import { Button } from '@mui/material'
-import { DeleteButton } from '@/components/ui/delete-button'
+import { DeleteButtonWithDialog } from '@/components/ui/delete-button-with-dialog'
 
 interface ProjectCardProps {
   project: ProjectBasic
@@ -21,13 +9,6 @@ interface ProjectCardProps {
 }
 
 export function ProjectCard({ project, deleteProject }: ProjectCardProps) {
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
-
-  const handleDelete = () => {
-    deleteProject(project.id)
-    setIsDeleteDialogOpen(false)
-  }
-
   return (
     <div className="group relative">
       <Link href={`/projects/${project.id}`}>
@@ -68,31 +49,13 @@ export function ProjectCard({ project, deleteProject }: ProjectCardProps) {
       </Link>
 
       {/* Delete Button */}
-      <DeleteButton onDelete={() => setIsDeleteDialogOpen(true)} />
-
-      {/* Delete Confirmation Dialog */}
-      <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>確認刪除</DialogTitle>
-            <DialogDescription>
-              您確定要刪除專案 "{project.title}" 嗎？此操作無法復原。
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter className="mt-4">
-            <Button
-              variant="outlined"
-              onClick={() => setIsDeleteDialogOpen(false)}
-              sx={{ mr: 1 }}
-            >
-              取消
-            </Button>
-            <Button variant="contained" color="error" onClick={handleDelete}>
-              刪除
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <DeleteButtonWithDialog
+        deleteItem={() => {
+          deleteProject(project.id)
+        }}
+        title="確認刪除"
+        description={`您確定要刪除專案 "${project.title}" 嗎？此操作無法復原。`}
+      />
     </div>
   )
 }
