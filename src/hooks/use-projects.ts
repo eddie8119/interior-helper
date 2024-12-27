@@ -12,28 +12,35 @@ const STORAGE_KEYS = {
 
 export function useProjects() {
   const [projects, setProjects] = useState<ProjectBasic[]>([])
+  const [isLoading, setIsLoading] = useState<boolean>(true)
 
   // 初始化專案
   useEffect(() => {
-    const savedProjects = localStorage.getItem(STORAGE_KEYS.PROJECTS)
-    if (savedProjects) {
+    const loadProjects = async () => {
       try {
-        const parsedProjects = JSON.parse(savedProjects)
-        // 將字串日期轉換為 Date 物件
-        const projectsWithDates = parsedProjects.map(
-          (project: ProjectBasic) => ({
-            ...project,
-            createdAt: new Date(project.createdAt),
-          })
-        )
-        setProjects(projectsWithDates)
+        const savedProjects = localStorage.getItem(STORAGE_KEYS.PROJECTS)
+        if (savedProjects) {
+          const parsedProjects = JSON.parse(savedProjects)
+          // 將字串日期轉換為 Date 物件
+          const projectsWithDates = parsedProjects.map(
+            (project: ProjectBasic) => ({
+              ...project,
+              createdAt: new Date(project.createdAt),
+            })
+          )
+          setProjects(projectsWithDates)
+        } else {
+          setProjects(defaultProjects)
+        }
       } catch (error) {
         console.error('Error parsing projects:', error)
         setProjects(defaultProjects)
+      } finally {
+        setIsLoading(false)
       }
-    } else {
-      setProjects(defaultProjects)
     }
+
+    loadProjects()
   }, [])
 
   // 保存專案到本地存儲
@@ -80,6 +87,7 @@ export function useProjects() {
 
   return {
     projects,
+    isLoading,
     addProject,
     updateProject,
     deleteProject,
