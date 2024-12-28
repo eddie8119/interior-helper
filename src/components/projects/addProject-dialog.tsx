@@ -107,7 +107,7 @@ export function AddProjectDialog({ onAddProject }: AddProjectDialogProps) {
           <DialogFooter className="mt-6">
             <Button
               onClick={() => setOpen(false)}
-              className="bg-cancel hover:bg-cancel/90 mr-1 text-white"
+              className="hover:bg-cancel/90 mr-1 bg-cancel text-white"
             >
               取消
             </Button>

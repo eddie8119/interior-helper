@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation'
 
 import { useProjects } from '@/hooks/use-projects'
 import { useTasks } from '@/hooks/use-tasks'
-import { DraggableContainers } from './draggable-containers'
+import { DraggableContainers } from './drag/draggable-containers'
 
 interface ProjectContainerProps {
   projectId: string
