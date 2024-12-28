@@ -17,6 +17,7 @@ module.exports = {
           light: 'var(--main-light)',
           dark: 'var(--main-dark)',
         },
+        cancel: 'var(--cancel)',
         background: 'var(--background)',
         foreground: 'var(--foreground)',
         card: 'var(--card)',

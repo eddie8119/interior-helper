@@ -107,9 +107,9 @@ export function AddProjectDialog({ onAddProject }: AddProjectDialogProps) {
 
           <DialogFooter className="mt-6">
             <Button
-              variant="outlined"
+              variant="outline"
               onClick={() => setOpen(false)}
-              sx={{ mr: 1 }}
+              className="hover:bg-[var(--cancel)]/90 mr-1 bg-[var(--cancel)] text-white"
             >
               取消
             </Button>
