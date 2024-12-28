@@ -52,7 +52,6 @@ export function AddProjectDialog({ onAddProject }: AddProjectDialogProps) {
   return (
     <>
       <Button
-        variant="contained"
         sx={{
           backgroundColor: 'var(--main)',
           color: '#000000',
@@ -107,14 +106,12 @@ export function AddProjectDialog({ onAddProject }: AddProjectDialogProps) {
 
           <DialogFooter className="mt-6">
             <Button
-              variant="outline"
               onClick={() => setOpen(false)}
-              className="hover:bg-[var(--cancel)]/90 mr-1 bg-[var(--cancel)] text-white"
+              className="bg-cancel hover:bg-cancel/90 mr-1 text-white"
             >
               取消
             </Button>
             <Button
-              variant="contained"
               onClick={handleSubmit}
               disabled={!newProject.title || !newProject.type}
               sx={{

@@ -37,7 +37,7 @@ export function DeleteDialog({
           <Button
             variant="destructive"
             onClick={handleDeleteItem}
-            className="hover:bg-[var(--cancel)]/90 mr-1 bg-[var(--cancel)]"
+            className="mr-1 bg-cancel"
           >
             刪除
           </Button>
