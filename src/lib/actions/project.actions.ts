@@ -25,11 +25,13 @@ function getProjects(): Promise<{
         if (savedProjects) {
           const parsedProjects = JSON.parse(savedProjects)
           // 將字串日期轉換為 Date 物件
-          const projectsWithDates = parsedProjects.map((project: ProjectBasic) => ({
-            ...project,
-            createdAt: new Date(project.createdAt),
-            editedAt: new Date(project.editedAt),
-          }))
+          const projectsWithDates = parsedProjects.map(
+            (project: ProjectBasic) => ({
+              ...project,
+              createdAt: new Date(project.createdAt),
+              editedAt: new Date(project.editedAt),
+            })
+          )
           resolve({ projects: projectsWithDates, isError: false })
         } else {
           resolve({ projects: defaultProjects, isError: false })
@@ -85,7 +87,7 @@ function updateProject(
             }
           : project
       )
-      
+
       saveProjects(updatedProjects)
       resolve()
     })
@@ -99,7 +101,7 @@ function deleteProject(projectId: string): Promise<void> {
       const updatedProjects = projects.filter(
         (project) => project.id !== projectId
       )
-      
+
       saveProjects(updatedProjects)
       resolve()
     })
@@ -107,9 +109,7 @@ function deleteProject(projectId: string): Promise<void> {
 }
 
 // 獲取單個專案
-function getProjectById(
-  projectId: string
-): Promise<ProjectBasic | null> {
+function getProjectById(projectId: string): Promise<ProjectBasic | null> {
   return new Promise((resolve) => {
     getProjects().then(({ projects }) => {
       resolve(projects.find((project) => project.id === projectId) || null)

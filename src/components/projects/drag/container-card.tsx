@@ -1,6 +1,5 @@
 import { Card } from '@/components/ui/card'
 import { Task } from '@/types/project'
-import { cn } from '@/lib/utils'
 import { DraggableProvided, DraggableStateSnapshot } from '@hello-pangea/dnd'
 import { TaskList } from '@/components/projects/drag/task-list'
 import { DeleteButtonWithDialog } from '@/components/ui/delete-button-with-dialog'
@@ -24,15 +23,15 @@ export function ContainerCard({
     <div
       ref={dragProvided.innerRef}
       {...dragProvided.draggableProps}
-      className={cn('min-w-[300px]', dragSnapshot.isDragging && 'z-10')}
+      className={`min-w-[300px] ${dragSnapshot.isDragging ? 'z-10' : ''}`}
     >
       <Card
         {...dragProvided.dragHandleProps}
-        className={cn(
-          'p-4 transition-all duration-200',
-          dragSnapshot.isDragging &&
-            'shadow-lg ring-2 ring-[#D4763B] ring-opacity-50'
-        )}
+        className={`p-4 transition-all duration-200 ${
+          dragSnapshot.isDragging
+            ? 'shadow-lg ring-2 ring-[#D4763B] ring-opacity-50'
+            : ''
+        }`}
       >
         <div className="group relative mb-4 flex items-center justify-between">
           <h3 className="text-lg font-semibold">

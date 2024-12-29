@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { menuLists } from '@/config/menu'
+import { menuLists } from '@/constants/menu'
 import { usePathname } from 'next/navigation'
 import { useProjects } from '@/hooks/use-projects'
 import { Menu } from '@/types/project'
