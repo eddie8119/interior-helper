@@ -2,8 +2,8 @@
 
 import { useState } from 'react'
 import { Menu, X } from 'lucide-react'
-import { LogoArea } from './logo-area'
-import { MobileSidebar } from './mobile-sidebar'
+import { LogoArea } from '@/components/layout/navigation/logo-area'
+import { MobileSidebar } from '@/components/layout/navigation/mobile-sidebar'
 
 export function MobileNav() {
   const [isOpen, setIsOpen] = useState(false)

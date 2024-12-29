@@ -2,8 +2,8 @@ import { ProjectBasic, Task } from '@/types/project'
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd'
 import { useContainers } from '@/hooks/use-containers'
 import { useDragEnd } from '@/hooks/use-drag-end'
-import { AddContainer } from '../add-container'
-import { ContainerCard } from './container-card'
+import { AddContainer } from '@/components/projects/add-container'
+import { ContainerCard } from '@/components/projects/drag/container-card'
 
 const DROPPABLE_TYPE = {
   CONTAINER: 'container',

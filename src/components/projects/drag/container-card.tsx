@@ -2,7 +2,7 @@ import { Card } from '@/components/ui/card'
 import { Task } from '@/types/project'
 import { cn } from '@/lib/utils'
 import { DraggableProvided, DraggableStateSnapshot } from '@hello-pangea/dnd'
-import { TaskList } from './task-list'
+import { TaskList } from '@/components/projects/drag/task-list'
 import { DeleteButtonWithDialog } from '@/components/ui/delete-button-with-dialog'
 
 interface ContainerCardProps {
