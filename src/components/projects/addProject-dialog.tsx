@@ -18,17 +18,11 @@ import {
   FormControl,
   InputLabel,
 } from '@mui/material'
+import { PROJECT_TYPES } from '@/constants/selection'
 
 interface AddProjectDialogProps {
   onAddProject: (project: any) => void
 }
-
-const PROJECT_TYPES = [
-  { value: 'residential', label: '住宅' },
-  { value: 'luxury', label: '豪宅' },
-  { value: 'commercial', label: '商空' },
-  { value: 'office', label: '辦公室' },
-]
 
 export function AddProjectDialog({ onAddProject }: AddProjectDialogProps) {
   const [open, setOpen] = useState(false)

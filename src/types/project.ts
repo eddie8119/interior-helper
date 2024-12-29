@@ -8,6 +8,12 @@ export interface Menu {
   icon: FC<SVGProps<SVGElement>>
   subMenu?: ProjectMenu[]
 }
+
+export interface ProjectType {
+  value: string
+  label: string
+}
+
 export interface Container {
   id: string
   type: string
