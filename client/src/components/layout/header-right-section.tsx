@@ -1,7 +1,7 @@
 'use client'
 
 import { useTheme } from '@/contexts/theme-context'
-
+import { LoginDialog } from '@/components/layout/login-dialog'
 export function HeaderRightSection() {
   const { theme, toggleTheme } = useTheme()
 
@@ -69,6 +69,7 @@ export function HeaderRightSection() {
           />
         </svg>
       </button>
+      <LoginDialog />
     </div>
   )
 }
