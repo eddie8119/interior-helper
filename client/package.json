@@ -1,13 +1,9 @@
 {
   "name": "interior-helper",
-  "version": "1.0.0",
-  "description": "Full stack interior helper application",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
-    "client": "cd client && npm run dev",
-    "server": "cd server && npm run dev",
-    "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "install-all": "npm install && cd client && npm install && cd ../server && npm install",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -36,7 +32,6 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "concurrently": "^8.2.2",
     "eslint": "^9",
     "eslint-config-next": "15.1.0",
     "postcss": "^8",
