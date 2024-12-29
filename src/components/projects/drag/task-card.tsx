@@ -88,7 +88,7 @@ export function TaskCard({ task, index }: TaskCardProps) {
               />
               <div className="flex justify-between">
                 <Button
-                  className="border-cancel hover:bg-cancel text-cancel border hover:text-white"
+                  className="border border-cancel text-cancel hover:bg-cancel hover:text-white"
                   onClick={handleCancel}
                 >
                   刪除
