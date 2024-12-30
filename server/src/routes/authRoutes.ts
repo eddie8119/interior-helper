@@ -1,12 +1,25 @@
 import express from 'express';
-import { register } from '../controllers/authController';
+import {
+  register,
+  login,
+  logout,
+  getCurrentUser,
+  updateCurrentUser,
+  updatePassword,
+} from '../controllers/authController';
+import { protect } from '../middleware/auth';
 
 const router = express.Router();
 
-router.post('/users/login', (req, res) => {});
+// Public routes
+router.post('/register', register);
+router.post('/login', login);
 
-router.get('/users/register', register);
-
-router.get('/users/logout', (req, res) => {});
+// Protected routes
+router.use(protect); // 應用身份驗證中間件到以下所有路由
+router.post('/logout', logout);
+router.get('/me', getCurrentUser);
+router.put('/me', updateCurrentUser);
+router.put('/password', updatePassword);
 
 export default router;
