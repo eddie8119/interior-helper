@@ -94,7 +94,7 @@ export class Project extends BaseEntity {
   // 計算剩餘天數
   calculateDaysLeft(): void {
     if (!this.endDate) {
-      this.daysLeft = null;
+      this.daysLeft = undefined;  
       return;
     }
 
