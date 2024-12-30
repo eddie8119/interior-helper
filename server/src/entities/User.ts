@@ -1,11 +1,21 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, OneToMany } from 'typeorm';
+import {
+  Entity,
+  Column,
+  OneToMany,
+  BeforeInsert,
+  BeforeUpdate,
+} from 'typeorm';
+import * as bcrypt from 'bcryptjs';
+import { BaseEntity } from './Base';
 import { Project } from './Project';
 
-@Entity('users')
-export class User {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+export enum UserRole {
+  ADMIN = 'admin',
+  USER = 'user',
+}
 
+@Entity('users')
+export class User extends BaseEntity {
   @Column({ unique: true })
   email: string;
 
@@ -15,9 +25,36 @@ export class User {
   @Column()
   name: string;
 
-  @CreateDateColumn()
-  createdAt: Date;
+  @Column({
+    type: 'enum',
+    enum: UserRole,
+    default: UserRole.USER,
+  })
+  role: UserRole;
+
+  @Column({ nullable: true })
+  avatar?: string;
+
+  @Column({ default: false })
+  isEmailVerified: boolean;
+
+  @Column({ nullable: true })
+  lastLoginAt?: Date;
 
   @OneToMany(() => Project, project => project.user)
   projects: Project[];
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  async hashPassword() {
+    // Only hash the password if it has been modified
+    if (this.password && this.password.length < 60) {
+      const salt = await bcrypt.genSalt(10);
+      this.password = await bcrypt.hash(this.password, salt);
+    }
+  }
+
+  async comparePassword(candidatePassword: string): Promise<boolean> {
+    return bcrypt.compare(candidatePassword, this.password);
+  }
 }
