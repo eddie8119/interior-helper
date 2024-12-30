@@ -15,7 +15,7 @@ export const AppDataSource = new DataSource({
   entities: [User, Project, Task],
   migrations: [],
   subscribers: [],
-})
+});
 
 export const initializeDatabase = async () => {
   try {

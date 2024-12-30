@@ -34,11 +34,9 @@ export const register = async (req: Request, res: Response): Promise<void> => {
     await userRepository.save(user);
 
     // Create token
-    const token = jwt.sign(
-      { id: user.id },
-      process.env.JWT_SECRET as string,
-      { expiresIn: '30d' }
-    );
+    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET as string, {
+      expiresIn: '30d',
+    });
 
     res.status(201).json({
       id: user.id,
