@@ -1,13 +1,28 @@
-import mongoose from 'mongoose';
+import { DataSource } from 'typeorm';
+import { User } from '../entities/User';
+import { Project } from '../entities/Project';
+import { Task } from '../entities/Task';
 
-const connectDB = async (): Promise<void> => {
+export const AppDataSource = new DataSource({
+  type: 'mysql',
+  host: process.env.DB_HOST || 'localhost',
+  port: parseInt(process.env.DB_PORT || '3306'),
+  username: process.env.DB_USER || 'root',
+  password: process.env.DB_PASSWORD || '',
+  database: process.env.DB_NAME || 'interior_helper',
+  synchronize: process.env.NODE_ENV === 'development', // 開發環境下自動同步數據庫結構
+  logging: process.env.NODE_ENV === 'development',
+  entities: [User, Project, Task],
+  migrations: [],
+  subscribers: [],
+})
+
+export const initializeDatabase = async () => {
   try {
-    const conn = await mongoose.connect(process.env.MONGODB_URI as string);
-    console.log(`MongoDB Connected: ${conn.connection.host}`);
+    await AppDataSource.initialize();
+    console.log('Database connection established');
   } catch (error) {
-    console.error(`Error: ${error instanceof Error ? error.message : 'Unknown error occurred'}`);
+    console.error('Error connecting to database:', error);
     process.exit(1);
   }
 };
-
-export default connectDB;

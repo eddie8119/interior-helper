@@ -1,7 +1,8 @@
+import 'reflect-metadata';
 import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import connectDB from './config/database';
+import { initializeDatabase } from './config/database';
 import authRoutes from './routes/authRoutes';
 
 // Load env vars
@@ -10,8 +11,8 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 5000;
 
-// Connect to MongoDB
-connectDB();
+// Initialize database connection
+initializeDatabase();
 
 // Middleware
 app.use(cors());
