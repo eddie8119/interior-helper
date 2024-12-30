@@ -4,6 +4,9 @@ import { AppDataSource } from '../config/database';
 import { User } from '../entities/User';
 import { AuthRequest } from '../middleware/auth';
 
+// 初始化 repository
+const userRepository = AppDataSource.getRepository(User);
+
 // 生成 JWT Token
 const generateToken = (id: string): string => {
   return jwt.sign({ id }, process.env.JWT_SECRET as string, {
@@ -15,8 +18,6 @@ const generateToken = (id: string): string => {
 // @route   POST /api/auth/register
 // @access  Public
 export const register = async (req: Request, res: Response): Promise<void> => {
-  const userRepository = AppDataSource.getRepository(User);
-
   try {
     const { email, password, name } = req.body;
 
@@ -74,8 +75,6 @@ export const register = async (req: Request, res: Response): Promise<void> => {
 // @route   POST /api/auth/login
 // @access  Public
 export const login = async (req: Request, res: Response): Promise<void> => {
-  const userRepository = AppDataSource.getRepository(User);
-
   try {
     const { email, password } = req.body;
 
@@ -150,7 +149,6 @@ export const logout = async (req: AuthRequest, res: Response): Promise<void> => 
 // @access  Private
 export const getCurrentUser = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    const userRepository = AppDataSource.getRepository(User);
     const user = await userRepository.findOne({
       where: { id: req.user?.id },
       select: ['id', 'name', 'email', 'role', 'isEmailVerified', 'lastLoginAt', 'avatar'],
@@ -173,7 +171,6 @@ export const getCurrentUser = async (req: AuthRequest, res: Response): Promise<v
 // @access  Private
 export const updateCurrentUser = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    const userRepository = AppDataSource.getRepository(User);
     const user = await userRepository.findOne({ where: { id: req.user?.id } });
 
     if (!user) {
@@ -217,7 +214,6 @@ export const updatePassword = async (req: AuthRequest, res: Response): Promise<v
       return;
     }
 
-    const userRepository = AppDataSource.getRepository(User);
     const user = await userRepository.findOne({ where: { id: req.user?.id } });
 
     if (!user) {

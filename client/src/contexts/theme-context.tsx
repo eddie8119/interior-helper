@@ -11,24 +11,21 @@ type ThemeContextType = {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined)
 
-// Function to get initial theme
 const getInitialTheme = (): Theme => {
   if (typeof window !== 'undefined') {
-    // Only check localStorage
     const savedTheme = localStorage.getItem('theme') as Theme
     if (savedTheme) {
       return savedTheme
     }
   }
-  // default
+
   return 'light'
 }
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setTheme] = useState<Theme>(() => getInitialTheme())
-  const [mounted, setMounted] = useState(false)
+  const [mounted, setMounted] = useState<boolean>(false)
 
-  // Handle initial theme setup
   useEffect(() => {
     setMounted(true)
     const root = window.document.documentElement
@@ -42,7 +39,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     localStorage.setItem('theme', newTheme)
   }
 
-  // Avoid hydration mismatch
+  // 防止伺服器端渲染和客戶端渲染不一致  hydration mismatch
   if (!mounted) {
     return null
   }
