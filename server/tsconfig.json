@@ -14,9 +14,15 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "strictPropertyInitialization": false,
-    "baseUrl": ".",
+    "baseUrl": "./src",
     "paths": {
-      "*": ["node_modules/*"]
+      "@/*": ["*"],
+      "@entities/*": ["entities/*"],
+      "@config/*": ["config/*"],
+      "@controllers/*": ["controllers/*"],
+      "@middleware/*": ["middleware/*"],
+      "@routes/*": ["routes/*"],
+      "@utils/*": ["utils/*"]
     }
   },
   "include": ["src/**/*"],

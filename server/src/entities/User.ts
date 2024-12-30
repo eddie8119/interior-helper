@@ -1,10 +1,4 @@
-import {
-  Entity,
-  Column,
-  OneToMany,
-  BeforeInsert,
-  BeforeUpdate,
-} from 'typeorm';
+import { Entity, Column, OneToMany, BeforeInsert, BeforeUpdate } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
 import { BaseEntity } from './Base';
 import { Project } from './Project';
