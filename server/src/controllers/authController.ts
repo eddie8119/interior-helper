@@ -19,10 +19,10 @@ const generateToken = (id: string): string => {
 // @access  Public
 export const register = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { email, password, name } = req.body;
+    const { email, password, confirmPassword, name } = req.body;
 
     // 檢查必要欄位
-    if (!email || !password || !name) {
+    if (!email || !password || !confirmPassword || !name) {
       res.status(400).json({ message: '請填寫所有必要欄位' });
       return;
     }
@@ -30,6 +30,28 @@ export const register = async (req: Request, res: Response): Promise<void> => {
     // 檢查密碼長度
     if (password.length < 6) {
       res.status(400).json({ message: '密碼長度至少需要6個字符' });
+      return;
+    }
+
+    // 檢查密碼是否匹配
+    if (password !== confirmPassword) {
+      res.status(400).json({ message: '兩次輸入的密碼不一致' });
+      return;
+    }
+
+    // 檢查密碼複雜度
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$/;
+    if (!passwordRegex.test(password)) {
+      res.status(400).json({ 
+        message: '密碼必須包含至少一個大寫字母、一個小寫字母和一個數字' 
+      });
+      return;
+    }
+
+    // 檢查郵箱格式
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      res.status(400).json({ message: '請輸入有效的郵箱地址' });
       return;
     }
 
