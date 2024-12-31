@@ -4,8 +4,8 @@
   "description": "Backend server for interior helper application",
   "main": "dist/index.js",
   "scripts": {
-    "start": "node -r tsconfig-paths/register dist/index.js",
-    "dev": "ts-node-dev -r tsconfig-paths/register --respawn --transpile-only src/index.ts",
+    "dev": "cross-env NODE_ENV=development ts-node-dev --respawn --transpile-only src/server.ts",
+    "start": "cross-env NODE_ENV=production node dist/server.js",
     "build": "tsc",
     "typeorm": "typeorm-ts-node-commonjs",
     "migration:generate": "npm run typeorm migration:generate",
