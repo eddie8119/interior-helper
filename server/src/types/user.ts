@@ -1,10 +1,12 @@
 import { Document } from 'mongoose';
 
-export interface IUser extends Document {
+export interface IUser {
   email: string;
   password: string;
   name: string;
-  createdAt: Date;
+  role: string;
+  isEmailVerified: boolean;
+  lastLoginAt?: Date;
 }
 
 export interface IUserInput {

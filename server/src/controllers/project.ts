@@ -28,9 +28,9 @@ export async function getProjects(req: UserRequest, res: Response): Promise<void
 export async function getProject(req: UserRequest, res: Response): Promise<void> {
   try {
     const project = await projectRepository.findOne({
-      where: { 
+      where: {
         id: req.params.id,
-        user: { id: req.user?.id }
+        user: { id: req.user?.id },
       },
       relations: ['tasks', 'team'],
     });
@@ -52,7 +52,7 @@ export async function getProject(req: UserRequest, res: Response): Promise<void>
 // @access  Private
 export async function createProject(req: UserRequest, res: Response): Promise<void> {
   try {
-    const { title, type, description, startDate, endDate, budget } = req.body;
+    const { title, type, startDate, endDate } = req.body;
 
     // 基本驗證
     if (!title || !type) {
@@ -63,10 +63,10 @@ export async function createProject(req: UserRequest, res: Response): Promise<vo
     const project = projectRepository.create({
       title,
       type,
-      description,
       startDate,
       endDate,
-      budget,
+      budgetTotal: 0,
+      costTotal: 0,
       user: req.user,
       containers: req.body.containers || [],
       progress: 0,
@@ -87,9 +87,9 @@ export async function createProject(req: UserRequest, res: Response): Promise<vo
 export async function updateProject(req: UserRequest, res: Response): Promise<void> {
   try {
     const project = await projectRepository.findOne({
-      where: { 
+      where: {
         id: req.params.id,
-        user: { id: req.user?.id }
+        user: { id: req.user?.id },
       },
     });
 
@@ -119,9 +119,9 @@ export async function updateProject(req: UserRequest, res: Response): Promise<vo
 export async function deleteProject(req: UserRequest, res: Response): Promise<void> {
   try {
     const project = await projectRepository.findOne({
-      where: { 
+      where: {
         id: req.params.id,
-        user: { id: req.user?.id }
+        user: { id: req.user?.id },
       },
     });
 
@@ -152,9 +152,9 @@ export async function updateProjectProgress(req: UserRequest, res: Response): Pr
     }
 
     const project = await projectRepository.findOne({
-      where: { 
+      where: {
         id: req.params.id,
-        user: { id: req.user?.id }
+        user: { id: req.user?.id },
       },
     });
 

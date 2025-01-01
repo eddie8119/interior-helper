@@ -28,9 +28,6 @@ export class Project extends BaseEntity {
   })
   type: ProjectType;
 
-  @Column({ type: 'text', nullable: true })
-  description?: string;
-
   @Column({ type: 'varchar', nullable: true })
   startDate?: string;
 
@@ -38,7 +35,10 @@ export class Project extends BaseEntity {
   endDate?: string;
 
   @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
-  budget?: number;
+  budgetTotal?: number;
+
+  @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
+  costTotal?: number;
 
   @Column({ type: 'float', default: 0 })
   progress: number;
@@ -84,5 +84,16 @@ export class Project extends BaseEntity {
     const end = new Date(this.endDate);
     const diffTime = Math.abs(end.getTime() - today.getTime());
     this.daysLeft = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  }
+
+  // 計算總成本
+  calculateTotalCost(): void {
+    if (!this.tasks?.length) {
+      this.costTotal = 0;
+      return;
+    }
+
+    // 如果 Task 實體有 cost 欄位，可以加總計算
+    // this.costTotal = this.tasks.reduce((total, task) => total + (task.cost || 0), 0);
   }
 }
