@@ -6,7 +6,7 @@ import {
   getCurrentUser,
   updateCurrentUser,
   updatePassword,
-} from '../controllers/userController';
+} from '../controllers/user';
 import { verifyToken } from '../middleware/auth';
 
 const router = express.Router();

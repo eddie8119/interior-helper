@@ -1,11 +1,13 @@
 import { Router } from 'express';
-import userRoutes from './userRoutes';
+import userRoutes from './user';
+import projectRoutes from './project';
 
 const router = Router();
 
 router.use('/api/user', userRoutes);
+router.use('/api/project', projectRoutes);
 
-// 處理 404 路由
+// 404
 router.use('*', (req, res) => {
   res.status(404).json({ message: '找不到該路由' });
 });
