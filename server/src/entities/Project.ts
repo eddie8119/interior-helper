@@ -3,19 +3,17 @@ import { BaseEntity } from './Base';
 import { User } from './User';
 import { Task } from './Task';
 
-export enum ProjectStatus {
-  PLANNING = 'planning',
-  IN_PROGRESS = 'in_progress',
-  ON_HOLD = 'on_hold',
-  COMPLETED = 'completed',
-  CANCELLED = 'cancelled',
-}
-
 export enum ProjectType {
   RESIDENTIAL = 'residential',
+  LUXURY = 'luxury',
   COMMERCIAL = 'commercial',
-  INDUSTRIAL = 'industrial',
-  RENOVATION = 'renovation',
+  OFFICE = 'office',
+}
+
+export interface Container {
+  id: string;
+  type: string;
+  order: number;
 }
 
 @Entity('projects')
@@ -30,12 +28,17 @@ export class Project extends BaseEntity {
   })
   type: ProjectType;
 
-  @Column({
-    type: 'enum',
-    enum: ProjectStatus,
-    default: ProjectStatus.PLANNING,
-  })
-  status: ProjectStatus;
+  @Column({ type: 'text', nullable: true })
+  description?: string;
+
+  @Column({ type: 'varchar', nullable: true })
+  startDate?: string;
+
+  @Column({ type: 'varchar', nullable: true })
+  endDate?: string;
+
+  @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
+  budget?: number;
 
   @Column({ type: 'float', default: 0 })
   progress: number;
@@ -43,32 +46,11 @@ export class Project extends BaseEntity {
   @Column({ type: 'integer', nullable: true })
   daysLeft?: number;
 
-  @Column({ type: 'text', nullable: true })
-  description?: string;
+  @Column({ type: 'json', default: [] })
+  containers: Container[];
 
-  @Column({ type: 'date', nullable: true })
-  startDate?: Date;
-
-  @Column({ type: 'date', nullable: true })
-  endDate?: Date;
-
-  @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
-  budget?: number;
-
-  @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
-  actualCost: number;
-
-  @Column({ type: 'json', nullable: true })
-  location?: {
-    address: string;
-    city: string;
-    state: string;
-    country: string;
-    postalCode: string;
-  };
-
-  @Column({ type: 'simple-array', nullable: true })
-  tags?: string[];
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  editedAt: Date;
 
   @ManyToOne(() => User, user => user.projects)
   @JoinColumn({ name: 'userId' })

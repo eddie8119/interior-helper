@@ -24,11 +24,16 @@ export interface ProjectBasic {
   id: string
   title: string
   type: 'residential' | 'luxury' | 'commercial' | 'office'
+  startDate?: string
+  endDate?: string
+  budget?: number
   progress?: number
   daysLeft?: number
   createdAt: Date
   editedAt: Date
   containers: Container[]
+  team?: TeamMember[]
+  tasks?: Task[]
 }
 
 export interface Task {
@@ -42,15 +47,6 @@ export interface Task {
   dueDate?: Date
   createdAt: Date
   updatedAt: Date
-}
-
-export interface ProjectDetail extends ProjectBasic {
-  description?: string
-  startDate?: string
-  endDate?: string
-  budget?: number
-  team?: TeamMember[]
-  tasks?: Task[]
 }
 
 export interface TeamMember {
