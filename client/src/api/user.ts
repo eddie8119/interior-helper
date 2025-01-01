@@ -1,5 +1,5 @@
 import  request  from '@/lib/request';
-import { RegisterData, LoginData, UpdateUserData, UpdatePasswordData } from '@/types/user';
+import { RegisterData, LoginData, UpdateUserData, UpdatePasswordData } from '@/types/api/user';
 
 export function register(data: RegisterData) {
   return request({

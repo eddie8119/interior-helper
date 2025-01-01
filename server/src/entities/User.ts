@@ -38,6 +38,7 @@ export class User extends BaseEntity {
   @OneToMany(() => Project, project => project.user)
   projects: Project[];
 
+  // 裝飾器會在儲存到資料庫前觸發 hashPassword 方法
   @BeforeInsert()
   @BeforeUpdate()
   async hashPassword() {
