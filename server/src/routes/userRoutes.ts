@@ -6,8 +6,8 @@ import {
   getCurrentUser,
   updateCurrentUser,
   updatePassword,
-} from '../controllers/authController';
-import { protect } from '../middleware/auth';
+} from '../controllers/userController';
+import { protect } from '../middleware/user';
 
 const router = express.Router();
 

@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { AppDataSource } from '../config/database';
 import { User } from '../entities/User';
-import { AuthRequest } from '../middleware/auth';
+import { UserRequest } from '../middleware/user';
 
 // 初始化 repository
 const userRepository = AppDataSource.getRepository(User);
@@ -15,7 +15,7 @@ function generateToken(id: string): string {
 }
 
 // @desc    註冊新用戶
-// @route   POST /api/auth/register
+// @route   POST /api/user/register
 // @access  Public
 export async function register(req: Request, res: Response): Promise<void> {
   try {
@@ -94,7 +94,7 @@ export async function register(req: Request, res: Response): Promise<void> {
 }
 
 // @desc    登入用戶
-// @route   POST /api/auth/login
+// @route   POST /api/user/login
 // @access  Public
 export async function login(req: Request, res: Response): Promise<void> {
   try {
@@ -149,9 +149,9 @@ export async function login(req: Request, res: Response): Promise<void> {
 }
 
 // @desc    登出用戶
-// @route   POST /api/auth/logout
+// @route   POST /api/user/logout
 // @access  Private
-export async function logout(req: AuthRequest, res: Response): Promise<void> {
+export async function logout(req: UserRequest, res: Response): Promise<void> {
   try {
     // 清除 cookie
     res.cookie('token', '', {
@@ -167,9 +167,9 @@ export async function logout(req: AuthRequest, res: Response): Promise<void> {
 }
 
 // @desc    獲取當前用戶信息
-// @route   GET /api/auth/me
+// @route   GET /api/user/me
 // @access  Private
-export async function getCurrentUser(req: AuthRequest, res: Response): Promise<void> {
+export async function getCurrentUser(req: UserRequest, res: Response): Promise<void> {
   try {
     const user = await userRepository.findOne({
       where: { id: req.user?.id },
@@ -189,9 +189,9 @@ export async function getCurrentUser(req: AuthRequest, res: Response): Promise<v
 }
 
 // @desc    更新用戶信息
-// @route   PUT /api/auth/me
+// @route   PUT /api/user/me
 // @access  Private
-export async function updateCurrentUser(req: AuthRequest, res: Response): Promise<void> {
+export async function updateCurrentUser(req: UserRequest, res: Response): Promise<void> {
   try {
     const user = await userRepository.findOne({ where: { id: req.user?.id } });
 
@@ -220,9 +220,9 @@ export async function updateCurrentUser(req: AuthRequest, res: Response): Promis
 }
 
 // @desc    更改密碼
-// @route   PUT /api/auth/password
+// @route   PUT /api/user/password
 // @access  Private
-export async function updatePassword(req: AuthRequest, res: Response): Promise<void> {
+export async function updatePassword(req: UserRequest, res: Response): Promise<void> {
   try {
     const { currentPassword, newPassword } = req.body;
 

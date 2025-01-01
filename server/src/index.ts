@@ -4,7 +4,7 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
 import { initializeDatabase } from './config/database';
-import authRoutes from './routes/authRoutes';
+import routes from './routes';
 
 // Load env vars
 dotenv.config();
@@ -27,11 +27,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
-app.use('/api/auth', authRoutes);
-
-app.get('/api/test', (req: Request, res: Response) => {
-  res.json({ message: 'Backend server is running!' });
-});
+app.use(routes);
 
 // Error handling middleware
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {

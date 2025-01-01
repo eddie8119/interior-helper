@@ -3,12 +3,12 @@ import jwt from 'jsonwebtoken';
 import { AppDataSource } from '../config/database';
 import { User } from '../entities/User';
 
-export interface AuthRequest extends Request {
+export interface UserRequest extends Request {
   user?: User;
 }
 
 export const protect = async (
-  req: AuthRequest,
+  req: UserRequest,
   res: Response,
   next: NextFunction,
 ): Promise<void> => {
