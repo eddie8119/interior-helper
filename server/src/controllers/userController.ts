@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { AppDataSource } from '../config/database';
 import { User } from '../entities/User';
-import { UserRequest } from '../middleware/user';
+import { UserRequest } from '../middleware/auth';
 
 // 初始化 repository
 const userRepository = AppDataSource.getRepository(User);
