@@ -2,12 +2,10 @@ import dotenv from 'dotenv';
 import path from 'path';
 
 // 根據 NODE_ENV 加載對應的環境變量文件
-const envFile = process.env.NODE_ENV === 'production' 
-  ? '.env.production' 
-  : '.env.development';
+const envFile = process.env.NODE_ENV === 'production' ? '.env.production' : '.env.development';
 
-dotenv.config({ 
-  path: path.resolve(process.cwd(), envFile) 
+dotenv.config({
+  path: path.resolve(process.cwd(), envFile),
 });
 
 // 配置對象
@@ -16,7 +14,7 @@ const config = {
   port: parseInt(process.env.PORT || '5000', 10),
   jwtSecret: process.env.JWT_SECRET,
   database: {
-    url: process.env.DATABASE_URL
+    url: process.env.DATABASE_URL,
   },
   // 其他配置...
 };
@@ -24,7 +22,7 @@ const config = {
 // 驗證必要的環境變量
 const validateConfig = () => {
   const requiredEnvVars = ['JWT_SECRET', 'DATABASE_URL'];
-  
+
   for (const envVar of requiredEnvVars) {
     if (!process.env[envVar]) {
       throw new Error(`Missing required environment variable: ${envVar}`);
