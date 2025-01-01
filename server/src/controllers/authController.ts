@@ -8,16 +8,16 @@ import { AuthRequest } from '../middleware/auth';
 const userRepository = AppDataSource.getRepository(User);
 
 // 生成 JWT Token
-const generateToken = (id: string): string => {
+function generateToken(id: string): string {
   return jwt.sign({ id }, process.env.JWT_SECRET as string, {
     expiresIn: '30d',
   });
-};
+}
 
 // @desc    註冊新用戶
 // @route   POST /api/auth/register
 // @access  Public
-export const register = async (req: Request, res: Response): Promise<void> => {
+export async function register(req: Request, res: Response): Promise<void> {
   try {
     const { email, password, confirmPassword, name } = req.body;
 
@@ -91,12 +91,12 @@ export const register = async (req: Request, res: Response): Promise<void> => {
     console.error('Register error:', error);
     res.status(500).json({ message: '註冊失敗，請稍後再試' });
   }
-};
+}
 
 // @desc    登入用戶
 // @route   POST /api/auth/login
 // @access  Public
-export const login = async (req: Request, res: Response): Promise<void> => {
+export async function login(req: Request, res: Response): Promise<void> {
   try {
     const { email, password } = req.body;
 
@@ -146,12 +146,12 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     console.error('Login error:', error);
     res.status(500).json({ message: '登入失敗，請稍後再試' });
   }
-};
+}
 
 // @desc    登出用戶
 // @route   POST /api/auth/logout
 // @access  Private
-export const logout = async (req: AuthRequest, res: Response): Promise<void> => {
+export async function logout(req: AuthRequest, res: Response): Promise<void> {
   try {
     // 清除 cookie
     res.cookie('token', '', {
@@ -164,12 +164,12 @@ export const logout = async (req: AuthRequest, res: Response): Promise<void> => 
     console.error('Logout error:', error);
     res.status(500).json({ message: '登出失敗，請稍後再試' });
   }
-};
+}
 
 // @desc    獲取當前用戶信息
 // @route   GET /api/auth/me
 // @access  Private
-export const getCurrentUser = async (req: AuthRequest, res: Response): Promise<void> => {
+export async function getCurrentUser(req: AuthRequest, res: Response): Promise<void> {
   try {
     const user = await userRepository.findOne({
       where: { id: req.user?.id },
@@ -186,12 +186,12 @@ export const getCurrentUser = async (req: AuthRequest, res: Response): Promise<v
     console.error('Get current user error:', error);
     res.status(500).json({ message: '獲取用戶信息失敗' });
   }
-};
+}
 
 // @desc    更新用戶信息
 // @route   PUT /api/auth/me
 // @access  Private
-export const updateCurrentUser = async (req: AuthRequest, res: Response): Promise<void> => {
+export async function updateCurrentUser(req: AuthRequest, res: Response): Promise<void> {
   try {
     const user = await userRepository.findOne({ where: { id: req.user?.id } });
 
@@ -217,12 +217,12 @@ export const updateCurrentUser = async (req: AuthRequest, res: Response): Promis
     console.error('Update user error:', error);
     res.status(500).json({ message: '更新用戶信息失敗' });
   }
-};
+}
 
 // @desc    更改密碼
 // @route   PUT /api/auth/password
 // @access  Private
-export const updatePassword = async (req: AuthRequest, res: Response): Promise<void> => {
+export async function updatePassword(req: AuthRequest, res: Response): Promise<void> {
   try {
     const { currentPassword, newPassword } = req.body;
 
@@ -259,4 +259,4 @@ export const updatePassword = async (req: AuthRequest, res: Response): Promise<v
     console.error('Update password error:', error);
     res.status(500).json({ message: '更新密碼失敗' });
   }
-};
+}
