@@ -1,10 +1,9 @@
-import 'reflect-metadata';
 import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import { config } from 'dotenv';
-import { AppDataSource } from './config/database';
 import routes from './routes';
+import prisma from './lib/prisma';
 
 // 載入環境變數
 config();
@@ -50,11 +49,11 @@ app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
   });
 });
 
-// 初始化資料庫並啟動服務器
+// 初始化服務器
 const startServer = async () => {
   try {
-    // 初始化資料庫連接
-    await AppDataSource.initialize();
+    // 測試資料庫連接
+    await prisma.$connect();
     console.log('✓ 資料庫連接成功');
 
     // 啟動服務器
@@ -77,6 +76,13 @@ process.on('unhandledRejection', (reason: Error) => {
 process.on('uncaughtException', (error: Error) => {
   console.error('未捕獲的異常:', error);
   process.exit(1);
+});
+
+// 優雅關閉
+process.on('SIGTERM', async () => {
+  console.log('正在關閉應用...');
+  await prisma.$disconnect();
+  process.exit(0);
 });
 
 // 啟動應用
