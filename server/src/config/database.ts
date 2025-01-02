@@ -1,20 +1,22 @@
 import { DataSource } from 'typeorm';
-import { User } from '../entities/User';
-import { Project } from '../entities/Project';
-import { Task } from '../entities/Task';
+import { config } from 'dotenv';
+import path from 'path';
+
+// 載入環境變數
+config();
 
 export const AppDataSource = new DataSource({
   type: 'mysql',
   host: process.env.DB_HOST || 'localhost',
   port: parseInt(process.env.DB_PORT || '3306'),
-  username: process.env.DB_USER || 'root',
+  username: process.env.DB_USERNAME || 'root',
   password: process.env.DB_PASSWORD || '',
-  database: process.env.DB_NAME || 'interior_helper',
-  synchronize: process.env.NODE_ENV === 'development', // 開發環境下自動同步數據庫結構
-  logging: process.env.NODE_ENV === 'development',
-  entities: [User, Project, Task],
-  migrations: [],
-  subscribers: [],
+  database: process.env.DB_DATABASE || 'interior_helper',
+  synchronize: process.env.NODE_ENV === 'development', // 開發環境下自動同步資料庫結構
+  logging: process.env.NODE_ENV === 'development',     // 開發環境下顯示 SQL 日誌
+  entities: [path.join(__dirname, '..', 'entities', '*.{ts,js}')],
+  migrations: [path.join(__dirname, '..', 'migrations', '*.{ts,js}')],
+  subscribers: [path.join(__dirname, '..', 'subscribers', '*.{ts,js}')],
 });
 
 export const initializeDatabase = async () => {

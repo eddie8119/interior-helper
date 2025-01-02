@@ -11,34 +11,39 @@ dotenv.config({
 // 配置對象
 const config = {
   env: process.env.NODE_ENV || 'development',
-  port: parseInt(process.env.PORT || '5000', 10),
+  port: parseInt(process.env.PORT || '3000', 10),
   jwtSecret: process.env.JWT_SECRET,
   database: {
-    url: process.env.DATABASE_URL,
+    host: process.env.DB_HOST || 'localhost',
+    port: parseInt(process.env.DB_PORT || '3306', 10),
+    username: process.env.DB_USERNAME || 'root',
+    password: process.env.DB_PASSWORD || '',
+    database: process.env.DB_DATABASE || 'interior_helper',
   },
-  // 其他配置...
+  api: {
+    prefix: process.env.API_PREFIX || '/api',
+  }
 };
 
 // 驗證必要的環境變量
 const validateConfig = () => {
-  const requiredEnvVars = ['JWT_SECRET', 'DATABASE_URL'];
+  const requiredEnvVars = ['JWT_SECRET', 'DB_PASSWORD'];
 
   for (const envVar of requiredEnvVars) {
     if (!process.env[envVar]) {
-      throw new Error(`Missing required environment variable: ${envVar}`);
+      throw new Error(`缺少必要的環境變數: ${envVar}`);
     }
   }
 
   // JWT_SECRET 長度檢查
   if (process.env.JWT_SECRET!.length < 32) {
-    throw new Error('JWT_SECRET is too short (minimum 32 characters)');
+    throw new Error('JWT_SECRET 太短了 (最少需要 32 個字符)');
   }
 
   // 生產環境特定檢查
   if (process.env.NODE_ENV === 'production') {
-    // 確保生產環境使用更複雜的密鑰
-    if (process.env.JWT_SECRET === 'dev_jwt_secret_123456') {
-      throw new Error('Production environment cannot use development JWT_SECRET');
+    if (!process.env.DB_PASSWORD || process.env.DB_PASSWORD === 'default_password') {
+      throw new Error('生產環境不能使用預設密碼');
     }
   }
 };
