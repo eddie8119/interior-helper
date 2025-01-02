@@ -10,50 +10,68 @@ datasource db {
 }
 
 model User {
-  id             String    @id @default(uuid())
-  email          String    @unique
-  password       String
-  name           String
-  role           String    @default("user")
-  isEmailVerified Boolean  @default(false)
-  lastLoginAt    DateTime?
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
-  projects       Project[]
+  id              String    @id @default(uuid())
+  email           String    @unique
+  password        String
+  name            String
+  role            String    @default("user")
+  isEmailVerified Boolean   @default(false)
+  lastLoginAt     DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  projects        Project[]
 }
 
 model Project {
-  id          String   @id @default(uuid())
+  id          String      @id @default(uuid())
   title       String
-  type        String
+  type        ProjectType
   startDate   String?
   endDate     String?
   budgetTotal Float?
   costTotal   Float?
-  progress    Float    @default(0)
+  progress    Float       @default(0)
   daysLeft    Int?
-  containers  Json     @default("[]")
-  createdAt   DateTime @default(now())
-  editedAt    DateTime @updatedAt
+  containers  Json        @default("[]")
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
   userId      String
-  user        User     @relation(fields: [userId], references: [id])
+  user        User        @relation(fields: [userId], references: [id])
   tasks       Task[]
 
   @@index([userId])
 }
 
 model Task {
-  id              String   @id @default(uuid())
+  id               String     @id @default(uuid())
   constructionType String
-  title           String
-  content         String?  @db.Text
-  status          String   @default("todo")
-  priority        String?
-  dueDate         DateTime?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-  projectId       String
-  project         Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  title            String
+  content          String?    @db.Text
+  status           TaskStatus @default(todo)
+  priority         Priority   @default(low)
+  dueDate          DateTime?
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
+  projectId        String
+  project          Project    @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
   @@index([projectId])
+}
+
+enum ProjectType {
+  residential
+  luxury
+  commercial
+  office
+}
+
+enum TaskStatus {
+  todo
+  progress
+  done
+}
+
+enum Priority {
+  low
+  high
 }

@@ -26,11 +26,12 @@ export interface ProjectBasic {
   type: 'residential' | 'luxury' | 'commercial' | 'office'
   startDate?: string
   endDate?: string
-  budget?: number
-  progress?: number
+  budgetTotal?: number
+  costTotal?: number
+  progress: number
   daysLeft?: number
   createdAt: Date
-  editedAt: Date
+  updatedAt: Date
   containers: Container[]
   team?: TeamMember[]
   tasks?: Task[]
@@ -42,8 +43,8 @@ export interface Task {
   projectId: string
   title: string
   content?: string
-  status: 'todo' | 'in-progress' | 'done'
-  priority?: 'low' | 'medium' | 'high'
+  status: 'todo' | 'progress' | 'done'
+  priority?: 'low' | 'high'
   dueDate?: Date
   createdAt: Date
   updatedAt: Date
