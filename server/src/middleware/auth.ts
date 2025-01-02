@@ -1,56 +1,65 @@
-import { Request, Response, NextFunction } from 'express';
+import { Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { AppDataSource } from '../config/database';
-import { User } from '../entities/User';
+import prisma from '../lib/prisma';
+import { AuthRequest, JwtCustomPayload } from '../types/auth';
 
-export interface UserRequest extends Request {
-  user?: User;
+// 擴展 Request 類型以包含用戶信息
+declare global {
+  namespace Express {
+    interface Request {
+      user?: {
+        id: string;
+        email: string;
+        role: string;
+      };
+    }
+  }
 }
 
-export const verifyToken = async (
-  req: UserRequest,
+export async function authMiddleware(
+  req: AuthRequest,
   res: Response,
-  next: NextFunction,
-): Promise<void> => {
+  next: NextFunction
+) {
   try {
-    let token: string | undefined;
-    if (req.headers.authorization?.startsWith('Bearer')) {
-      token = req.headers.authorization.split(' ')[1];
-    } else if (req.cookies?.token) {
-      token = req.cookies.token;
-    }
+    // 從 header 或 cookie 中獲取 token
+    const token = 
+      req.headers.authorization?.split(' ')[1] || 
+      req.cookies.token;
 
     if (!token) {
-      res.status(401).json({ message: '請先登入' });
-      return;
+      return res.status(401).json({ error: '未提供認證令牌' });
     }
 
     // 驗證 token
-    const verified = jwt.verify(token, process.env.JWT_SECRET as string) as { id: string };
+    const decoded = jwt.verify(
+      token,
+      process.env.JWT_SECRET!
+    ) as JwtCustomPayload;
 
-    // 獲取用戶信息
-    const userRepository = AppDataSource.getRepository(User);
-    const user = await userRepository.findOne({
-      where: { id: verified.id },
-      select: ['id', 'email', 'name', 'role', 'isEmailVerified', 'lastLoginAt'],
+    // 檢查用戶是否存在
+    const user = await prisma.user.findUnique({
+      where: { id: decoded.id },
+      select: {
+        id: true,
+        email: true,
+        role: true
+      }
     });
 
     if (!user) {
-      res.status(401).json({ message: '用戶不存在' });
-      return;
+      return res.status(401).json({ error: '用戶不存在' });
     }
 
+    // 將用戶信息添加到請求對象
     req.user = user;
+
     next();
   } catch (error) {
-    // JWT 驗證失敗
     if (error instanceof jwt.JsonWebTokenError) {
-      res.status(401).json({ message: 'Token 無效或已過期' });
-      return;
+      return res.status(401).json({ error: '無效的認證令牌' });
     }
-
-    // 其他錯誤
-    console.error('Auth middleware error:', error);
-    res.status(500).json({ message: '服務器錯誤' });
+    console.error('認證中間件錯誤:', error);
+    res.status(500).json({ error: '認證失敗' });
   }
-};
+}

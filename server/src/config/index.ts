@@ -13,21 +13,18 @@ const config = {
   env: process.env.NODE_ENV || 'development',
   port: parseInt(process.env.PORT || '3000', 10),
   jwtSecret: process.env.JWT_SECRET,
-  database: {
-    host: process.env.DB_HOST || 'localhost',
-    port: parseInt(process.env.DB_PORT || '3306', 10),
-    username: process.env.DB_USERNAME || 'root',
-    password: process.env.DB_PASSWORD || '',
-    database: process.env.DB_DATABASE || 'interior_helper',
-  },
   api: {
     prefix: process.env.API_PREFIX || '/api',
+  },
+  cors: {
+    origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+    credentials: true,
   }
 };
 
 // 驗證必要的環境變量
 const validateConfig = () => {
-  const requiredEnvVars = ['JWT_SECRET', 'DB_PASSWORD'];
+  const requiredEnvVars = ['JWT_SECRET', 'DATABASE_URL'];
 
   for (const envVar of requiredEnvVars) {
     if (!process.env[envVar]) {
@@ -42,8 +39,8 @@ const validateConfig = () => {
 
   // 生產環境特定檢查
   if (process.env.NODE_ENV === 'production') {
-    if (!process.env.DB_PASSWORD || process.env.DB_PASSWORD === 'default_password') {
-      throw new Error('生產環境不能使用預設密碼');
+    if (!process.env.DATABASE_URL || process.env.DATABASE_URL.includes('localhost')) {
+      throw new Error('生產環境不能使用本地數據庫');
     }
   }
 };

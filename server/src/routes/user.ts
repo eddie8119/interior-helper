@@ -1,25 +1,19 @@
-import express from 'express';
-import {
-  register,
-  login,
-  logout,
-  getCurrentUser,
-  updateCurrentUser,
-  updatePassword,
-} from '../controllers/user';
-import { verifyToken } from '../middleware/auth';
+import { Router } from 'express';
+import { UserController } from '../controllers/user';
+import { authMiddleware } from '../middleware/auth';
 
-const router = express.Router();
+const router = Router();
+const userController = new UserController();
 
-// Public routes
-router.post('/register', register);
-router.post('/login', login);
+// 公開路由（不需要認證）
+router.post('/register', userController.register);
+router.post('/login', userController.login);
 
-// Protected routes
-router.use(verifyToken); // 應用身份驗證中間件到以下所有路由
-router.post('/logout', logout);
-router.get('/me', getCurrentUser);
-router.put('/me', updateCurrentUser);
-router.put('/password', updatePassword);
+// 需要認證的路由
+router.use(authMiddleware);
+router.post('/logout', userController.logout);
+router.get('/me', userController.getCurrentUser);
+router.put('/me', userController.updateUser);
+router.delete('/me', userController.deleteUser);
 
 export default router;

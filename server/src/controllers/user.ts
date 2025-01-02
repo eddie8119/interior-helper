@@ -1,262 +1,182 @@
 import { Request, Response } from 'express';
+import prisma from '../lib/prisma';
+import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { AppDataSource } from '../config/database';
-import { User } from '../entities/User';
-import { UserRequest } from '../middleware/auth';
 
-// 初始化 repository
-const userRepository = AppDataSource.getRepository(User);
+export class UserController {
+  // 用戶註冊
+  async register(req: Request, res: Response) {
+    try {
+      const { email, password, name } = req.body;
 
-// 生成 JWT Token
-function generateToken(id: string): string {
-  return jwt.sign({ id }, process.env.JWT_SECRET as string, {
-    expiresIn: '30d',
-  });
-}
-
-// @desc    註冊新用戶
-// @route   POST /api/user/register
-// @access  Public
-export async function register(req: Request, res: Response): Promise<void> {
-  try {
-    const { email, password, confirmPassword, name } = req.body;
-
-    // 檢查必要欄位
-    if (!email || !password || !confirmPassword || !name) {
-      res.status(400).json({ message: '請填寫所有必要欄位' });
-      return;
-    }
-
-    // 檢查密碼長度
-    if (password.length < 6) {
-      res.status(400).json({ message: '密碼長度至少需要6個字符' });
-      return;
-    }
-
-    // 檢查密碼是否匹配
-    if (password !== confirmPassword) {
-      res.status(400).json({ message: '兩次輸入的密碼不一致' });
-      return;
-    }
-
-    // 檢查密碼複雜度
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$/;
-    if (!passwordRegex.test(password)) {
-      res.status(400).json({
-        message: '密碼必須包含至少一個大寫字母、一個小寫字母和一個數字',
+      // 檢查郵箱是否已存在
+      const existingUser = await prisma.user.findUnique({
+        where: { email }
       });
-      return;
+
+      if (existingUser) {
+        return res.status(400).json({ error: '此郵箱已被註冊' });
+      }
+
+      // 加密密碼
+      const hashedPassword = await bcrypt.hash(password, 10);
+
+      // 創建新用戶
+      const newUser = await prisma.user.create({
+        data: {
+          email,
+          password: hashedPassword,
+          name
+        },
+        select: {
+          id: true,
+          email: true,
+          name: true,
+          role: true,
+          isEmailVerified: true,
+          createdAt: true
+        }
+      });
+
+      res.status(201).json(newUser);
+    } catch (error) {
+      console.error('註冊失敗:', error);
+      res.status(500).json({ error: '註冊失敗' });
     }
-
-    // 檢查郵箱格式
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      res.status(400).json({ message: '請輸入有效的郵箱地址' });
-      return;
-    }
-
-    // 檢查用戶是否已存在
-    const userExists = await userRepository.findOne({ where: { email } });
-    if (userExists) {
-      res.status(400).json({ message: '此信箱已被註冊' });
-      return;
-    }
-
-    // 創建用戶
-    const user = userRepository.create({
-      email,
-      password,
-      name,
-    });
-
-    await userRepository.save(user);
-
-    // 生成 token
-    const token = generateToken(user.id);
-
-    // 設置 cookie
-    res.cookie('token', token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
-    });
-
-    res.status(201).json({
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      token,
-    });
-  } catch (error) {
-    console.error('Register error:', error);
-    res.status(500).json({ message: '註冊失敗，請稍後再試' });
   }
-}
 
-// @desc    登入用戶
-// @route   POST /api/user/login
-// @access  Public
-export async function login(req: Request, res: Response): Promise<void> {
-  try {
-    const { email, password } = req.body;
+  // 用戶登錄
+  async login(req: Request, res: Response) {
+    try {
+      const { email, password } = req.body;
 
-    // 檢查必要欄位
-    if (!email || !password) {
-      res.status(400).json({ message: '請填寫所有必要欄位' });
-      return;
+      // 查找用戶
+      const user = await prisma.user.findUnique({
+        where: { email }
+      });
+
+      if (!user) {
+        return res.status(401).json({ error: '郵箱或密碼錯誤' });
+      }
+
+      // 驗證密碼
+      const isValidPassword = await bcrypt.compare(password, user.password);
+      if (!isValidPassword) {
+        return res.status(401).json({ error: '郵箱或密碼錯誤' });
+      }
+
+      // 更新最後登錄時間
+      await prisma.user.update({
+        where: { id: user.id },
+        data: { lastLoginAt: new Date() }
+      });
+
+      // 生成 JWT
+      const token = jwt.sign(
+        { 
+          id: user.id,
+          email: user.email,
+          role: user.role 
+        },
+        process.env.JWT_SECRET!,
+        { expiresIn: process.env.JWT_EXPIRES_IN || '7d' }
+      );
+
+      // 設置 cookie
+      res.cookie('token', token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+      });
+
+      // 返回用戶信息（不包含密碼）
+      const { password: _, ...userWithoutPassword } = user;
+      res.json({ user: userWithoutPassword, token });
+    } catch (error) {
+      console.error('登錄失敗:', error);
+      res.status(500).json({ error: '登錄失敗' });
     }
-
-    // 查找用戶
-    const user = await userRepository.findOne({ where: { email } });
-    if (!user) {
-      res.status(401).json({ message: '信箱或密碼錯誤' });
-      return;
-    }
-
-    // 驗證密碼
-    const isMatch = await user.comparePassword(password);
-    if (!isMatch) {
-      res.status(401).json({ message: '信箱或密碼錯誤' });
-      return;
-    }
-
-    // 更新最後登入時間
-    user.lastLoginAt = new Date();
-    await userRepository.save(user);
-
-    // 生成 token
-    const token = generateToken(user.id);
-
-    // 設置 cookie
-    res.cookie('token', token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
-    });
-
-    res.json({
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      role: user.role,
-      isEmailVerified: user.isEmailVerified,
-      token,
-    });
-  } catch (error) {
-    console.error('Login error:', error);
-    res.status(500).json({ message: '登入失敗，請稍後再試' });
   }
-}
 
-// @desc    登出用戶
-// @route   POST /api/user/logout
-// @access  Private
-export async function logout(req: UserRequest, res: Response): Promise<void> {
-  try {
-    // 清除 cookie
-    res.cookie('token', '', {
-      httpOnly: true,
-      expires: new Date(0),
-    });
-
-    res.json({ message: '登出成功' });
-  } catch (error) {
-    console.error('Logout error:', error);
-    res.status(500).json({ message: '登出失敗，請稍後再試' });
+  // 登出
+  async logout(_req: Request, res: Response) {
+    res.clearCookie('token');
+    res.json({ message: '成功登出' });
   }
-}
 
-// @desc    獲取當前用戶信息
-// @route   GET /api/user/me
-// @access  Private
-export async function getCurrentUser(req: UserRequest, res: Response): Promise<void> {
-  try {
-    const user = await userRepository.findOne({
-      where: { id: req.user?.id },
-      select: ['id', 'name', 'email', 'role', 'isEmailVerified', 'lastLoginAt', 'avatar'],
-    });
+  // 獲取當前用戶信息
+  async getCurrentUser(req: Request, res: Response) {
+    try {
+      const user = await prisma.user.findUnique({
+        where: { id: req.user.id },
+        select: {
+          id: true,
+          email: true,
+          name: true,
+          role: true,
+          isEmailVerified: true,
+          lastLoginAt: true,
+          createdAt: true
+        }
+      });
 
-    if (!user) {
-      res.status(404).json({ message: '用戶不存在' });
-      return;
+      if (!user) {
+        return res.status(404).json({ error: '找不到用戶' });
+      }
+
+      res.json(user);
+    } catch (error) {
+      console.error('獲取用戶信息失敗:', error);
+      res.status(500).json({ error: '獲取用戶信息失敗' });
     }
-
-    res.json(user);
-  } catch (error) {
-    console.error('Get current user error:', error);
-    res.status(500).json({ message: '獲取用戶信息失敗' });
   }
-}
 
-// @desc    更新用戶信息
-// @route   PUT /api/user/me
-// @access  Private
-export async function updateCurrentUser(req: UserRequest, res: Response): Promise<void> {
-  try {
-    const user = await userRepository.findOne({ where: { id: req.user?.id } });
+  // 更新用戶信息
+  async updateUser(req: Request, res: Response) {
+    try {
+      const { name, password } = req.body;
+      const userId = req.user.id;
 
-    if (!user) {
-      res.status(404).json({ message: '用戶不存在' });
-      return;
+      const updateData: any = {};
+      if (name) updateData.name = name;
+      if (password) {
+        updateData.password = await bcrypt.hash(password, 10);
+      }
+
+      const updatedUser = await prisma.user.update({
+        where: { id: userId },
+        data: updateData,
+        select: {
+          id: true,
+          email: true,
+          name: true,
+          role: true,
+          isEmailVerified: true,
+          lastLoginAt: true,
+          createdAt: true
+        }
+      });
+
+      res.json(updatedUser);
+    } catch (error) {
+      console.error('更新用戶信息失敗:', error);
+      res.status(500).json({ error: '更新用戶信息失敗' });
     }
-
-    const { name, avatar } = req.body;
-
-    if (name) user.name = name;
-    if (avatar) user.avatar = avatar;
-
-    await userRepository.save(user);
-
-    res.json({
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      avatar: user.avatar,
-    });
-  } catch (error) {
-    console.error('Update user error:', error);
-    res.status(500).json({ message: '更新用戶信息失敗' });
   }
-}
 
-// @desc    更改密碼
-// @route   PUT /api/user/password
-// @access  Private
-export async function updatePassword(req: UserRequest, res: Response): Promise<void> {
-  try {
-    const { currentPassword, newPassword } = req.body;
+  // 刪除用戶帳號
+  async deleteUser(req: Request, res: Response) {
+    try {
+      await prisma.user.delete({
+        where: { id: req.user.id }
+      });
 
-    if (!currentPassword || !newPassword) {
-      res.status(400).json({ message: '請填寫所有必要欄位' });
-      return;
+      res.clearCookie('token');
+      res.status(204).send();
+    } catch (error) {
+      console.error('刪除帳號失敗:', error);
+      res.status(500).json({ error: '刪除帳號失敗' });
     }
-
-    if (newPassword.length < 6) {
-      res.status(400).json({ message: '新密碼長度至少需要6個字符' });
-      return;
-    }
-
-    const user = await userRepository.findOne({ where: { id: req.user?.id } });
-
-    if (!user) {
-      res.status(404).json({ message: '用戶不存在' });
-      return;
-    }
-
-    // 驗證當前密碼
-    const isMatch = await user.comparePassword(currentPassword);
-    if (!isMatch) {
-      res.status(401).json({ message: '當前密碼錯誤' });
-      return;
-    }
-
-    // 更新密碼
-    user.password = newPassword;
-    await userRepository.save(user);
-
-    res.json({ message: '密碼更新成功' });
-  } catch (error) {
-    console.error('Update password error:', error);
-    res.status(500).json({ message: '更新密碼失敗' });
   }
 }

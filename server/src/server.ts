@@ -1,25 +1,14 @@
 import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
-import { config } from 'dotenv';
+import config from './config';
 import routes from './routes';
-import prisma from './lib/prisma';
-
-// 載入環境變數
-config();
 
 // 建立 Express 應用
 const app = express();
-const port = process.env.PORT || 3000;
 
 // 中間件設置
-app.use(cors({
-  origin: process.env.NODE_ENV === 'production' 
-    ? process.env.FRONTEND_URL 
-    : 'http://localhost:3000',
-  credentials: true,
-}));
-
+app.use(cors(config.cors));
 app.use(express.json());
 app.use(cookieParser());
 
@@ -30,7 +19,7 @@ app.use((req: Request, _res: Response, next: NextFunction) => {
 });
 
 // API 路由
-app.use(process.env.API_PREFIX || '/api', routes);
+app.use(config.api.prefix, routes);
 
 // 404 處理
 app.use((_req: Request, res: Response) => {
@@ -45,28 +34,9 @@ app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
   console.error('Error:', err);
   res.status(500).json({
     status: 'error',
-    message: process.env.NODE_ENV === 'development' ? err.message : '服務器內部錯誤',
+    message: config.env === 'development' ? err.message : '服務器內部錯誤',
   });
 });
-
-// 初始化服務器
-const startServer = async () => {
-  try {
-    // 測試資料庫連接
-    await prisma.$connect();
-    console.log('✓ 資料庫連接成功');
-
-    // 啟動服務器
-    app.listen(port, () => {
-      console.log(`✓ 服務器運行在端口 ${port}`);
-      console.log(`✓ 環境: ${process.env.NODE_ENV}`);
-      console.log(`✓ 訪問 API: http://localhost:${port}${process.env.API_PREFIX || '/api'}`);
-    });
-  } catch (error) {
-    console.error('✗ 啟動服務器時發生錯誤:', error);
-    process.exit(1);
-  }
-};
 
 // 處理未捕獲的異常
 process.on('unhandledRejection', (reason: Error) => {
@@ -78,12 +48,8 @@ process.on('uncaughtException', (error: Error) => {
   process.exit(1);
 });
 
-// 優雅關閉
-process.on('SIGTERM', async () => {
-  console.log('正在關閉應用...');
-  await prisma.$disconnect();
-  process.exit(0);
+// 啟動服務器
+app.listen(config.port, () => {
+  console.log(`服務器運行在 http://localhost:${config.port}`);
+  console.log(`環境: ${config.env}`);
 });
-
-// 啟動應用
-startServer();
