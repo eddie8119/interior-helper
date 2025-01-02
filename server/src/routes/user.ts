@@ -5,11 +5,9 @@ import { authMiddleware } from '../middleware/auth';
 const router = Router();
 const userController = new UserController();
 
-// 公開路由（不需要認證）
 router.post('/register', userController.register);
 router.post('/login', userController.login);
 
-// 需要認證的路由
 router.use(authMiddleware);
 router.post('/logout', userController.logout);
 router.get('/me', userController.getCurrentUser);
