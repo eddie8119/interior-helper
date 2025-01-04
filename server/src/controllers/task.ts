@@ -107,7 +107,7 @@ export class TaskController {
   async updateTask(req: Request, res: Response) {
     try {
       const { id } = req.params;
-const authReq = req as AuthRequest;
+      const authReq = req as AuthRequest;
 
       // 檢查任務是否存在且屬於當前用戶的項目
       const existingTask = await prisma.task.findUnique({

@@ -5,6 +5,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
 export class UserController {
+  // POST /user/register
   // 用戶註冊
   async register(req: Request, res: Response) {
     try {
@@ -51,6 +52,7 @@ export class UserController {
     }
   }
 
+  // POST /user/login
   // 用戶登錄
   async login(req: Request, res: Response) {
     try {
@@ -105,12 +107,14 @@ export class UserController {
     }
   }
 
+  // POST /user/logout
   // 登出
   async logout(_req: Request, res: Response) {
     res.clearCookie('token');
     res.json({ message: '成功登出' });
   }
 
+  // GET /user/me
   // 獲取當前用戶信息
   async getCurrentUser(req: Request, res: Response) {
     const authReq = req as AuthRequest;
@@ -139,6 +143,7 @@ export class UserController {
     }
   }
 
+  // PUT /user/me
   // 更新用戶信息
   async updateUserData(req: Request, res: Response) {
     const authReq = req as AuthRequest;
@@ -200,6 +205,7 @@ export class UserController {
     }
   }
 
+  // DELETE /user/me
   // 刪除用戶帳號
   async deleteUser(req: Request, res: Response) {
     const authReq = req as AuthRequest;

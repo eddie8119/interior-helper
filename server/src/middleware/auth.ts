@@ -16,26 +16,17 @@ declare global {
   }
 }
 
-export async function authMiddleware(
-  req: AuthRequest,
-  res: Response,
-  next: NextFunction
-) {
+export async function authMiddleware(req: AuthRequest, res: Response, next: NextFunction) {
   try {
     // 從 header 或 cookie 中獲取 token
-    const token = 
-      req.headers.authorization?.split(' ')[1] || 
-      req.cookies.token;
+    const token = req.headers.authorization?.split(' ')[1] || req.cookies.token;
 
     if (!token) {
       return res.status(401).json({ error: '未提供認證令牌' });
     }
 
     // 驗證 token
-    const decoded = jwt.verify(
-      token,
-      process.env.JWT_SECRET!
-    ) as JwtCustomPayload;
+    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtCustomPayload;
 
     // 檢查用戶是否存在
     const user = await prisma.user.findUnique({
@@ -43,8 +34,8 @@ export async function authMiddleware(
       select: {
         id: true,
         email: true,
-        role: true
-      }
+        role: true,
+      },
     });
 
     if (!user) {
