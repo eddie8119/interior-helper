@@ -1,4 +1,9 @@
-import { ProjectType } from '../project';
+import { ProjectType, Container } from '../project';
+
+export interface CreateProjectData {
+  title: string;
+  type: ProjectType;
+}
 
 export interface CreateProjectData {
   title: string;
@@ -13,5 +18,5 @@ export interface UpdateProjectData {
   budgetTotal?: number | null;
   costTotal?: number | null;
   progress?: number;
-  containers?: any;  
+  containers?: Container;  
 }

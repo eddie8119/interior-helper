@@ -59,11 +59,27 @@ export class ProjectController {
       const { title, type } = req.body;
       const authReq = req as AuthRequest;
 
+      const defaultContainers = [
+        { id: '拆除', type: '拆除', order: 0 },
+        { id: '機電', type: '機電', order: 1 },
+        { id: '水電', type: '水電', order: 2 },
+        { id: '地坪', type: '地坪', order: 3 },
+        { id: '泥做', type: '泥做', order: 4 },
+        { id: '門框', type: '門框', order: 5 },
+        { id: '輕隔間', type: '輕隔間', order: 6 },
+        { id: '木做', type: '木做', order: 7 },
+        { id: '油漆', type: '油漆', order: 8 },
+        { id: '石材', type: '石材', order: 9 },
+        { id: '玻璃', type: '玻璃', order: 10 },
+        { id: '收尾', type: '收尾', order: 11 },
+      ];
+
       const project = await prisma.project.create({
         data: {
           title,
           type,
           userId: authReq.user.id,
+          containers: defaultContainers,
         },
         include: {
           tasks: true, // 包含關聯的任務資料
