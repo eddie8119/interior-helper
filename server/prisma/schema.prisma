@@ -28,8 +28,8 @@ model Project {
   id          String      @id @default(uuid())
   title       String
   type        ProjectType
-  startDate   String?
-  endDate     String?
+  startDate   DateTime?
+  endDate     DateTime?
   budgetTotal Float?
   costTotal   Float?
   progress    Float       @default(0)

@@ -1,13 +1,16 @@
 import { Request, Response } from 'express';
+import { Prisma } from '@prisma/client';
 import prisma from '../lib/prisma';
 import { AuthRequest } from '../types/auth';
 
 export class ProjectController {
   // 獲取所有項目
-  async getAllProjects(req: AuthRequest, res: Response) {
+  async getAllProjects(req: Request, res: Response) {
     try {
+      const authReq = req as AuthRequest;
+
       const projects = await prisma.project.findMany({
-        where: { userId: req.user.id },
+        where: { userId: authReq.user.id },
         include: {
           tasks: true,
         },
@@ -24,14 +27,15 @@ export class ProjectController {
   }
 
   // 獲取特定項目
-  async getProjectById(req: AuthRequest, res: Response) {
+  async getProjectById(req: Request, res: Response) {
     try {
       const { id } = req.params;
+      const authReq = req as AuthRequest;
 
       const project = await prisma.project.findFirst({
         where: {
-          id: parseInt(id),
-          userId: req.user.id,
+          id,
+          userId: authReq.user.id,
         },
         include: {
           tasks: true,
@@ -50,18 +54,16 @@ export class ProjectController {
   }
 
   // 創建項目
-  async createProject(req: AuthRequest, res: Response) {
+  async createProject(req: Request, res: Response) {
     try {
-      const { name, description, startDate, endDate, budget } = req.body;
+      const { title, type } = req.body;
+      const authReq = req as AuthRequest;
 
       const project = await prisma.project.create({
         data: {
-          name,
-          description,
-          startDate: new Date(startDate),
-          endDate: endDate ? new Date(endDate) : null,
-          budget: parseFloat(budget),
-          userId: req.user.id,
+          title,
+          type,
+          userId: authReq.user.id,
         },
       });
 
@@ -73,16 +75,18 @@ export class ProjectController {
   }
 
   // 更新項目
-  async updateProject(req: AuthRequest, res: Response) {
+  async updateProject(req: Request, res: Response) {
     try {
       const { id } = req.params;
-      const { name, description, startDate, endDate, budget, status } = req.body;
+      const { title, type, startDate, endDate, budgetTotal, costTotal, progress, containers } =
+        req.body;
+      const authReq = req as AuthRequest;
 
       // 檢查項目是否存在且屬於當前用戶
       const existingProject = await prisma.project.findFirst({
         where: {
-          id: parseInt(id),
-          userId: req.user.id,
+          id,
+          userId: authReq.user.id,
         },
       });
 
@@ -90,54 +94,62 @@ export class ProjectController {
         return res.status(404).json({ error: '找不到項目' });
       }
 
+      const updateData: any = {};
+
+      // 只更新有提供的欄位
+      if (title !== undefined) updateData.title = title;
+      if (type !== undefined) updateData.type = type;
+      if (startDate !== undefined) updateData.startDate = startDate ? new Date(startDate) : null;
+      if (endDate !== undefined) updateData.endDate = endDate ? new Date(endDate) : null;
+      if (budgetTotal !== undefined)
+        updateData.budgetTotal = budgetTotal ? parseFloat(budgetTotal) : null;
+      if (costTotal !== undefined) updateData.costTotal = costTotal ? parseFloat(costTotal) : null;
+      if (progress !== undefined) updateData.progress = parseFloat(progress);
+      if (containers !== undefined) updateData.containers = containers;
+
       const project = await prisma.project.update({
-        where: { id: parseInt(id) },
-        data: {
-          name,
-          description,
-          startDate: startDate ? new Date(startDate) : undefined,
-          endDate: endDate ? new Date(endDate) : null,
-          budget: budget ? parseFloat(budget) : undefined,
-          status,
+        where: {
+          id,
+          userId: authReq.user.id,
+        },
+        data: updateData,
+        include: {
+          tasks: true, // 包含關聯的任務資料
         },
       });
 
       res.json(project);
     } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (error.code === 'P2025') {
+          return res.status(404).json({ error: '找不到項目或無權限修改' });
+        }
+      }
       console.error('更新項目失敗:', error);
       res.status(500).json({ error: '更新項目失敗' });
     }
   }
 
   // 刪除項目
-  async deleteProject(req: AuthRequest, res: Response) {
+  async deleteProject(req: Request, res: Response) {
     try {
       const { id } = req.params;
+      const authReq = req as AuthRequest;
 
-      // 檢查項目是否存在且屬於當前用戶
-      const existingProject = await prisma.project.findFirst({
-        where: {
-          id: parseInt(id),
-          userId: req.user.id,
-        },
-      });
-
-      if (!existingProject) {
-        return res.status(404).json({ error: '找不到項目' });
-      }
-
-      // 首先刪除項目相關的所有任務
-      await prisma.task.deleteMany({
-        where: { projectId: parseInt(id) },
-      });
-
-      // 然後刪除項目
       await prisma.project.delete({
-        where: { id: parseInt(id) },
+        where: {
+          id,
+          userId: authReq.user.id,
+        },
       });
 
       res.status(204).send();
     } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (error.code === 'P2025') {
+          return res.status(404).json({ error: '找不到項目或無權限刪除' });
+        }
+      }
       console.error('刪除項目失敗:', error);
       res.status(500).json({ error: '刪除項目失敗' });
     }
