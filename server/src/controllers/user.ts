@@ -140,15 +140,43 @@ export class UserController {
   }
 
   // 更新用戶信息
-  async updateUser(req: Request, res: Response) {
+  async updateUserData(req: Request, res: Response) {
     const authReq = req as AuthRequest;
     try {
-      const { name, password } = req.body;
+      const { name, currentPassword, newPassword, confirmPassword } = req.body;
+
+      // 檢查密碼確認是否匹配
+      if (newPassword !== confirmPassword) {
+        return res.status(400).json({ error: '密碼與確認密碼不匹配' });
+      }
 
       const updateData: any = {};
-      if (name) updateData.name = name;
-      if (password) {
-        updateData.password = await bcrypt.hash(password, 10);
+
+      if (name !== undefined) updateData.name = name;
+      if (currentPassword && newPassword) {
+        // 驗證當前密碼
+        const user = await prisma.user.findUnique({
+          where: { id: authReq.user.id },
+        });
+
+        if (!user) {
+          return res.status(404).json({ error: '用戶不存在' });
+        }
+
+        const isPasswordValid = await bcrypt.compare(currentPassword, user.password);
+        if (!isPasswordValid) {
+          return res.status(400).json({ error: '當前密碼不正確' });
+        }
+
+        // 更新密碼
+        updateData.password = await bcrypt.hash(newPassword, 10);
+      } else if ((currentPassword && !newPassword) || (!currentPassword && newPassword)) {
+        return res.status(400).json({ error: '更新密碼時需要同時提供當前密碼和新密碼' });
+      }
+
+      // 如果沒有要更新的數據
+      if (Object.keys(updateData).length === 0) {
+        return res.status(400).json({ error: '沒有提供要更新的數據' });
       }
 
       const updatedUser = await prisma.user.update({

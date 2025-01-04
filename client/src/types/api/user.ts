@@ -12,11 +12,7 @@ export interface LoginData {
 
 export interface UpdateUserData {
   name?: string;
-  email?: string;
-}
-
-export interface UpdatePasswordData {
-  currentPassword: string;
-  newPassword: string;
-  confirmPassword: string;
+  currentPassword?: string;
+  newPassword?: string;
+  confirmPassword?: string;
 }

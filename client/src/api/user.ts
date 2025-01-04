@@ -1,5 +1,5 @@
-import  request  from '@/lib/request';
-import { RegisterData, LoginData, UpdateUserData, UpdatePasswordData } from '@/types/api/user';
+import request from '@/lib/request';
+import { RegisterData, LoginData, UpdateUserData } from '@/types/api/user';
 
 export function register(data: RegisterData) {
   return request({
@@ -31,17 +31,9 @@ export function getCurrentUser() {
   });
 }
 
-export function updateCurrentUser(data: UpdateUserData) {
+export function updateUserData(data: UpdateUserData) {
   return request({
     url: "/user/me",
-    method: "put",
-    data,
-  });
-}
-
-export function updatePassword(data: UpdatePasswordData) {
-  return request({
-    url: "/user/password",
     method: "put",
     data,
   });

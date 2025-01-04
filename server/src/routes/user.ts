@@ -17,7 +17,7 @@ router.use((req: Request, res: Response, next: NextFunction) => {
 
 router.post('/logout', userController.logout);
 router.get('/me', userController.getCurrentUser);
-router.put('/me', userController.updateUser);
+router.put('/me', userController.updateUserData);
 router.delete('/me', userController.deleteUser);
 
 export default router;
