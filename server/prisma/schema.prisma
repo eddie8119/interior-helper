@@ -30,8 +30,8 @@ model Project {
   type        ProjectType
   startDate   DateTime?
   endDate     DateTime?
-  budgetTotal Float?
-  costTotal   Float?
+  budgetTotal Float?      @default(0)
+  costTotal   Float?      @default(0)
   progress    Float       @default(0)
   daysLeft    Int?
   containers  Json        @default("[]")

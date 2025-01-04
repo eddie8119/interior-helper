@@ -65,6 +65,9 @@ export class ProjectController {
           type,
           userId: authReq.user.id,
         },
+        include: {
+          tasks: true, // 包含關聯的任務資料
+        },
       });
 
       res.status(201).json(project);
