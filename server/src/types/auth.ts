@@ -2,7 +2,7 @@ import { Request } from 'express';
 import { JwtPayload } from 'jsonwebtoken';
 
 export interface AuthUser {
-  id: number;
+  id: string;
   email: string;
   role: string;
 }
@@ -12,7 +12,7 @@ export interface AuthRequest extends Request {
 }
 
 export interface JwtCustomPayload extends JwtPayload {
-  id: number;
+  id: string;
   email: string;
   role: string;
 }

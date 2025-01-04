@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { AuthRequest } from '../types/auth';
 import prisma from '../lib/prisma';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
@@ -7,11 +8,16 @@ export class UserController {
   // 用戶註冊
   async register(req: Request, res: Response) {
     try {
-      const { email, password, name } = req.body;
+      const { email, password, confirmPassword, name } = req.body;
+
+      // 檢查密碼確認是否匹配
+      if (password !== confirmPassword) {
+        return res.status(400).json({ error: '密碼與確認密碼不匹配' });
+      }
 
       // 檢查郵箱是否已存在
       const existingUser = await prisma.user.findUnique({
-        where: { email }
+        where: { email },
       });
 
       if (existingUser) {
@@ -26,7 +32,7 @@ export class UserController {
         data: {
           email,
           password: hashedPassword,
-          name
+          name,
         },
         select: {
           id: true,
@@ -34,8 +40,8 @@ export class UserController {
           name: true,
           role: true,
           isEmailVerified: true,
-          createdAt: true
-        }
+          createdAt: true,
+        },
       });
 
       res.status(201).json(newUser);
@@ -52,7 +58,7 @@ export class UserController {
 
       // 查找用戶
       const user = await prisma.user.findUnique({
-        where: { email }
+        where: { email },
       });
 
       if (!user) {
@@ -68,18 +74,18 @@ export class UserController {
       // 更新最後登錄時間
       await prisma.user.update({
         where: { id: user.id },
-        data: { lastLoginAt: new Date() }
+        data: { lastLoginAt: new Date() },
       });
 
       // 生成 JWT
       const token = jwt.sign(
-        { 
+        {
           id: user.id,
           email: user.email,
-          role: user.role 
+          role: user.role,
         },
         process.env.JWT_SECRET!,
-        { expiresIn: process.env.JWT_EXPIRES_IN || '7d' }
+        { expiresIn: process.env.JWT_EXPIRES_IN || '7d' },
       );
 
       // 設置 cookie
@@ -87,7 +93,7 @@ export class UserController {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'lax',
-        maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
       });
 
       // 返回用戶信息（不包含密碼）
@@ -106,7 +112,7 @@ export class UserController {
   }
 
   // 獲取當前用戶信息
-  async getCurrentUser(req: Request, res: Response) {
+  async getCurrentUser(req: AuthRequest, res: Response) {
     try {
       const user = await prisma.user.findUnique({
         where: { id: req.user.id },
@@ -116,13 +122,13 @@ export class UserController {
           name: true,
           role: true,
           isEmailVerified: true,
+          createdAt: true,
           lastLoginAt: true,
-          createdAt: true
-        }
+        },
       });
 
       if (!user) {
-        return res.status(404).json({ error: '找不到用戶' });
+        return res.status(404).json({ error: '用戶不存在' });
       }
 
       res.json(user);
@@ -133,10 +139,9 @@ export class UserController {
   }
 
   // 更新用戶信息
-  async updateUser(req: Request, res: Response) {
+  async updateUser(req: AuthRequest, res: Response) {
     try {
       const { name, password } = req.body;
-      const userId = req.user.id;
 
       const updateData: any = {};
       if (name) updateData.name = name;
@@ -145,7 +150,7 @@ export class UserController {
       }
 
       const updatedUser = await prisma.user.update({
-        where: { id: userId },
+        where: { id: req.user.id },
         data: updateData,
         select: {
           id: true,
@@ -154,8 +159,8 @@ export class UserController {
           role: true,
           isEmailVerified: true,
           lastLoginAt: true,
-          createdAt: true
-        }
+          createdAt: true,
+        },
       });
 
       res.json(updatedUser);
@@ -166,10 +171,10 @@ export class UserController {
   }
 
   // 刪除用戶帳號
-  async deleteUser(req: Request, res: Response) {
+  async deleteUser(req: AuthRequest, res: Response) {
     try {
       await prisma.user.delete({
-        where: { id: req.user.id }
+        where: { id: req.user.id },
       });
 
       res.clearCookie('token');
