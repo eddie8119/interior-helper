@@ -70,7 +70,7 @@ export const defaultProjects: ProjectBasic[] = [
     type: 'residential',
     progress: 30,
     daysLeft: 45,
-    editedAt: new Date(),
+    updatedAt: new Date(),
     createdAt: new Date('2024-01-01'),
     containers: [
       {
