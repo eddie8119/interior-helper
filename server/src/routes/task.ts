@@ -1,17 +1,18 @@
-import { Router } from 'express';
+import { Router, Request, Response, NextFunction } from 'express';
 import { TaskController } from '../controllers/task';
 import { authMiddleware } from '../middleware/auth';
+import { AuthRequest } from '../types/auth';
 
 const router = Router();
 const taskController = new TaskController();
 
-// 所有任務路由都需要認證
-router.use(authMiddleware);
+router.use((req: Request, res: Response, next: NextFunction) => {
+  return authMiddleware(req as AuthRequest, res, next);
+});
 
-// 任務路由
 router.get('/project/:projectId', taskController.getProjectTasks);
 router.post('/project/:projectId', taskController.createTask);
-router.get('/:id', taskController.getTaskById);
+router.get('/:id', taskController.getTask);
 router.put('/:id', taskController.updateTask);
 router.delete('/:id', taskController.deleteTask);
 

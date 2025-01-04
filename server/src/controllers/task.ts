@@ -1,30 +1,32 @@
 import { Request, Response } from 'express';
 import prisma from '../lib/prisma';
+import { AuthRequest } from '../types/auth';
 
 export class TaskController {
   // 獲取項目的所有任務
   async getProjectTasks(req: Request, res: Response) {
     try {
       const { projectId } = req.params;
+      const authReq = req as AuthRequest;
 
       // 檢查項目是否存在且屬於當前用戶
       const project = await prisma.project.findUnique({
-        where: { id: projectId }
+        where: { id: projectId },
       });
 
       if (!project) {
         return res.status(404).json({ error: '找不到項目' });
       }
 
-      if (project.userId !== req.user.id) {
+      if (project.userId !== authReq.user.id) {
         return res.status(403).json({ error: '無權訪問此項目的任務' });
       }
 
       const tasks = await prisma.task.findMany({
         where: { projectId },
         orderBy: {
-          createdAt: 'desc'
-        }
+          createdAt: 'desc',
+        },
       });
 
       res.json(tasks);
@@ -38,12 +40,13 @@ export class TaskController {
   async getTask(req: Request, res: Response) {
     try {
       const { id } = req.params;
+      const authReq = req as AuthRequest;
 
       const task = await prisma.task.findUnique({
         where: { id },
         include: {
-          project: true
-        }
+          project: true,
+        },
       });
 
       if (!task) {
@@ -51,7 +54,7 @@ export class TaskController {
       }
 
       // 檢查任務是否屬於當前用戶的項目
-      if (task.project.userId !== req.user.id) {
+      if (task.project.userId !== authReq.user.id) {
         return res.status(403).json({ error: '無權訪問此任務' });
       }
 
@@ -67,17 +70,18 @@ export class TaskController {
     try {
       const { projectId } = req.params;
       const { constructionType, title, content, priority, dueDate } = req.body;
+      const authReq = req as AuthRequest;
 
       // 檢查項目是否存在且屬於當前用戶
       const project = await prisma.project.findUnique({
-        where: { id: projectId }
+        where: { id: projectId },
       });
 
       if (!project) {
         return res.status(404).json({ error: '找不到項目' });
       }
 
-      if (project.userId !== req.user.id) {
+      if (project.userId !== authReq.user.id) {
         return res.status(403).json({ error: '無權在此項目中創建任務' });
       }
 
@@ -88,8 +92,8 @@ export class TaskController {
           content,
           priority,
           dueDate: dueDate ? new Date(dueDate) : null,
-          projectId
-        }
+          projectId,
+        },
       });
 
       res.status(201).json(newTask);
@@ -103,20 +107,21 @@ export class TaskController {
   async updateTask(req: Request, res: Response) {
     try {
       const { id } = req.params;
+const authReq = req as AuthRequest;
 
       // 檢查任務是否存在且屬於當前用戶的項目
       const existingTask = await prisma.task.findUnique({
         where: { id },
         include: {
-          project: true
-        }
+          project: true,
+        },
       });
 
       if (!existingTask) {
         return res.status(404).json({ error: '找不到任務' });
       }
 
-      if (existingTask.project.userId !== req.user.id) {
+      if (existingTask.project.userId !== authReq.user.id) {
         return res.status(403).json({ error: '無權修改此任務' });
       }
 
@@ -124,8 +129,8 @@ export class TaskController {
         where: { id },
         data: {
           ...req.body,
-          dueDate: req.body.dueDate ? new Date(req.body.dueDate) : undefined
-        }
+          dueDate: req.body.dueDate ? new Date(req.body.dueDate) : undefined,
+        },
       });
 
       res.json(updatedTask);
@@ -139,25 +144,26 @@ export class TaskController {
   async deleteTask(req: Request, res: Response) {
     try {
       const { id } = req.params;
+      const authReq = req as AuthRequest;
 
       // 檢查任務是否存在且屬於當前用戶的項目
       const task = await prisma.task.findUnique({
         where: { id },
         include: {
-          project: true
-        }
+          project: true,
+        },
       });
 
       if (!task) {
         return res.status(404).json({ error: '找不到任務' });
       }
 
-      if (task.project.userId !== req.user.id) {
+      if (task.project.userId !== authReq.user.id) {
         return res.status(403).json({ error: '無權刪除此任務' });
       }
 
       await prisma.task.delete({
-        where: { id }
+        where: { id },
       });
 
       res.status(204).send();
