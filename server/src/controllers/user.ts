@@ -112,10 +112,11 @@ export class UserController {
   }
 
   // 獲取當前用戶信息
-  async getCurrentUser(req: AuthRequest, res: Response) {
+  async getCurrentUser(req: Request, res: Response) {
+    const authReq = req as AuthRequest;
     try {
       const user = await prisma.user.findUnique({
-        where: { id: req.user.id },
+        where: { id: authReq.user.id },
         select: {
           id: true,
           email: true,
@@ -139,7 +140,8 @@ export class UserController {
   }
 
   // 更新用戶信息
-  async updateUser(req: AuthRequest, res: Response) {
+  async updateUser(req: Request, res: Response) {
+    const authReq = req as AuthRequest;
     try {
       const { name, password } = req.body;
 
@@ -150,7 +152,7 @@ export class UserController {
       }
 
       const updatedUser = await prisma.user.update({
-        where: { id: req.user.id },
+        where: { id: authReq.user.id },
         data: updateData,
         select: {
           id: true,
@@ -171,10 +173,11 @@ export class UserController {
   }
 
   // 刪除用戶帳號
-  async deleteUser(req: AuthRequest, res: Response) {
+  async deleteUser(req: Request, res: Response) {
+    const authReq = req as AuthRequest;
     try {
       await prisma.user.delete({
-        where: { id: req.user.id },
+        where: { id: authReq.user.id },
       });
 
       res.clearCookie('token');
