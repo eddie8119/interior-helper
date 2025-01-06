@@ -1,4 +1,29 @@
-import GitHub from 'next-auth/providers/github'
+import Credentials from 'next-auth/providers/credentials'
 import type { NextAuthConfig } from 'next-auth'
+import { loginSchema } from './lib/schemas/loginSchema'
+import { getUserByEmail } from './actions/authActions'
+import { compare } from 'bcryptjs'
 
-export default { providers: [GitHub] } satisfies NextAuthConfig
+export default {
+  providers: [
+    Credentials({
+      name: 'credentials',
+      async authorize(creds) {
+        const validated = loginSchema.safeParse(creds)
+        if (validated.success) {
+          const { email, password } = validated.data
+
+          const user = await getUserByEmail(email)
+
+          if (
+            !user ||
+            !user.passwordHash ||
+            !(await compare(password, user.passwordHash))
+          )
+            return null
+        }
+        return null
+      },
+    }),
+  ],
+} satisfies NextAuthConfig
