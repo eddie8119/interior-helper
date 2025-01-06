@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form'
 import { Button, Card, CardBody, CardHeader, Input } from '@nextui-org/react'
 import { RegisterSchema, registerSchema } from '@/lib/schemas/registerSchema'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { registerUser } from '@/actions/authActions'
 
 export default function RegisterForm() {
   const {
@@ -15,7 +16,9 @@ export default function RegisterForm() {
     resolver: zodResolver(registerSchema),
     mode: 'onTouched',
   })
-  const onSubmit = (data: RegisterSchema) => {}
+  const onSubmit = async (data: RegisterSchema) => {
+    const result = await registerUser(data)
+  }
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="mt-4 space-y-4">
       <Input
