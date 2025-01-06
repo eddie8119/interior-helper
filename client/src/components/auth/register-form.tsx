@@ -11,13 +11,27 @@ export default function RegisterForm() {
   const {
     register,
     handleSubmit,
-    formState: { errors, isValid },
+    setError,
+    formState: { errors, isValid, isSubmitting },
   } = useForm<RegisterSchema>({
     resolver: zodResolver(registerSchema),
     mode: 'onTouched',
   })
   const onSubmit = async (data: RegisterSchema) => {
     const result = await registerUser(data)
+
+    if (result.status === 'success') {
+      console.log('user register successful ')
+    } else {
+      if (Array.isArray(result.error)) {
+        result.error.forEach((e) => {
+          const fieldName = e.path[0] as 'name' | 'email' | 'password'
+          setError(fieldName, { message: e.message })
+        })
+      } else {
+        setError('root.serverError', { message: result.error })
+      }
+    }
   }
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="mt-4 space-y-4">
@@ -46,7 +60,16 @@ export default function RegisterForm() {
         isInvalid={!!errors.password}
         errorMessage={errors.password?.message as string}
       />
-      <Button isDisabled={!isValid} fullWidth color="secondary" type="submit">
+      {errors.root?.serverError && (
+        <p className="text-danger text-sm">{errors.root.serverError.message}</p>
+      )}
+      <Button
+        isLoading={isSubmitting}
+        isDisabled={!isValid}
+        fullWidth
+        color="secondary"
+        type="submit"
+      >
         Register
       </Button>
     </form>
