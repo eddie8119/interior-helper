@@ -5,8 +5,11 @@ import { useForm } from 'react-hook-form'
 import { Button, Card, CardBody, CardHeader, Input } from '@nextui-org/react'
 import { LoginSchema, loginSchema } from '@/lib/schemas/loginSchema'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { signInUser } from '@/actions/authActions'
+import { useRouter } from 'next/router'
 
 export default function LoginForm() {
+  const router = useRouter()
   const {
     register,
     handleSubmit,
@@ -15,7 +18,13 @@ export default function LoginForm() {
     resolver: zodResolver(loginSchema),
     mode: 'onTouched',
   })
-  const onSubmit = (data: any) => {}
+  const onSubmit = async (data: LoginSchema) => {
+    const result = await signInUser(data)
+    if (result.status === 'success') {
+      router.push('')
+    }
+  }
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="mt-4 space-y-4">
       <Input
