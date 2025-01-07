@@ -7,7 +7,7 @@ import { ActionResult } from '@/types'
 import { User } from '@prisma/client'
 import { LoginSchema } from '@/lib/schemas/loginSchema'
 import { AuthError } from 'next-auth'
-import { signIn } from '@/auth'
+import { signIn, signOut } from '@/auth'
 
 export async function signInUser(
   data: LoginSchema
@@ -34,6 +34,10 @@ export async function signInUser(
       return { status: 'error', error: 'Something else went wrong' }
     }
   }
+}
+
+export async function signOutUser() {
+  await signOut({ redirectTo: '/' })
 }
 
 export async function registerUser(

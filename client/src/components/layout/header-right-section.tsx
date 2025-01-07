@@ -1,7 +1,9 @@
 'use client'
 
 import { useTheme } from '@/contexts/theme-context'
-import { LoginDialog } from '@/components/layout/login-dialog'
+import { LoginRegisterArea } from '@/components/layout/login-register-area'
+import { Button } from '@nextui-org/react'
+
 export function HeaderRightSection() {
   const { theme, toggleTheme } = useTheme()
 
@@ -69,7 +71,7 @@ export function HeaderRightSection() {
           />
         </svg>
       </button>
-      <LoginDialog />
+      <LoginRegisterArea />
     </div>
   )
 }

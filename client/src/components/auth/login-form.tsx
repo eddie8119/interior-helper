@@ -6,7 +6,7 @@ import { Button, Card, CardBody, CardHeader, Input } from '@nextui-org/react'
 import { LoginSchema, loginSchema } from '@/lib/schemas/loginSchema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { signInUser } from '@/actions/authActions'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 import { toast } from 'react-toastify'
 import Link from 'next/link'
 
@@ -23,7 +23,7 @@ export default function LoginForm() {
   const onSubmit = async (data: LoginSchema) => {
     const result = await signInUser(data)
     if (result.status === 'success') {
-      router.push('')
+      router.push('/')
     } else {
       toast.error(result.error as string)
     }
