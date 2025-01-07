@@ -7,13 +7,15 @@ import { LoginSchema, loginSchema } from '@/lib/schemas/loginSchema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { signInUser } from '@/actions/authActions'
 import { useRouter } from 'next/router'
+import { toast } from 'react-toastify'
+import Link from 'next/link'
 
 export default function LoginForm() {
   const router = useRouter()
   const {
     register,
     handleSubmit,
-    formState: { errors, isValid },
+    formState: { errors, isValid, isSubmitting },
   } = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
     mode: 'onTouched',
@@ -22,6 +24,8 @@ export default function LoginForm() {
     const result = await signInUser(data)
     if (result.status === 'success') {
       router.push('')
+    } else {
+      toast.error(result.error as string)
     }
   }
 
@@ -44,9 +48,18 @@ export default function LoginForm() {
         isInvalid={!!errors.password}
         errorMessage={errors.password?.message as string}
       />
-      <Button isDisabled={!isValid} fullWidth color="secondary" type="submit">
+      <Button
+        isLoading={isSubmitting}
+        isDisabled={!isValid}
+        fullWidth
+        color="secondary"
+        type="submit"
+      >
         Login
       </Button>
+      <div className="flex justify-center text-sm hover:underline">
+        <Link href="/forgot-password">Forgot password?</Link>
+      </div>
     </form>
   )
 }
