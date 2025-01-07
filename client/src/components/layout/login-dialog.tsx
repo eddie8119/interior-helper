@@ -1,7 +1,7 @@
 'use client'
 
-import { useState } from 'react'
 import { Button, TextField } from '@mui/material'
+import { LoadingButton } from '@mui/lab'
 import {
   Dialog,
   DialogContent,
@@ -9,6 +9,12 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import Link from 'next/link'
+import { useForm } from 'react-hook-form'
+import { LoginSchema, loginSchema } from '@/lib/schemas/loginSchema'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { signInUser } from '@/actions/authActions'
+import { useRouter } from 'next/navigation'
+import { toast } from 'react-toastify'
 
 interface LoginDialogProps {
   open: boolean
@@ -16,16 +22,23 @@ interface LoginDialogProps {
 }
 
 export function LoginDialog({ open, setOpen }: LoginDialogProps) {
-  const [loginData, setLoginData] = useState({
-    email: '',
-    password: '',
+  const router = useRouter()
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid, isSubmitting },
+  } = useForm<LoginSchema>({
+    resolver: zodResolver(loginSchema),
+    mode: 'onTouched',
   })
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    // TODO: 處理登入邏輯
-    setLoginData({ email: '', password: '' })
-    setOpen(false)
+  const onSubmit = async (data: LoginSchema) => {
+    const result = await signInUser(data)
+    if (result.status === 'success') {
+      router.push('/')
+    } else {
+      toast.error(result.error as string)
+    }
   }
 
   const handleGoogleLogin = () => {
@@ -47,28 +60,24 @@ export function LoginDialog({ open, setOpen }: LoginDialogProps) {
           </div>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="mt-4 space-y-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="mt-4 space-y-4">
           <TextField
             fullWidth
             label="Email"
             type="email"
             variant="outlined"
-            value={loginData.email}
-            onChange={(e) =>
-              setLoginData({ ...loginData, email: e.target.value })
-            }
-            required
+            {...register('email')}
+            error={!!errors.email}
+            helperText={errors.email?.message as string}
           />
           <TextField
             fullWidth
             label="Password"
             type="password"
             variant="outlined"
-            value={loginData.password}
-            onChange={(e) =>
-              setLoginData({ ...loginData, password: e.target.value })
-            }
-            required
+            {...register('password')}
+            error={!!errors.password}
+            helperText={errors.password?.message as string}
           />
 
           <div className="text-right">
@@ -80,7 +89,9 @@ export function LoginDialog({ open, setOpen }: LoginDialogProps) {
             </Link>
           </div>
 
-          <Button
+          <LoadingButton
+            loading={isSubmitting}
+            disabled={!isValid}
             fullWidth
             variant="contained"
             type="submit"
@@ -93,8 +104,8 @@ export function LoginDialog({ open, setOpen }: LoginDialogProps) {
               },
             }}
           >
-            email登入
-          </Button>
+            登入
+          </LoadingButton>
 
           <Button
             fullWidth
