@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Button } from '@mui/material'
 import Link from 'next/link'
 import { LoginDialog } from './login-dialog'
+import UserMenu from './user-menu'
 
 export function LoginRegisterArea() {
   const [open, setOpen] = useState(false)
@@ -39,6 +40,7 @@ export function LoginRegisterArea() {
           註冊
         </Link>
       </Button>
+      <UserMenu userInfo={null} />
       <LoginDialog open={open} setOpen={setOpen} />
     </>
   )

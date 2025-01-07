@@ -35,7 +35,7 @@ export function LoginDialog({ open, setOpen }: LoginDialogProps) {
   const onSubmit = async (data: LoginSchema) => {
     const result = await signInUser(data)
     if (result.status === 'success') {
-      router.push('/')
+      router.push('/projects')
     } else {
       toast.error(result.error as string)
     }

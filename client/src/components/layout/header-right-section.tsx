@@ -2,7 +2,6 @@
 
 import { useTheme } from '@/contexts/theme-context'
 import { LoginRegisterArea } from '@/components/layout/login-register-area'
-import { Button } from '@nextui-org/react'
 
 export function HeaderRightSection() {
   const { theme, toggleTheme } = useTheme()

@@ -37,7 +37,7 @@ export function ProjectContainer({ projectId }: ProjectContainerProps) {
       <header className="sticky top-0 z-10 flex items-center bg-background">
         <h1 className="text-2xl font-semibold">{project.title}</h1>
       </header>
-      <p>上次編輯時間：{project.editedAt.toLocaleString()}</p>
+      <p>上次編輯時間：{}</p>
 
       <DraggableContainers
         project={project}
