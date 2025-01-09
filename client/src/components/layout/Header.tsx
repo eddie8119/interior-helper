@@ -1,5 +1,3 @@
-'use client'
-
 import { HeaderRightSection } from './header-right-section'
 
 export function Header() {

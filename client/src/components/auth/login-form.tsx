@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { useForm } from 'react-hook-form'
-import { Button, Card, CardBody, CardHeader, Input } from '@nextui-org/react'
+import { Button, Input } from '@nextui-org/react'
 import { LoginSchema, loginSchema } from '@/lib/schemas/loginSchema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { signInUser } from '@/actions/authActions'
@@ -23,7 +23,7 @@ export default function LoginForm() {
   const onSubmit = async (data: LoginSchema) => {
     const result = await signInUser(data)
     if (result.status === 'success') {
-      router.push('/')
+      router.push('/projects')
     } else {
       toast.error(result.error as string)
     }
@@ -55,7 +55,7 @@ export default function LoginForm() {
         color="secondary"
         type="submit"
       >
-        Login
+        Register
       </Button>
       <div className="flex justify-center text-sm hover:underline">
         <Link href="/forgot-password">Forgot password?</Link>
