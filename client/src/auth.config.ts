@@ -21,9 +21,17 @@ export default {
             !(await compare(password, user.passwordHash))
           )
             return null
+
+          return user
         }
+
         return null
       },
     }),
   ],
-} satisfies NextAuthConfig
+} satisfies NextAuthConfig // 確保配置符合 NextAuthConfig 類型
+
+// 資料驗證：
+// 用戶查詢：
+// 密碼驗證：
+// 安全性考慮：

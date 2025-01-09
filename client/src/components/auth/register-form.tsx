@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { useForm } from 'react-hook-form'
-import { Button, Card, CardBody, CardHeader, Input } from '@nextui-org/react'
+import { Button, Input } from '@nextui-org/react'
 import { RegisterSchema, registerSchema } from '@/lib/schemas/registerSchema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { registerUser } from '@/actions/authActions'
