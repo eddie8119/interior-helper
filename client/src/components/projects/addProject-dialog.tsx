@@ -41,7 +41,20 @@ export function AddProjectDialog() {
   })
 
   const onSubmit = async (data: CreateProjectInputSchema) => {
-    const result = await createProject(data)
+    try {
+      const result = await createProject(data)
+      if (result.status === 'success') {
+        setOpen(false)
+      } else {
+        if (Array.isArray(result.error)) {
+          result.error.forEach((e) => {})
+        } else {
+          setError('root.serverError', { message: result.error })
+        }
+      }
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   return (

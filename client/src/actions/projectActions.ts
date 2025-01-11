@@ -12,12 +12,11 @@ import { revalidatePath } from 'next/cache'
 import { constructionContainer } from '@/constants/default-data'
 
 // 獲取當前用戶的所有專案
-export async function getProjects() {
+export async function getProjects(): Promise<ActionResult<Project[]>> {
   try {
     const session = await auth()
-    console.log(5555, session)
-    if (!session?.user) {
-      return null
+    if (!session?.user?.id) {
+      return { status: 'error', error: 'Unauthorized' }
     }
 
     const projects = await prisma.project.findMany({
@@ -31,10 +30,10 @@ export async function getProjects() {
         createdAt: 'desc',
       },
     })
-    return { data: projects }
+    return { status: 'success', data: projects }
   } catch (error) {
-    console.error('Error fetching projects:', error)
-    return { error: 'Failed to fetch projects' }
+    console.error(error)
+    return { status: 'error', error: 'Something went wrong' }
   }
 }
 
@@ -68,7 +67,9 @@ export async function getProject(id: string) {
 }
 
 // 創建新專案
-export async function createProject(data: CreateProjectInputSchema): Promise<ActionResult<Project>> {
+export async function createProject(
+  data: CreateProjectInputSchema
+): Promise<ActionResult<Project>> {
   try {
     const validated = createProjectInputSchema.safeParse(data)
 
@@ -78,7 +79,7 @@ export async function createProject(data: CreateProjectInputSchema): Promise<Act
 
     const { title, type } = validated.data
 
-    const session = await auth()    
+    const session = await auth()
     if (!session?.user?.id) {
       return { status: 'error', error: 'Unauthorized' }
     }
@@ -93,7 +94,7 @@ export async function createProject(data: CreateProjectInputSchema): Promise<Act
         costTotal: 0,
         progress: 0,
         daysLeft: null,
-        containers: JSON.stringify( constructionContainer),
+        containers: JSON.stringify(constructionContainer),
         team: JSON.stringify([]),
         userId: session.user.id,
       },
@@ -102,7 +103,7 @@ export async function createProject(data: CreateProjectInputSchema): Promise<Act
     revalidatePath('/projects')
     return { status: 'success', data: project }
   } catch (error) {
-    console.error( error)
+    console.error(error)
     return { status: 'error', error: 'Something went wrong' }
   }
 }

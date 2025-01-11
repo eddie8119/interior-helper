@@ -18,11 +18,15 @@ export const metadata: Metadata = {
   },
 }
 export default async function ProjectsPage() {
-  const projects = await getProjects()
-  console.log(1111, projects)
+  const response = await getProjects()
+  if (response.status !== 'success' || !response.data) {
+    return <div>Error: Failed to load projects</div>
+  }
+  const { data } = response
+
   return (
     <section className="flex h-full flex-col">
-      <ProjectsDisplay projects={projects} createProject={createProject} />
+      <ProjectsDisplay projects={data} createProject={createProject} />
     </section>
   )
 }
