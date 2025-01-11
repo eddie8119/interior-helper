@@ -1,5 +1,4 @@
 import { Metadata } from 'next'
-import { getProjects } from '@/actions/projectActions'
 import { ProjectList } from '@/components/projects/project-list'
 
 export const metadata: Metadata = {
@@ -16,8 +15,7 @@ export const metadata: Metadata = {
     canonical: '/projects',
   },
 }
-export default async function ProjectsPage() {
-  const projects = await getProjects()
+export default function TrialProjectsPage() {
   return (
     <section className="flex h-full flex-col">
       <ProjectList />
