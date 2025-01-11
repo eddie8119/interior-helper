@@ -1,15 +1,19 @@
 'use server'
 
 import { prisma } from '@/lib/prisma'
-import { ProjectBasic } from '@/types/project'
+import {
+  CreateProjectSchema,
+  createProjectSchema,
+} from '@/lib/schemas/createProjectSchema'
 import { auth } from '@/auth'
 import { revalidatePath } from 'next/cache'
+import { constructionContainer } from '@/constants/default-data'
 
 // 獲取當前用戶的所有專案
 export async function getProjects() {
   try {
     const session = await auth()
-    console.log(5555,session)
+    console.log(5555, session)
     if (!session?.user) {
       return null
     }
@@ -62,8 +66,13 @@ export async function getProject(id: string) {
 }
 
 // 創建新專案
-export async function createProject(data: Omit<ProjectBasic, 'id' | 'createdAt' | 'updatedAt'>) {
+export async function createProject(data: CreateProjectSchema) {
   try {
+    const validated = createProjectSchema.safeParse(data)
+
+    if (!validated.success) return
+    const { title, type } = validated.data
+
     const session = await auth()
     if (!session?.user) {
       return { error: 'Unauthorized' }
@@ -71,11 +80,12 @@ export async function createProject(data: Omit<ProjectBasic, 'id' | 'createdAt' 
 
     const project = await prisma.project.create({
       data: {
-        ...data,
+        title,
+        type,
         userId: session.user.id,
-        containers: JSON.stringify(data.containers || []),
-        team: JSON.stringify([])
-      }
+        containers: JSON.stringify(constructionContainer),
+        team: JSON.stringify([]),
+      },
     })
 
     revalidatePath('/projects')
@@ -83,43 +93,6 @@ export async function createProject(data: Omit<ProjectBasic, 'id' | 'createdAt' 
   } catch (error) {
     console.error('Error creating project:', error)
     return { error: 'Failed to create project' }
-  }
-}
-
-// 更新專案
-export async function updateProject(id: string, data: Partial<ProjectBasic>) {
-  try {
-    const session = await auth()
-    if (!session?.user) {
-      return { error: 'Unauthorized' }
-    }
-
-    // 確認專案屬於當前用戶
-    const existingProject = await prisma.project.findUnique({
-      where: {
-        id,
-        userId: session.user.id,
-      },
-    })
-
-    if (!existingProject) {
-      return { error: 'Project not found or unauthorized' }
-    }
-
-    const project = await prisma.project.update({
-      where: { id },
-      data: {
-        ...data,
-        containers: data.containers || undefined,
-        team: data.team || undefined,
-      },
-    })
-
-    revalidatePath(`/projects/${id}`)
-    return { data: project }
-  } catch (error) {
-    console.error('Error updating project:', error)
-    return { error: 'Failed to update project' }
   }
 }
 
@@ -152,53 +125,5 @@ export async function deleteProject(id: string) {
   } catch (error) {
     console.error('Error deleting project:', error)
     return { error: 'Failed to delete project' }
-  }
-}
-
-// 更新專案進度
-export async function updateProjectProgress(id: string, progress: number) {
-  try {
-    const session = await auth()
-    if (!session?.user) {
-      return { error: 'Unauthorized' }
-    }
-
-    const project = await prisma.project.update({
-      where: {
-        id,
-        userId: session.user.id,
-      },
-      data: { progress },
-    })
-
-    revalidatePath(`/projects/${id}`)
-    return { data: project }
-  } catch (error) {
-    console.error('Error updating project progress:', error)
-    return { error: 'Failed to update project progress' }
-  }
-}
-
-// 更新專案預算
-export async function updateProjectBudget(id: string, budgetTotal: number) {
-  try {
-    const session = await auth()
-    if (!session?.user) {
-      return { error: 'Unauthorized' }
-    }
-
-    const project = await prisma.project.update({
-      where: {
-        id,
-        userId: session.user.id,
-      },
-      data: { budgetTotal },
-    })
-
-    revalidatePath(`/projects/${id}`)
-    return { data: project }
-  } catch (error) {
-    console.error('Error updating project budget:', error)
-    return { error: 'Failed to update project budget' }
   }
 }

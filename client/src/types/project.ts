@@ -1,5 +1,6 @@
 import { FC, SVGProps } from 'react'
 import { ProjectMenu } from './navigation'
+import { ProjectType } from '@prisma/client'
 
 export interface Menu {
   id: string
@@ -7,11 +8,6 @@ export interface Menu {
   link: string
   icon: FC<SVGProps<SVGElement>>
   subMenu?: ProjectMenu[]
-}
-
-export interface ProjectType {
-  value: string
-  label: string
 }
 
 export interface Container {
@@ -23,18 +19,18 @@ export interface Container {
 export interface ProjectBasic {
   id: string
   title: string
-  type: 'residential' | 'luxury' | 'commercial' | 'office'
-  startDate?: string
-  endDate?: string
-  budgetTotal?: number
-  costTotal?: number
+  type: ProjectType
+  startDate?: Date | null
+  endDate?: Date | null
+  budgetTotal?: number | null
+  costTotal?: number | null
   progress: number
-  daysLeft?: number
+  daysLeft?: number | null
+  containers: any[]
+  team: any[]
   createdAt: Date
   updatedAt: Date
-  containers: Container[]
-  team?: TeamMember[]
-  tasks?: Task[]
+  userId: string
 }
 
 export interface Task {
