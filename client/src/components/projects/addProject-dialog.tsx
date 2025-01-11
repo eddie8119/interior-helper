@@ -3,8 +3,8 @@
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import {
-  CreateProjectSchema,
-  createProjectSchema,
+  createProjectInputSchema,
+  CreateProjectInputSchema,
 } from '@/lib/schemas/createProjectSchema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { createProject } from '@/actions/projectActions'
@@ -35,12 +35,12 @@ export function AddProjectDialog() {
     handleSubmit,
     setError,
     formState: { errors, isValid, isSubmitting },
-  } = useForm<CreateProjectSchema>({
-    resolver: zodResolver(createProjectSchema),
+  } = useForm<CreateProjectInputSchema>({
+    resolver: zodResolver(createProjectInputSchema),
     mode: 'onTouched',
   })
 
-  const onSubmit = async (data: CreateProjectSchema) => {
+  const onSubmit = async (data: CreateProjectInputSchema) => {
     const result = await createProject(data)
   }
 

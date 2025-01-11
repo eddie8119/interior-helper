@@ -2,8 +2,8 @@
 
 import { prisma } from '@/lib/prisma'
 import {
-  CreateProjectSchema,
-  createProjectSchema,
+  createProjectInputSchema,
+  CreateProjectInputSchema,
 } from '@/lib/schemas/createProjectSchema'
 import { auth } from '@/auth'
 import { revalidatePath } from 'next/cache'
@@ -66,15 +66,18 @@ export async function getProject(id: string) {
 }
 
 // 創建新專案
-export async function createProject(data: CreateProjectSchema) {
+export async function createProject(data: CreateProjectInputSchema) {
   try {
-    const validated = createProjectSchema.safeParse(data)
+    const validated = createProjectInputSchema.safeParse(data)
 
-    if (!validated.success) return
+    if (!validated.success) {
+      return { status: 'error', error: validated.error.errors }
+    }
+
     const { title, type } = validated.data
 
     const session = await auth()
-    if (!session?.user) {
+    if (!session?.user?.id) {
       return { error: 'Unauthorized' }
     }
 
@@ -82,17 +85,23 @@ export async function createProject(data: CreateProjectSchema) {
       data: {
         title,
         type,
-        userId: session.user.id,
-        containers: JSON.stringify(constructionContainer),
+        startDate: null,
+        endDate: null,
+        budgetTotal: 0,
+        costTotal: 0,
+        progress: 0,
+        daysLeft: null,
+        containers: JSON.stringify( constructionContainer),
         team: JSON.stringify([]),
+        userId: session.user.id,
       },
     })
 
     revalidatePath('/projects')
-    return { data: project }
+    return { status: 'success', data: project }
   } catch (error) {
-    console.error('Error creating project:', error)
-    return { error: 'Failed to create project' }
+    console.error( error)
+    return { status: 'error', error: 'Something went wrong' }
   }
 }
 
