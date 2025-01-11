@@ -5,6 +5,8 @@ import {
   createProjectInputSchema,
   CreateProjectInputSchema,
 } from '@/lib/schemas/createProjectSchema'
+import { ActionResult } from '@/types'
+import { Project } from '@prisma/client'
 import { auth } from '@/auth'
 import { revalidatePath } from 'next/cache'
 import { constructionContainer } from '@/constants/default-data'
@@ -66,7 +68,7 @@ export async function getProject(id: string) {
 }
 
 // 創建新專案
-export async function createProject(data: CreateProjectInputSchema) {
+export async function createProject(data: CreateProjectInputSchema): Promise<ActionResult<Project>> {
   try {
     const validated = createProjectInputSchema.safeParse(data)
 
@@ -76,9 +78,9 @@ export async function createProject(data: CreateProjectInputSchema) {
 
     const { title, type } = validated.data
 
-    const session = await auth()
+    const session = await auth()    
     if (!session?.user?.id) {
-      return { error: 'Unauthorized' }
+      return { status: 'error', error: 'Unauthorized' }
     }
 
     const project = await prisma.project.create({
