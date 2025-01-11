@@ -1,6 +1,13 @@
 'use client'
 
 import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import {
+  CreateProjectSchema,
+  createProjectSchema,
+} from '@/lib/schemas/createProjectSchema'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { createProject } from '@/actions/projectActions'
 import { Plus } from 'lucide-react'
 import {
   Dialog,
@@ -18,29 +25,23 @@ import {
   FormControl,
   InputLabel,
 } from '@mui/material'
+import { LoadingButton } from '@mui/lab'
 import { PROJECT_TYPES } from '@/constants/selection'
 
-interface AddProjectDialogProps {
-  onAddProject: (project: any) => void
-}
-
-export function AddProjectDialog({ onAddProject }: AddProjectDialogProps) {
+export function AddProjectDialog() {
   const [open, setOpen] = useState(false)
-  const [newProject, setNewProject] = useState({
-    title: '',
-    type: '',
+  const {
+    register,
+    handleSubmit,
+    setError,
+    formState: { errors, isValid, isSubmitting },
+  } = useForm<CreateProjectSchema>({
+    resolver: zodResolver(createProjectSchema),
+    mode: 'onTouched',
   })
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    onAddProject({
-      ...newProject,
-      id: Math.random().toString(),
-      progress: 0,
-      createdAt: new Date(),
-    })
-    setNewProject({ title: '', type: '' })
-    setOpen(false)
+  const onSubmit = async (data: CreateProjectSchema) => {
+    const result = await createProject(data)
   }
 
   return (
@@ -69,26 +70,18 @@ export function AddProjectDialog({ onAddProject }: AddProjectDialogProps) {
             </DialogDescription>
           </DialogHeader>
 
-          <form onSubmit={handleSubmit} className="mt-4 space-y-4">
+          <form onSubmit={handleSubmit(onSubmit)} className="mt-4 space-y-4">
             <TextField
               fullWidth
               label="專案名稱"
               variant="outlined"
-              value={newProject.title}
-              onChange={(e) =>
-                setNewProject({ ...newProject, title: e.target.value })
-              }
-              required
+              {...register('title')}
+              error={!!errors.title}
+              helperText={errors.title?.message as string}
             />
             <FormControl fullWidth required>
               <InputLabel>專案類型</InputLabel>
-              <Select
-                value={newProject.type}
-                label="專案類型"
-                onChange={(e) =>
-                  setNewProject({ ...newProject, type: e.target.value })
-                }
-              >
+              <Select {...register('type')} label="專案類型">
                 {PROJECT_TYPES.map((type) => (
                   <MenuItem key={type.value} value={type.value}>
                     {type.label}
@@ -96,34 +89,34 @@ export function AddProjectDialog({ onAddProject }: AddProjectDialogProps) {
                 ))}
               </Select>
             </FormControl>
-          </form>
-
-          <DialogFooter className="mt-6">
-            <Button
-              onClick={() => setOpen(false)}
-              className="hover:bg-cancel/90 mr-1 bg-cancel text-white"
-            >
-              取消
-            </Button>
-            <Button
-              onClick={handleSubmit}
-              disabled={!newProject.title || !newProject.type}
-              sx={{
-                backgroundColor: 'var(--main)',
-                color: '#000000',
-                '&:hover': {
-                  backgroundColor: 'var(--main-light)',
+            <DialogFooter className="mt-6">
+              <Button
+                onClick={() => setOpen(false)}
+                className="hover:bg-cancel/90 mr-1 bg-cancel text-white"
+              >
+                取消
+              </Button>
+              <LoadingButton
+                loading={isSubmitting}
+                disabled={!isValid}
+                type="submit"
+                sx={{
+                  backgroundColor: 'var(--main)',
                   color: '#000000',
-                },
-                '&:disabled': {
-                  backgroundColor: 'var(--main-light)',
-                  color: 'rgba(0, 0, 0, 0.38)',
-                },
-              }}
-            >
-              新增
-            </Button>
-          </DialogFooter>
+                  '&:hover': {
+                    backgroundColor: 'var(--main-light)',
+                    color: '#000000',
+                  },
+                  '&:disabled': {
+                    backgroundColor: 'var(--main-light)',
+                    color: 'rgba(0, 0, 0, 0.38)',
+                  },
+                }}
+              >
+                新增
+              </LoadingButton>
+            </DialogFooter>
+          </form>
         </DialogContent>
       </Dialog>
     </>
