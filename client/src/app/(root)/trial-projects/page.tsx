@@ -1,5 +1,5 @@
 import { Metadata } from 'next'
-import { ProjectList } from '@/components/projects/project-list'
+import { ProjectsDisplayTrial } from '@/components/projects/projects-display-trial'
 
 export const metadata: Metadata = {
   title: '專案列表 | Interior Helper',
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 export default function TrialProjectsPage() {
   return (
     <section className="flex h-full flex-col">
-      <ProjectList />
+      <ProjectsDisplayTrial />
     </section>
   )
 }

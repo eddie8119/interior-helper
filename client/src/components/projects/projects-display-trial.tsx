@@ -4,7 +4,7 @@ import { AddProjectDialog } from '@/components/projects/addProject-dialog'
 import { ProjectCard } from '@/components/projects/project-card'
 import { useProjects } from '@/hooks/use-projects'
 
-export function ProjectList() {
+export function ProjectsDisplayTrial() {
   const { projects, addProject, deleteProject } = useProjects()
 
   return (

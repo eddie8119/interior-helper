@@ -1,7 +1,5 @@
 export const publicRoutes = [
   '/',
-  '/projects',
-  '/projects/\\d+',
   '/trial-projects',
   '/trial-projects/\\d+',
 ]
@@ -12,4 +10,6 @@ export const authRoutes = [
   '/verify-email',
   '/forgot-password',
   '/reset-password',
+  // '/projects',
+  // '/projects/\\d+',
 ]

@@ -1,6 +1,7 @@
+import React from 'react'
 import { Metadata } from 'next'
 import { getProjects } from '@/actions/projectActions'
-import { ProjectList } from '@/components/projects/project-list'
+import { ProjectsDisplay } from '@/components/projects/projects-display'
 
 export const metadata: Metadata = {
   title: '專案列表 | Interior Helper',
@@ -18,9 +19,10 @@ export const metadata: Metadata = {
 }
 export default async function ProjectsPage() {
   const projects = await getProjects()
+  console.log(1111, projects)
   return (
     <section className="flex h-full flex-col">
-      <ProjectList />
+      {/* <ProjectsDisplay /> */}
     </section>
   )
 }
