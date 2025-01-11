@@ -13,7 +13,7 @@ export const menuLists: Menu[] = [
   {
     id: '1',
     title: '工程專案列表',
-    link: 'projects',
+    link: 'trial-projects',
     icon: ProjectIcon,
   },
   {

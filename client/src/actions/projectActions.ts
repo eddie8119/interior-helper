@@ -9,8 +9,9 @@ import { revalidatePath } from 'next/cache'
 export async function getProjects() {
   try {
     const session = await auth()
-    if (!session?.user?.id) {
-      return { error: 'Unauthorized' }
+    console.log(5555,session)
+    if (!session?.user) {
+      return null
     }
 
     const projects = await prisma.project.findMany({
@@ -24,7 +25,6 @@ export async function getProjects() {
         createdAt: 'desc',
       },
     })
-
     return { data: projects }
   } catch (error) {
     console.error('Error fetching projects:', error)
@@ -36,7 +36,7 @@ export async function getProjects() {
 export async function getProject(id: string) {
   try {
     const session = await auth()
-    if (!session?.user?.id) {
+    if (!session?.user) {
       return { error: 'Unauthorized' }
     }
 
@@ -62,12 +62,10 @@ export async function getProject(id: string) {
 }
 
 // 創建新專案
-export async function createProject(
-  data: Omit<ProjectBasic, 'id' | 'createdAt' | 'updatedAt'>
-) {
+export async function createProject(data: Omit<ProjectBasic, 'id' | 'createdAt' | 'updatedAt'>) {
   try {
     const session = await auth()
-    if (!session?.user?.id) {
+    if (!session?.user) {
       return { error: 'Unauthorized' }
     }
 
@@ -75,9 +73,9 @@ export async function createProject(
       data: {
         ...data,
         userId: session.user.id,
-        containers: data.containers || [],
-        team: data.team || [],
-      },
+        containers: JSON.stringify(data.containers || []),
+        team: JSON.stringify([])
+      }
     })
 
     revalidatePath('/projects')
@@ -92,7 +90,7 @@ export async function createProject(
 export async function updateProject(id: string, data: Partial<ProjectBasic>) {
   try {
     const session = await auth()
-    if (!session?.user?.id) {
+    if (!session?.user) {
       return { error: 'Unauthorized' }
     }
 
@@ -129,7 +127,7 @@ export async function updateProject(id: string, data: Partial<ProjectBasic>) {
 export async function deleteProject(id: string) {
   try {
     const session = await auth()
-    if (!session?.user?.id) {
+    if (!session?.user) {
       return { error: 'Unauthorized' }
     }
 
@@ -161,7 +159,7 @@ export async function deleteProject(id: string) {
 export async function updateProjectProgress(id: string, progress: number) {
   try {
     const session = await auth()
-    if (!session?.user?.id) {
+    if (!session?.user) {
       return { error: 'Unauthorized' }
     }
 
@@ -185,7 +183,7 @@ export async function updateProjectProgress(id: string, progress: number) {
 export async function updateProjectBudget(id: string, budgetTotal: number) {
   try {
     const session = await auth()
-    if (!session?.user?.id) {
+    if (!session?.user) {
       return { error: 'Unauthorized' }
     }
 

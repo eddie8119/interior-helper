@@ -1,6 +1,6 @@
 import React from 'react'
 import { Metadata } from 'next'
-import { getProjects } from '@/actions/projectActions'
+import { getProjects, createProject } from '@/actions/projectActions'
 import { ProjectsDisplay } from '@/components/projects/projects-display'
 
 export const metadata: Metadata = {
@@ -22,7 +22,7 @@ export default async function ProjectsPage() {
   console.log(1111, projects)
   return (
     <section className="flex h-full flex-col">
-      {/* <ProjectsDisplay /> */}
+      <ProjectsDisplay projects={projects} createProject={createProject} />
     </section>
   )
 }

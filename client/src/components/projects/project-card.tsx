@@ -11,7 +11,7 @@ interface ProjectCardProps {
 export function ProjectCard({ project, deleteProject }: ProjectCardProps) {
   return (
     <div className="group relative">
-      <Link href={`/projects/${project.id}`}>
+      <Link href={`/trial-projects/${project.id}`}>
         <Card className="relative overflow-y-auto rounded-xl border bg-card p-6 transition-all hover:scale-[1.02] dark:bg-gray-800">
           <div className="flex flex-col">
             <span className="text-sm text-gray-400 dark:text-gray-500">
