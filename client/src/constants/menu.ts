@@ -18,6 +18,12 @@ export const menuLists: Menu[] = [
   },
   {
     id: '2',
+    title: '會員-工程專案列表',
+    link: 'projects',
+    icon: ProjectIcon,
+  },
+  {
+    id: '3',
     title: '行事曆',
     link: 'calendar',
     icon: CalendarIcon,

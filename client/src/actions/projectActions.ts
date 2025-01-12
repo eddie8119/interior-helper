@@ -101,7 +101,6 @@ export async function createProject(
       },
     })
 
-    revalidatePath('/projects')
     return { status: 'success', data: project }
   } catch (error) {
     console.error(error)
