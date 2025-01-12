@@ -1,5 +1,6 @@
 import React from 'react'
 import { Metadata } from 'next'
+import { notFound } from 'next/navigation'
 import { getProjects } from '@/actions/projectActions'
 import { ProjectsDisplay } from '@/components/projects/projects-display'
 
@@ -20,10 +21,9 @@ export const metadata: Metadata = {
 export default async function ProjectsPage() {
   const response = await getProjects()
   if (response.status !== 'success' || !response.data) {
-    return <div>Error: Failed to load projects</div>
+    return notFound()
   }
   const { data } = response
-  console.log('project data', data)
 
   return (
     <section className="flex h-full flex-col">
