@@ -1,37 +1,12 @@
 'use client'
 
-import { notFound } from 'next/navigation'
-
-import { useProjects } from '@/hooks/use-projects'
-import { useTasks } from '@/hooks/use-tasks'
-import { DraggableContainers } from './drag/draggable-containers'
+import { Project } from '@prisma/client'
 
 interface ProjectContainerProps {
-  projectId: string
+  project: Project
 }
 
-export function ProjectContainer({ projectId }: ProjectContainerProps) {
-  const { projects, isLoading, updateProject } = useProjects()
-  const { getProjectTasks, updateTask } = useTasks()
-
-  const project = projects.find((p) => p.id === projectId)
-  const projectTasks = getProjectTasks(projectId)
-
-  if (isLoading) {
-    return (
-      <div className="flex h-[50vh] items-center justify-center">
-        <div className="text-center">
-          <div className="border-primary h-8 w-8 animate-spin rounded-full border-4 border-t-transparent"></div>
-          <p className="mt-2 text-sm text-gray-500">載入中...</p>
-        </div>
-      </div>
-    )
-  }
-
-  if (!project) {
-    notFound()
-  }
-
+export function ProjectContainer({ project }: ProjectContainerProps) {
   return (
     <main className="container mx-auto">
       <header className="sticky top-0 z-10 flex items-center bg-background">
@@ -39,12 +14,12 @@ export function ProjectContainer({ projectId }: ProjectContainerProps) {
       </header>
       <p>上次編輯時間：{}</p>
 
-      <DraggableContainers
+      {/* <DraggableContainers
         project={project}
         projectTasks={projectTasks}
         onUpdateTask={updateTask}
         onUpdateProject={updateProject}
-      />
+      /> */}
     </main>
   )
 }

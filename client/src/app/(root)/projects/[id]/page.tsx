@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
-import { ProjectContainerTrial } from '@/components/projects/project-container-trial'
-import { getProjectById } from '@/app/actions/project-details'
+import { notFound } from 'next/navigation'
+import { ProjectContainer } from '@/components/projects/project-container'
+import { getProject } from '@/actions/projectActions'
 
 interface ProjectPageProps {
   params: {
@@ -11,9 +12,10 @@ interface ProjectPageProps {
 export async function generateMetadata({
   params,
 }: ProjectPageProps): Promise<Metadata> {
-  const project = await getProjectById(params.id)
+  const response = await getProject(params.id)
+  const { status, data: project } = response
 
-  if (!project) {
+  if (status === 'error') {
     return {
       title: '找不到專案 | Interior Helper',
       description: '抱歉，您要查看的專案不存在或已被刪除。',
@@ -51,9 +53,11 @@ export async function generateMetadata({
 }
 
 export default async function ProjectPage({ params }: ProjectPageProps) {
-  // 這裡可以加入伺服器端的資料預取邏輯
-  // const project = await getProject(params.id)
-  // if (!project) notFound()
+  const response = await getProject(params.id)
+  if (response.status !== 'success' || !response.data) {
+    return notFound()
+  }
+  const { data } = response
 
-  return <ProjectContainerTrial projectId={params.id} />
+  return <ProjectContainer project={data} />
 }

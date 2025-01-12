@@ -39,11 +39,11 @@ export async function getProjects(): Promise<ActionResult<Project[]>> {
 }
 
 // 獲取單個專案詳情
-export async function getProject(id: string) {
+export async function getProject(id: string): Promise<ActionResult<Project>> {
   try {
     const session = await auth()
-    if (!session?.user) {
-      return { error: 'Unauthorized' }
+    if (!session?.user?.id) {
+      return { status: 'error', error: 'Unauthorized' }
     }
 
     const project = await prisma.project.findUnique({
@@ -57,13 +57,13 @@ export async function getProject(id: string) {
     })
 
     if (!project) {
-      return { error: 'Project not found' }
+      return { status: 'error', error: 'Project not found' }
     }
 
-    return { data: project }
+    return { status: 'success', data: project }
   } catch (error) {
-    console.error('Error fetching project:', error)
-    return { error: 'Failed to fetch project' }
+    console.error(error)
+    return { status: 'error', error: 'Something went wrong' }
   }
 }
 

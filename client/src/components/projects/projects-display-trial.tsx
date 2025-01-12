@@ -21,6 +21,7 @@ export function ProjectsDisplayTrial() {
               key={project.id}
               project={project}
               deleteProject={deleteProject}
+              url={'trial-projects'}
             />
           ))}
         </article>

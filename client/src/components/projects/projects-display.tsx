@@ -23,6 +23,7 @@ export function ProjectsDisplay({ projects }: ProjectsDisplayProps) {
               key={project.id}
               project={project}
               deleteProject={deleteProject}
+              url={'projects'}
             />
           ))}
         </article>
