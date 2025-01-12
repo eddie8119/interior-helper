@@ -26,7 +26,7 @@ export interface ProjectBasic {
   costTotal?: number | null
   progress: number
   daysLeft?: number | null
-  containers: any[]
+  containers: Container[]
   team: any[]
   createdAt: Date
   updatedAt: Date

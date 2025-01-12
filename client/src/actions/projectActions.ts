@@ -9,7 +9,8 @@ import { ActionResult } from '@/types'
 import { Project } from '@prisma/client'
 import { auth } from '@/auth'
 import { revalidatePath } from 'next/cache'
-import { constructionContainer } from '@/constants/default-data'
+import defaultData from '@/constants/default-data.json'
+const { constructionContainer } = defaultData
 
 // 獲取當前用戶的所有專案
 export async function getProjects(): Promise<ActionResult<Project[]>> {
@@ -94,8 +95,8 @@ export async function createProject(
         costTotal: 0,
         progress: 0,
         daysLeft: null,
-        containers: JSON.stringify(constructionContainer),
-        team: JSON.stringify([]),
+        containers: constructionContainer,
+        // team: JSON.stringify([]),
         userId: session.user.id,
       },
     })
