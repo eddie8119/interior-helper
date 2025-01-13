@@ -1,6 +1,6 @@
 'use client'
 
-import { AddProjectDialog } from '@/components/projects/addProject-dialog'
+import { AddProjectDialog } from '@/components/projects/add-project-dialog'
 import { ProjectCard } from '@/components/projects/project-card'
 import { ProjectBasic } from '@/types/project'
 
