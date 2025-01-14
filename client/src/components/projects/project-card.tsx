@@ -1,10 +1,10 @@
 import Link from 'next/link'
-import { ProjectBasic } from '@/types/project'
+import { Project } from '@prisma/client'
 import { Card } from '@/components/ui/card'
 import { DeleteButtonWithDialog } from '@/components/ui/delete-button-with-dialog'
 
 interface ProjectCardProps {
-  project: ProjectBasic
+  project: Project
   deleteProject: (id: string) => void
   url: string
 }

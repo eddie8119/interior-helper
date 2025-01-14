@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { ProjectBasic } from '@/types/project'
+import { Project } from '@prisma/client'
 import {
   defaultProjects,
   constructionContainer,
@@ -11,7 +11,7 @@ const STORAGE_KEYS = {
 }
 
 export function useProjects() {
-  const [projects, setProjects] = useState<ProjectBasic[]>([])
+  const [projects, setProjects] = useState<Project[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(true)
 
   // 初始化專案
@@ -23,7 +23,7 @@ export function useProjects() {
           const parsedProjects = JSON.parse(savedProjects)
           // 將字串日期轉換為 Date 物件
           const projectsWithDates = parsedProjects.map(
-            (project: ProjectBasic) => ({
+            (project: Project) => ({
               ...project,
               createdAt: new Date(project.createdAt),
             })
@@ -44,14 +44,14 @@ export function useProjects() {
   }, [])
 
   // 保存專案到本地存儲
-  const saveProjects = (projects: ProjectBasic[]) => {
+  const saveProjects = (projects: Project[]) => {
     localStorage.setItem(STORAGE_KEYS.PROJECTS, JSON.stringify(projects))
     setProjects(projects)
   }
 
   // 添加專案
-  const addProject = (project: Omit<ProjectBasic, 'id' | 'createdAt'>) => {
-    const newProject: ProjectBasic = {
+  const addProject = (project: Omit<Project, 'id' | 'createdAt'>) => {
+    const newProject: Project = {
       ...project,
       id: crypto.randomUUID(),
       createdAt: new Date(),
@@ -65,7 +65,7 @@ export function useProjects() {
   }
 
   // 更新專案
-  const updateProject = (projectId: string, updates: Partial<ProjectBasic>) => {
+  const updateProject = (projectId: string, updates: Partial<Project>) => {
     const updatedProjects = projects.map((project) =>
       project.id === projectId
         ? {

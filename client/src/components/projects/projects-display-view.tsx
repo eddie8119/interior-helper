@@ -1,9 +1,10 @@
 'use client'
 
 import { Project } from '@prisma/client'
+import { useRouter } from 'next/navigation'
+import { deleteProject } from '@/actions/projectActions'
 import { ProjectCard } from './project-card'
 import { AddProjectDialog } from './add-project-dialog'
-import { useRouter } from 'next/navigation'
 
 interface ProjectsDisplayViewProps {
   projects: Project[]
@@ -28,11 +29,6 @@ export function ProjectsDisplayView({
 }: ProjectsDisplayViewProps) {
   const router = useRouter()
 
-  const handleProjectAdded = () => {
-    onProjectAdded?.()
-    router.refresh()
-  }
-
   return (
     <div className="space-y-8">
       <div className="flex items-center justify-between">
@@ -40,9 +36,7 @@ export function ProjectsDisplayView({
           <h2 className="text-2xl font-bold tracking-tight">{title}</h2>
           <p className="text-muted-foreground">{description}</p>
         </div>
-        {showAddButton && (
-          <AddProjectDialog onProjectAdded={handleProjectAdded} />
-        )}
+        {showAddButton && <AddProjectDialog />}
       </div>
       {projects.length === 0 ? (
         <div className="flex flex-col items-center justify-center p-8 text-center">
@@ -56,7 +50,12 @@ export function ProjectsDisplayView({
       ) : (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {projects.map((project) => (
-            <ProjectCard key={project.id} project={project} />
+            <ProjectCard
+              key={project.id}
+              project={project}
+              deleteProject={deleteProject}
+              url="projects"
+            />
           ))}
         </div>
       )}
