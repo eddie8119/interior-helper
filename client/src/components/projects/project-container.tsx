@@ -1,6 +1,7 @@
 'use client'
 
 import { Project } from '@prisma/client'
+import { DraggableContainers } from './drag/draggable-containers'
 
 interface ProjectContainerProps {
   project: Project
