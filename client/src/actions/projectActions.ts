@@ -39,7 +39,7 @@ export async function getProjects(): Promise<ActionResult<Project[]>> {
 }
 
 // 獲取單個專案詳情
-export async function getProject(id: string): Promise<ActionResult<Project>> {
+export async function getProject(id: string): Promise<ActionResult<Project & { tasks: any[] }>> {
   try {
     const session = await auth()
     if (!session?.user?.id) {

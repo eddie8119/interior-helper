@@ -1,5 +1,4 @@
-import { Task } from '@/types/project'
-import { Project } from '@prisma/client'
+import { Project, Task } from '@prisma/client'
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd'
 import { useContainers } from '@/hooks/use-containers'
 import { useDragEnd } from '@/hooks/use-drag-end'
