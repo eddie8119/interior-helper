@@ -11,11 +11,13 @@ interface ProjectTasksServerContainerProps {
 export async function ProjectTasksServerContainer({
   params,
 }: ProjectTasksServerContainerProps) {
-  const response = await getProject(params.id)
-  if (response.status !== 'success' || !response.data) {
+  // 等待 params.id 解析完成
+  const id = await Promise.resolve(params.id)
+  const response = await getProject(id)
+
+  if (response.status === 'error' || !response.data) {
     return notFound()
   }
-  const { data } = response
 
-  return <ProjectContainer project={data} />
+  return <ProjectContainer project={response.data} />
 }
