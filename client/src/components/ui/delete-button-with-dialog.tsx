@@ -1,3 +1,5 @@
+'use client'
+
 import { DeleteButton } from './delete-button'
 import { DeleteDialog } from './delete-dialog'
 import { useState } from 'react'

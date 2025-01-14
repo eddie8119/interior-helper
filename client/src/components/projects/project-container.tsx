@@ -13,12 +13,12 @@ export function ProjectContainer({ project }: ProjectContainerProps) {
       </header>
       <p>上次編輯時間：{}</p>
 
-      <DraggableContainers
+      {/* <DraggableContainers
         project={project}
         projectTasks={projectTasks}
         onUpdateTask={updateTask}
         onUpdateProject={updateProject}
-      />
+      /> */}
     </main>
   )
 }

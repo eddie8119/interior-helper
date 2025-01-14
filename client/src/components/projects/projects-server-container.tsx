@@ -9,5 +9,5 @@ export async function ProjectsServerContainer() {
   }
   const { data } = response
 
-  return <ProjectsDisplayView projects={data} />
+  return <ProjectsDisplayView projects={data} url="projects" />
 }

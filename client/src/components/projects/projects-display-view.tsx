@@ -13,6 +13,7 @@ interface ProjectsDisplayViewProps {
   title?: string
   description?: string
   showAddButton?: boolean
+  url: string
   useProjectsHook?: () => {
     projects: Project[]
     isLoading: boolean
@@ -27,6 +28,7 @@ export function ProjectsDisplayView({
   description = '這裡是您的所有專案，點擊可查看詳細資訊',
   showAddButton = true,
   useProjectsHook,
+  url,
 }: ProjectsDisplayViewProps) {
   const router = useRouter()
 
@@ -56,7 +58,7 @@ export function ProjectsDisplayView({
                 key={project.id}
                 project={project}
                 deleteProject={deleteProject}
-                url="projects"
+                url={url}
               />
             ))}
           </div>
