@@ -1,7 +1,6 @@
 import { Metadata } from 'next'
 import { getProject } from '@/actions/projectActions'
 import { ProjectTasksServerContainer } from '@/components/projects/project-tasks-server-container'
-import { notFound } from 'next/navigation'
 
 interface ProjectPageProps {
   params: {
@@ -52,11 +51,5 @@ export async function generateMetadata({
 }
 
 export default async function ProjectPage({ params }: ProjectPageProps) {
-  const response = await getProject(params.id)
-
-  if (response.status === 'error' || !response.data) {
-    return notFound()
-  }
-
-  return <ProjectTasksServerContainer project={response.data} />
+  return <ProjectTasksServerContainer params={params} />
 }
