@@ -60,8 +60,7 @@ export function useProjects() {
     }
 
     const updatedProjects = [...projects, newProject]
-    saveProjects(updatedProjects)
-    return newProject
+    saveProjects(updatedProjects)    
   }
 
   // 更新專案

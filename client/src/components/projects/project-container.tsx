@@ -1,5 +1,3 @@
-'use client'
-
 import { Project } from '@prisma/client'
 import { DraggableContainers } from './drag/draggable-containers'
 
@@ -15,12 +13,12 @@ export function ProjectContainer({ project }: ProjectContainerProps) {
       </header>
       <p>上次編輯時間：{}</p>
 
-      {/* <DraggableContainers
+      <DraggableContainers
         project={project}
         projectTasks={projectTasks}
         onUpdateTask={updateTask}
         onUpdateProject={updateProject}
-      /> */}
+      />
     </main>
   )
 }

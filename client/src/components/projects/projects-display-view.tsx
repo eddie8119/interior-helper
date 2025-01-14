@@ -8,7 +8,8 @@ import { AddProjectDialog } from './add-project-dialog'
 
 interface ProjectsDisplayViewProps {
   projects: Project[]
-  onProjectAdded?: () => void
+  addProject?: (project: Omit<Project, 'id' | 'createdAt'>) => void
+  deleteProject?: (id: string) => void
   title?: string
   description?: string
   showAddButton?: boolean
@@ -21,7 +22,7 @@ interface ProjectsDisplayViewProps {
 
 export function ProjectsDisplayView({
   projects,
-  onProjectAdded,
+  addProject,
   title = '專案列表',
   description = '這裡是您的所有專案，點擊可查看詳細資訊',
   showAddButton = true,
@@ -36,7 +37,7 @@ export function ProjectsDisplayView({
           <h2 className="text-2xl font-bold tracking-tight">{title}</h2>
           <p className="text-muted-foreground">{description}</p>
         </div>
-        {showAddButton && <AddProjectDialog />}
+        {showAddButton && <AddProjectDialog addProject={addProject} />}
       </header>
       <main className="flex-1 overflow-y-auto">
         {projects.length === 0 ? (
