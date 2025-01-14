@@ -30,35 +30,37 @@ export function ProjectsDisplayView({
   const router = useRouter()
 
   return (
-    <div className="space-y-8">
-      <div className="flex items-center justify-between">
+    <>
+      <header className="sticky top-0 z-10 flex items-center justify-between bg-background pb-6">
         <div>
           <h2 className="text-2xl font-bold tracking-tight">{title}</h2>
           <p className="text-muted-foreground">{description}</p>
         </div>
         {showAddButton && <AddProjectDialog />}
-      </div>
-      {projects.length === 0 ? (
-        <div className="flex flex-col items-center justify-center p-8 text-center">
-          <p className="text-muted-foreground">目前還沒有任何專案</p>
-          {showAddButton && (
-            <p className="text-muted-foreground mt-2">
-              點擊右上角的「新增專案」按鈕來創建您的第一個專案
-            </p>
-          )}
-        </div>
-      ) : (
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {projects.map((project) => (
-            <ProjectCard
-              key={project.id}
-              project={project}
-              deleteProject={deleteProject}
-              url="projects"
-            />
-          ))}
-        </div>
-      )}
-    </div>
+      </header>
+      <main className="flex-1 overflow-y-auto">
+        {projects.length === 0 ? (
+          <div className="flex flex-col items-center justify-center p-8 text-center">
+            <p className="text-muted-foreground">目前還沒有任何專案</p>
+            {showAddButton && (
+              <p className="text-muted-foreground mt-2">
+                點擊右上角的「新增專案」按鈕來創建您的第一個專案
+              </p>
+            )}
+          </div>
+        ) : (
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {projects.map((project) => (
+              <ProjectCard
+                key={project.id}
+                project={project}
+                deleteProject={deleteProject}
+                url="projects"
+              />
+            ))}
+          </div>
+        )}
+      </main>
+    </>
   )
 }
