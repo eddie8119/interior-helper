@@ -8,7 +8,7 @@ import Link from 'next/link'
 interface BaseProjectsDisplayProps {
   projects: Project[]
   onDeleteProject: (id: string) => Promise<void>
-  title?: string
+  title: string
   description?: string
   showAddButton?: boolean
   url: string
@@ -45,7 +45,11 @@ export function BaseProjectsDisplay({
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {projects.map((project) => (
               <Link href={`/projects/${project.id}`} key={project.id}>
-                <ProjectCard project={project} onDelete={onDeleteProject} />
+                <ProjectCard
+                  project={project}
+                  onDelete={onDeleteProject}
+                  url={url}
+                />
               </Link>
             ))}
           </div>
