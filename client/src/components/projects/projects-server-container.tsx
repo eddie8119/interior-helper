@@ -1,4 +1,4 @@
-import { ProjectsDisplayView } from './projects-display-view'
+import { ProjectsDisplayView } from './display/projects-display-view'
 import { notFound } from 'next/navigation'
 import { getProjects } from '@/actions/projectActions'
 

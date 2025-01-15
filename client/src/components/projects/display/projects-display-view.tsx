@@ -2,8 +2,8 @@
 
 import { Project } from '@prisma/client'
 import { deleteProject } from '@/actions/projectActions'
-import { ProjectCard } from './project-card'
-import { AddProjectDialogServer } from './dialog/add-project-dialog-server'
+import { ProjectCard } from '../project-card'
+import { AddProjectDialogServer } from '../dialog/add-project-dialog-server'
 
 interface ProjectsDisplayViewProps {
   projects: Project[]

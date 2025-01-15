@@ -1,6 +1,6 @@
 'use client'
 
-import { ProjectsDisplayView } from './projects-display-view'
+import { ProjectsDisplayView } from './display/projects-display-view'
 import { useProjects } from '@/hooks/use-projects'
 
 export function ProjectsTrialClientContainer() {
