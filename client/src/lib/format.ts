@@ -7,13 +7,10 @@ export const formatDateTime = (
   date: Date | string | number,
   options: DateTimeFormatOptions = {}
 ) => {
-  const {
-    format = 'full',
-    locale = 'zh-TW'
-  } = options
+  const { format = 'full', locale = 'zh-TW' } = options
 
   const formatOptions: Intl.DateTimeFormatOptions = {
-    hour12: false
+    hour12: false,
   }
 
   switch (format) {
@@ -23,20 +20,20 @@ export const formatDateTime = (
         month: 'long',
         day: 'numeric',
         hour: '2-digit',
-        minute: '2-digit'
+        minute: '2-digit',
       })
       break
     case 'date':
       Object.assign(formatOptions, {
         year: 'numeric',
         month: 'long',
-        day: 'numeric'
+        day: 'numeric',
       })
       break
     case 'time':
       Object.assign(formatOptions, {
         hour: '2-digit',
-        minute: '2-digit'
+        minute: '2-digit',
       })
       break
     case 'short':
@@ -44,7 +41,7 @@ export const formatDateTime = (
         month: 'numeric',
         day: 'numeric',
         hour: '2-digit',
-        minute: '2-digit'
+        minute: '2-digit',
       })
       break
   }
@@ -52,10 +49,15 @@ export const formatDateTime = (
   return new Intl.DateTimeFormat(locale, formatOptions).format(new Date(date))
 }
 
-export const formatRelativeTime = (date: Date | string | number, locale = 'zh-TW') => {
+export const formatRelativeTime = (
+  date: Date | string | number,
+  locale = 'zh-TW'
+) => {
   const now = new Date()
   const target = new Date(date)
-  const diffInMinutes = Math.floor((target.getTime() - now.getTime()) / (1000 * 60))
+  const diffInMinutes = Math.floor(
+    (target.getTime() - now.getTime()) / (1000 * 60)
+  )
   const rtf = new Intl.RelativeTimeFormat(locale, { numeric: 'auto' })
 
   if (Math.abs(diffInMinutes) < 60) {

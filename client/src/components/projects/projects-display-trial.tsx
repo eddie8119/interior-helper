@@ -1,6 +1,6 @@
 'use client'
 
-import { AddProjectDialogTrial } from '@/components/projects/add-project-dialog-trial'
+import { AddProjectDialogClient } from '@/components/projects/dialog/add-project-dialog-client'
 import { ProjectCard } from '@/components/projects/project-card'
 import { useProjects } from '@/hooks/use-projects'
 
@@ -11,7 +11,7 @@ export function ProjectsDisplayTrial() {
     <>
       <header className="sticky top-0 z-10 flex items-center justify-between bg-background pb-6">
         <h1 className="text-2xl font-semibold">工程專案列表</h1>
-        <AddProjectDialogTrial onAddProject={addProject} />
+        <AddProjectDialogClient onAddProject={addProject} />
       </header>
 
       <main className="flex-1 overflow-y-auto">

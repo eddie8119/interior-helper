@@ -22,12 +22,10 @@ export function useProjects() {
         if (savedProjects) {
           const parsedProjects = JSON.parse(savedProjects)
           // 將字串日期轉換為 Date 物件
-          const projectsWithDates = parsedProjects.map(
-            (project: Project) => ({
-              ...project,
-              createdAt: new Date(project.createdAt),
-            })
-          )
+          const projectsWithDates = parsedProjects.map((project: Project) => ({
+            ...project,
+            createdAt: new Date(project.createdAt),
+          }))
           setProjects(projectsWithDates)
         } else {
           setProjects(defaultProjects)
@@ -60,7 +58,7 @@ export function useProjects() {
     }
 
     const updatedProjects = [...projects, newProject]
-    saveProjects(updatedProjects)    
+    saveProjects(updatedProjects)
   }
 
   // 更新專案

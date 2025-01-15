@@ -7,7 +7,6 @@ import {
   CreateProjectInputSchema,
 } from '@/lib/schemas/createProjectSchema'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { createProject } from '@/actions/projectActions'
 import { Plus } from 'lucide-react'
 import {
   Dialog,
@@ -27,36 +26,40 @@ import {
 } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 import { PROJECT_TYPES } from '@/constants/selection'
-import { useRouter } from 'next/navigation'
 
-export function AddProjectDialog() {
+interface BaseProjectDialogProps {
+  onSubmit: (
+    data: CreateProjectInputSchema
+  ) => Promise<{ status: string; error?: any }>
+}
+
+export function BaseProjectDialog({ onSubmit }: BaseProjectDialogProps) {
   const [open, setOpen] = useState(false)
-  const router = useRouter()
   const {
     register,
     handleSubmit,
     setError,
     formState: { errors, isValid, isSubmitting },
+    reset,
   } = useForm<CreateProjectInputSchema>({
     resolver: zodResolver(createProjectInputSchema),
     mode: 'onTouched',
   })
 
-  const onSubmit = async (data: CreateProjectInputSchema) => {
-    try {
-      const result = await createProject(data)
-      if (result.status === 'success') {
-        setOpen(false)
-        router.refresh()
-      } else {
-        if (Array.isArray(result.error)) {
-          result.error.forEach((e) => {})
-        } else {
-          setError('root.serverError', { message: result.error })
-        }
+  const handleFormSubmit = async (data: CreateProjectInputSchema) => {
+    const result = await onSubmit(data)
+    if (result.status === 'success') {
+      setOpen(false)
+      reset()
+    } else {
+      if (Array.isArray(result.error)) {
+        result.error.forEach((e) => {
+          setError(e.path[0] as any, {
+            type: 'manual',
+            message: e.message,
+          })
+        })
       }
-    } catch (error) {
-      console.log(error)
     }
   }
 
@@ -78,7 +81,7 @@ export function AddProjectDialog() {
       </Button>
 
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent onOpenChange={setOpen}>
+        <DialogContent>
           <DialogHeader>
             <DialogTitle>新增專案</DialogTitle>
             <DialogDescription>
@@ -86,7 +89,10 @@ export function AddProjectDialog() {
             </DialogDescription>
           </DialogHeader>
 
-          <form onSubmit={handleSubmit(onSubmit)} className="mt-4 space-y-4">
+          <form
+            onSubmit={handleSubmit(handleFormSubmit)}
+            className="mt-4 space-y-4"
+          >
             <TextField
               fullWidth
               label="專案名稱"

@@ -1,10 +1,9 @@
 'use client'
 
 import { Project } from '@prisma/client'
-import { useRouter } from 'next/navigation'
 import { deleteProject } from '@/actions/projectActions'
 import { ProjectCard } from './project-card'
-import { AddProjectDialog } from './add-project-dialog'
+import { AddProjectDialogServer } from './dialog/add-project-dialog-server'
 
 interface ProjectsDisplayViewProps {
   projects: Project[]
@@ -30,8 +29,6 @@ export function ProjectsDisplayView({
   useProjectsHook,
   url,
 }: ProjectsDisplayViewProps) {
-  const router = useRouter()
-
   return (
     <>
       <header className="sticky top-0 z-10 flex items-center justify-between bg-background pb-6">
@@ -39,7 +36,7 @@ export function ProjectsDisplayView({
           <h2 className="text-2xl font-bold tracking-tight">{title}</h2>
           <p className="text-muted-foreground">{description}</p>
         </div>
-        {showAddButton && <AddProjectDialog />}
+        {showAddButton && <AddProjectDialogServer />}
       </header>
       <main className="flex-1 overflow-y-auto">
         {projects.length === 0 ? (
