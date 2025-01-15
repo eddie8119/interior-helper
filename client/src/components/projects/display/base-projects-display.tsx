@@ -3,7 +3,6 @@
 import { Project } from '@prisma/client'
 import { ProjectCard } from '../project-card'
 import { AddProjectDialogServer } from '../dialog/add-project-dialog-server'
-import Link from 'next/link'
 
 interface BaseProjectsDisplayProps {
   projects: Project[]
@@ -44,13 +43,12 @@ export function BaseProjectsDisplay({
         ) : (
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {projects.map((project) => (
-              <Link href={`/projects/${project.id}`} key={project.id}>
-                <ProjectCard
-                  project={project}
-                  onDelete={onDeleteProject}
-                  url={url}
-                />
-              </Link>
+              <ProjectCard
+                key={project.id}
+                project={project}
+                onDelete={onDeleteProject}
+                url={url}
+              />
             ))}
           </div>
         )}
