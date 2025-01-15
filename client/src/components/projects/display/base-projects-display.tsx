@@ -2,15 +2,15 @@
 
 import { Project } from '@prisma/client'
 import { ProjectCard } from '../project-card'
-import { AddProjectDialogServer } from '../dialog/add-project-dialog-server'
 
 interface BaseProjectsDisplayProps {
   projects: Project[]
   onDeleteProject: (id: string) => Promise<void>
-  title: string
+  title?: string
   description?: string
   showAddButton?: boolean
   url: string
+  AddProjectDialog: React.ComponentType
 }
 
 export function BaseProjectsDisplay({
@@ -20,6 +20,7 @@ export function BaseProjectsDisplay({
   description = '這裡是您的所有專案，點擊可查看詳細資訊',
   showAddButton = true,
   url,
+  AddProjectDialog,
 }: BaseProjectsDisplayProps) {
   return (
     <>
@@ -28,7 +29,7 @@ export function BaseProjectsDisplay({
           <h2 className="text-2xl font-bold tracking-tight">{title}</h2>
           <p className="text-muted-foreground">{description}</p>
         </div>
-        {showAddButton && <AddProjectDialogServer />}
+        {showAddButton && <AddProjectDialog />}
       </header>
       <main className="flex-1 overflow-y-auto">
         {projects.length === 0 ? (
@@ -43,12 +44,13 @@ export function BaseProjectsDisplay({
         ) : (
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {projects.map((project) => (
-              <ProjectCard
-                key={project.id}
-                project={project}
-                onDelete={onDeleteProject}
-                url={url}
-              />
+              <div key={project.id}>
+                <ProjectCard
+                  project={project}
+                  onDelete={onDeleteProject}
+                  url={url}
+                />
+              </div>
             ))}
           </div>
         )}
