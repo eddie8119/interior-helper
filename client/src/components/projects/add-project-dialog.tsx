@@ -27,9 +27,11 @@ import {
 } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 import { PROJECT_TYPES } from '@/constants/selection'
+import { useRouter } from 'next/navigation'
 
 export function AddProjectDialog() {
   const [open, setOpen] = useState(false)
+  const router = useRouter()
   const {
     register,
     handleSubmit,
@@ -45,6 +47,7 @@ export function AddProjectDialog() {
       const result = await createProject(data)
       if (result.status === 'success') {
         setOpen(false)
+        router.refresh()
       } else {
         if (Array.isArray(result.error)) {
           result.error.forEach((e) => {})

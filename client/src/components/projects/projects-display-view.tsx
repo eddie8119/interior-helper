@@ -39,7 +39,7 @@ export function ProjectsDisplayView({
           <h2 className="text-2xl font-bold tracking-tight">{title}</h2>
           <p className="text-muted-foreground">{description}</p>
         </div>
-        {showAddButton && <AddProjectDialog addProject={addProject} />}
+        {showAddButton && <AddProjectDialog />}
       </header>
       <main className="flex-1 overflow-y-auto">
         {projects.length === 0 ? (
