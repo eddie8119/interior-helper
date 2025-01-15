@@ -5,7 +5,7 @@ import { BaseProjectsDisplay } from './base-projects-display'
 
 interface WithClientDeleteProps {
   url: string
-  title?: string
+  title: string
   description?: string
   showAddButton?: boolean
 }

@@ -1,5 +1,5 @@
 import { Metadata } from 'next'
-import { ProjectsTrialClientContainer } from '@/components/projects/projects-trial-client-container'
+import { ProjectsDisplayClient } from '@/components/projects/display/projects-display-client'
 
 export const metadata: Metadata = {
   title: '試用版專案列表 | Interior Helper',
@@ -20,7 +20,11 @@ export const metadata: Metadata = {
 export default function TrialProjectsPage() {
   return (
     <section className="flex h-full flex-col">
-      <ProjectsTrialClientContainer />
+      <ProjectsDisplayClient
+        title="試用版專案列表"
+        description="這裡是您的試用版專案，功能受限但可以體驗基本操作"
+        url="trial-projects"
+      />
     </section>
   )
 }

@@ -1,9 +1,9 @@
+'use client'
+
 import { withClientDelete } from './with-client-delete'
 import { BaseProjectsDisplay } from './base-projects-display'
-import { Project } from '@prisma/client'
 
 interface ProjectsDisplayClientProps {
-  projects: Project[]
   url: string
   title: string
   description?: string
@@ -13,7 +13,6 @@ interface ProjectsDisplayClientProps {
 const ProjectsDisplayClientBase = withClientDelete(BaseProjectsDisplay)
 
 export function ProjectsDisplayClient({
-  projects,
   url,
   title,
   description,
@@ -21,7 +20,6 @@ export function ProjectsDisplayClient({
 }: ProjectsDisplayClientProps) {
   return (
     <ProjectsDisplayClientBase
-      projects={projects}
       url={url}
       title={title}
       description={description}
