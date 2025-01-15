@@ -13,7 +13,7 @@ export function ProjectCard({ project, deleteProject, url }: ProjectCardProps) {
   return (
     <div className="group relative">
       <Link href={`/${url}/${project.id}`}>
-        <Card className="relative overflow-y-auto rounded-xl border bg-card p-6 transition-all hover:scale-[1.02] dark:bg-gray-800">
+        <Card className="relative overflow-y-auto rounded-xl border bg-card p-6 transition-all hover:border-main-light dark:bg-gray-800">
           <div className="flex flex-col">
             <span className="text-sm text-gray-400 dark:text-gray-500">
               {project.createdAt.toLocaleDateString()}
