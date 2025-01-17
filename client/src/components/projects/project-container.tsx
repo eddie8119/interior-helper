@@ -1,5 +1,5 @@
 import { Project, Task } from '@prisma/client'
-import { DraggableContainers } from './drag/draggable-containers'
+import { DraggableContainersServer } from './container/draggable-containers-server'
 import { formatDateTime } from '@/lib/format'
 
 interface ProjectContainerProps {
@@ -20,12 +20,12 @@ export function ProjectContainer({ project }: ProjectContainerProps) {
         上次編輯時間：{formatDateTime(project.updatedAt)}
       </p>
 
-      {/* <DraggableContainers
+      <DraggableContainersServer
         project={project}
         projectTasks={project.tasks}
         onUpdateTask={updateTask}
         onUpdateProject={updateProject}
-      /> */}
+      />
     </main>
   )
 }

@@ -1,3 +1,5 @@
+'use client'
+
 import { Project, Task } from '@prisma/client'
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd'
 import { useContainers } from '@/hooks/use-containers'
@@ -10,19 +12,19 @@ const DROPPABLE_TYPE = {
   TASK: 'task',
 }
 
-interface DraggableContainersProps {
+interface DraggableContainersServerProps {
   project: Project
   projectTasks: Task[]
-  onUpdateTask: (taskId: string, data: Partial<Task>) => void
-  onUpdateProject: (projectId: string, data: Partial<Project>) => void
+  onUpdateTask?: (taskId: string, data: Partial<Task>) => void
+  onUpdateProject?: (projectId: string, data: Partial<Project>) => void
 }
 
-export function DraggableContainers({
+export function DraggableContainersServer({
   project,
   projectTasks,
   onUpdateTask,
   onUpdateProject,
-}: DraggableContainersProps) {
+}: DraggableContainersServerProps) {
   const { updateContainers, deleteContainer, createContainer } = useContainers(
     project,
     onUpdateProject

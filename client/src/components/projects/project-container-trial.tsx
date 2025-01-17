@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation'
 
 import { useProjects } from '@/hooks/use-projects'
 import { useTasks } from '@/hooks/use-tasks'
-import { DraggableContainers } from './drag/draggable-containers'
+import { DraggableContainersClient } from './container/draggable-containers-client'
 
 interface ProjectContainerTrialProps {
   projectId: string
@@ -41,7 +41,7 @@ export function ProjectContainerTrial({
       </header>
       <p>上次編輯時間：{}</p>
 
-      <DraggableContainers
+      <DraggableContainersClient
         project={project}
         projectTasks={projectTasks}
         onUpdateTask={updateTask}
