@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react'
 import { Project } from '@prisma/client'
-import {
-  defaultProjects,
-  constructionContainer,
-} from '@/constants/default-data'
+import { defaultProjects } from '@/constants/default-data'
+import defaultData from '@/constants/default-data.json'
+const { constructionContainer } = defaultData
 
 // Storage keys
 const STORAGE_KEYS = {
@@ -54,7 +53,6 @@ export function useProjects() {
       id: crypto.randomUUID(),
       createdAt: new Date(),
       containers: constructionContainer,
-      editedAt: new Date(),
     }
 
     const updatedProjects = [...projects, newProject]

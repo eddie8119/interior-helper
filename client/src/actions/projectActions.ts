@@ -1,6 +1,7 @@
 'use server'
 
 import { prisma } from '@/lib/prisma'
+import { Container } from '@/types/project'
 import {
   createProjectInputSchema,
   CreateProjectInputSchema,
@@ -8,7 +9,6 @@ import {
 import { ActionResult } from '@/types'
 import { Project } from '@prisma/client'
 import { auth } from '@/auth'
-import { revalidatePath } from 'next/cache'
 import defaultData from '@/constants/default-data.json'
 const { constructionContainer } = defaultData
 
@@ -134,10 +134,137 @@ export async function deleteProject(id: string) {
       where: { id },
     })
 
-    revalidatePath('/projects')
     return { success: true }
   } catch (error) {
     console.error('Error deleting project:', error)
     return { error: 'Failed to delete project' }
+  }
+}
+
+// 添加容器到專案
+export async function addContainer(
+  projectId: string,
+  data: { type: string }
+): Promise<ActionResult<Project>> {
+  try {
+    const session = await auth()
+    if (!session?.user?.id) {
+      return { status: 'error', error: 'Unauthorized' }
+    }
+
+    const project = await prisma.project.findUnique({
+      where: {
+        id: projectId,
+        userId: session.user.id,
+      },
+    })
+
+    if (!project) {
+      return { status: 'error', error: 'Project not found' }
+    }
+
+    const containers = project.containers || []
+    const newContainer: Container = {
+      id: crypto.randomUUID(),
+      type: data.type,
+      order: Number(containers.length),
+    }
+
+    const updatedProject = await prisma.project.update({
+      where: { id: projectId },
+      data: {
+        containers: [...containers, newContainer],
+        updatedAt: new Date(),
+      },
+    })
+
+    return { status: 'success', data: updatedProject }
+  } catch (error) {
+    console.error(error)
+    return { status: 'error', error: 'Failed to add container' }
+  }
+}
+
+// 更新容器
+export async function updateContainer(
+  projectId: string,
+  containerId: string,
+  updates: Partial<Container>
+): Promise<ActionResult<Project>> {
+  try {
+    const session = await auth()
+    if (!session?.user?.id) {
+      return { status: 'error', error: 'Unauthorized' }
+    }
+
+    const project = await prisma.project.findUnique({
+      where: {
+        id: projectId,
+        userId: session.user.id,
+      },
+    })
+
+    if (!project) {
+      return { status: 'error', error: 'Project not found' }
+    }
+
+    const containers = project.containers || []
+    const updatedContainers = containers.map((container) =>
+      container.id === containerId ? { ...container, ...updates } : container
+    )
+
+    const updatedProject = await prisma.project.update({
+      where: { id: projectId },
+      data: {
+        containers: updatedContainers,
+        updatedAt: new Date(),
+      },
+    })
+
+    return { status: 'success', data: updatedProject }
+  } catch (error) {
+    console.error(error)
+    return { status: 'error', error: 'Failed to update container' }
+  }
+}
+
+// 刪除容器
+export async function deleteContainer(
+  projectId: string,
+  containerId: string
+): Promise<ActionResult<Project>> {
+  try {
+    const session = await auth()
+    if (!session?.user?.id) {
+      return { status: 'error', error: 'Unauthorized' }
+    }
+
+    const project = await prisma.project.findUnique({
+      where: {
+        id: projectId,
+        userId: session.user.id,
+      },
+    })
+
+    if (!project) {
+      return { status: 'error', error: 'Project not found' }
+    }
+
+    const containers = project.containers || []
+    const updatedContainers = containers.filter(
+      (container) => container.id !== containerId
+    )
+
+    const updatedProject = await prisma.project.update({
+      where: { id: projectId },
+      data: {
+        containers: updatedContainers,
+        updatedAt: new Date(),
+      },
+    })
+    return { status: 'success', data: updatedProject }
+  } catch (error) {
+    console.error(error)
+    return { status: 'error', error: 'Failed to delete container' }
   }
 }

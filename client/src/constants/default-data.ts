@@ -1,3 +1,4 @@
+import { Project } from '@prisma/client'
 import { Task, ProjectBasic, Container } from '@/types/project'
 
 export const constructionContainer: Container[] = [
@@ -63,7 +64,7 @@ export const constructionContainer: Container[] = [
   },
 ]
 
-export const defaultProjects: ProjectBasic[] = [
+export const defaultProjects: Project[] = [
   {
     id: '1',
     title: '示範-台北市大安案',
