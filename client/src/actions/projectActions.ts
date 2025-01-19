@@ -10,25 +10,23 @@ import { ActionResult } from '@/types'
 import { Project } from '@prisma/client'
 import { auth } from '@/auth'
 import defaultData from '@/constants/default-data.json'
+import { getAuthUserId } from './authActions'
 const { constructionContainer } = defaultData
 
 // 獲取當前用戶的所有專案
 export async function getProjects(): Promise<ActionResult<Project[]>> {
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return { status: 'error', error: 'Unauthorized' }
-    }
+    const userId = await getAuthUserId()
 
     const projects = await prisma.project.findMany({
       where: {
-        userId: session.user.id,
+        userId
       },
       include: {
         tasks: true,
       },
       orderBy: {
-        createdAt: 'desc',
+        created: 'desc',
       },
     })
     return { status: 'success', data: projects }
@@ -43,15 +41,12 @@ export async function getProject(
   id: string
 ): Promise<ActionResult<Project & { tasks: any[] }>> {
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return { status: 'error', error: 'Unauthorized' }
-    }
+    const userId = await getAuthUserId()
 
     const project = await prisma.project.findUnique({
       where: {
         id,
-        userId: session.user.id,
+        userId,
       },
       include: {
         tasks: true,
@@ -82,10 +77,7 @@ export async function createProject(
 
     const { title, type } = validated.data
 
-    const session = await auth()
-    if (!session?.user?.id) {
-      return { status: 'error', error: 'Unauthorized' }
-    }
+    const userId = await getAuthUserId()
 
     const project = await prisma.project.create({
       data: {
@@ -99,7 +91,7 @@ export async function createProject(
         daysLeft: null,
         containers: constructionContainer,
         // team: JSON.stringify([]),
-        userId: session.user.id,
+        userId,
       },
     })
 
@@ -113,16 +105,13 @@ export async function createProject(
 // 刪除專案
 export async function deleteProject(id: string) {
   try {
-    const session = await auth()
-    if (!session?.user) {
-      return { error: 'Unauthorized' }
-    }
+    const userId = await getAuthUserId()
 
     // 確認專案屬於當前用戶
     const existingProject = await prisma.project.findUnique({
       where: {
         id,
-        userId: session.user.id,
+        userId,
       },
     })
 
@@ -147,15 +136,12 @@ export async function addContainer(
   data: { type: string }
 ): Promise<ActionResult<Project>> {
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return { status: 'error', error: 'Unauthorized' }
-    }
+    const userId = await getAuthUserId()
 
     const project = await prisma.project.findUnique({
       where: {
         id: projectId,
-        userId: session.user.id,
+        userId,
       },
     })
 
@@ -174,7 +160,7 @@ export async function addContainer(
       where: { id: projectId },
       data: {
         containers: [...containers, newContainer],
-        updatedAt: new Date(),
+        updated: new Date(),
       },
     })
 
@@ -192,15 +178,12 @@ export async function updateContainer(
   updates: Partial<Container>
 ): Promise<ActionResult<Project>> {
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return { status: 'error', error: 'Unauthorized' }
-    }
+    const userId = await getAuthUserId()
 
     const project = await prisma.project.findUnique({
       where: {
         id: projectId,
-        userId: session.user.id,
+        userId,
       },
     })
 
@@ -217,7 +200,7 @@ export async function updateContainer(
       where: { id: projectId },
       data: {
         containers: updatedContainers,
-        updatedAt: new Date(),
+        updated: new Date(),
       },
     })
 
@@ -234,15 +217,11 @@ export async function deleteContainer(
   containerId: string
 ): Promise<ActionResult<Project>> {
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return { status: 'error', error: 'Unauthorized' }
-    }
-
+    const userId = await getAuthUserId()
     const project = await prisma.project.findUnique({
       where: {
         id: projectId,
-        userId: session.user.id,
+        userId,
       },
     })
 
@@ -259,7 +238,7 @@ export async function deleteContainer(
       where: { id: projectId },
       data: {
         containers: updatedContainers,
-        updatedAt: new Date(),
+        updated: new Date(),
       },
     })
     return { status: 'success', data: updatedProject }

@@ -1,3 +1,4 @@
+import { getAuthUserId } from '@/actions/authActions'
 import { auth } from '@/auth'
 import { ActionResult } from '@/types'
 
@@ -10,11 +11,8 @@ export function withAuth<T, Args extends any[]>(
 ): ActionFunction<T, Args> {
   return async (...args: Args) => {
     try {
-      const session = await auth()
-      if (!session?.user?.id) {
-        return { status: 'error', error: 'Unauthorized' }
-      }
-      return await action(session.user.id, ...args)
+      const userId = await getAuthUserId()  
+      return await action(userId, ...args)
     } catch (error) {
       console.error('Auth error:', error)
       return { status: 'error', error: 'Authentication failed' }
