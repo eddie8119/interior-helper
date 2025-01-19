@@ -11,6 +11,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { updateMemberProfile } from '@/actions/userActions'
 import { useRouter } from 'next/navigation'
 import { toast } from 'react-toastify'
+import { handleFormServerErrors } from '@/lib/utils'
 
 interface EditFormProps {
   member: Member
@@ -37,6 +38,7 @@ export default function EditForm({ member }: EditFormProps) {
       router.refresh()
       reset({ ...data })
     } else {
+      handleFormServerErrors(result, setError)
     }
   }
 

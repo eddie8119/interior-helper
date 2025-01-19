@@ -13,6 +13,7 @@ import {
 } from '@/components/ui/dialog'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { handleFormServerErrors } from '@/lib/utils'
 
 export default function RegisterForm() {
   const router = useRouter()
@@ -29,17 +30,9 @@ export default function RegisterForm() {
     const result = await registerUser(data)
 
     if (result.status === 'success') {
-      console.log('user register successful ')
       router.push('/projects')
     } else {
-      if (Array.isArray(result.error)) {
-        result.error.forEach((e) => {
-          const fieldName = e.path[0] as 'name' | 'email' | 'password'
-          setError(fieldName, { message: e.message })
-        })
-      } else {
-        setError('root.serverError', { message: result.error })
-      }
+      handleFormServerErrors(result, setError)
     }
   }
   return (
