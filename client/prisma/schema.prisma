@@ -45,13 +45,11 @@ model User {
 model Member {
     id          String   @id @default(cuid())
     userId      String   @unique
-    name        String
-    gender      String
-    dateOfBirth DateTime
-    created     DateTime @default(now())
-    updated     DateTime @default(now())
+    company     String
     description String
     city        String
+    created     DateTime @default(now())
+    updated     DateTime @default(now())
     image       String?
     user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
     photos      Photo[]
