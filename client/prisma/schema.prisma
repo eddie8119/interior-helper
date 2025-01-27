@@ -42,6 +42,16 @@ model User {
     @@index([email])
 }
 
+model Token {
+    id      String    @id @default(cuid())
+    email   String
+    token   String
+    expires DateTime
+    type    TokenType
+
+    @@unique([email, token])
+}
+
 model Member {
     id          String   @id @default(cuid())
     userId      String   @unique
@@ -124,4 +134,9 @@ enum TaskStatus {
 enum Priority {
     low
     high
+}
+
+enum TokenType {
+    VERIFICATION
+    PASSWORD_RESET
 }
