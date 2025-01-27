@@ -20,7 +20,7 @@ export async function getProjects(): Promise<ActionResult<Project[]>> {
 
     const projects = await prisma.project.findMany({
       where: {
-        userId
+        userId,
       },
       include: {
         tasks: true,

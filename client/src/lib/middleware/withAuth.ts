@@ -11,7 +11,7 @@ export function withAuth<T, Args extends any[]>(
 ): ActionFunction<T, Args> {
   return async (...args: Args) => {
     try {
-      const userId = await getAuthUserId()  
+      const userId = await getAuthUserId()
       return await action(userId, ...args)
     } catch (error) {
       console.error('Auth error:', error)
