@@ -1,38 +1,39 @@
 import React from 'react'
-import { Input } from '@nextui-org/react'
+import { TextField } from '@mui/material'
 import { useFormContext } from 'react-hook-form'
 
 export default function UserDetailsForm() {
   const {
     register,
+    getValues,
     formState: { errors },
   } = useFormContext()
   return (
     <>
-      <Input
-        defaultValue=""
+      <TextField
+        defaultValue={getValues('name')}
         label="Name"
-        variant="bordered"
+        variant="outlined"
         {...register('name')}
-        isInvalid={!!errors.name}
-        errorMessage={errors.name?.message as string}
+        error={!!errors.name}
+        helperText={errors.name?.message as string}
       />
-      <Input
-        defaultValue=""
+      <TextField
+        defaultValue={getValues('email')}
         label="Email"
-        variant="bordered"
+        variant="outlined"
         {...register('email')}
-        isInvalid={!!errors.email}
-        errorMessage={errors.email?.message as string}
+        error={!!errors.email}
+        helperText={errors.email?.message as string}
       />
-      <Input
-        defaultValue=""
+      <TextField
+        defaultValue={getValues('password')}
         label="Password"
-        variant="bordered"
+        variant="outlined"
         type="password"
         {...register('password')}
-        isInvalid={!!errors.password}
-        errorMessage={errors.password?.message as string}
+        error={!!errors.password}
+        helperText={errors.password?.message as string}
       />
     </>
   )
