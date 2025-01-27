@@ -4,15 +4,26 @@ import bcrypt from 'bcryptjs'
 import { prisma } from '@/lib/prisma'
 import { RegisterSchema, registerSchema } from '@/lib/schemas/registerSchema'
 import { ActionResult } from '@/types'
-import { User } from '@prisma/client'
+import { TokenType, User } from '@prisma/client'
 import { LoginSchema } from '@/lib/schemas/loginSchema'
 import { AuthError } from 'next-auth'
 import { signIn, signOut, auth } from '@/auth'
+import { generateToken } from '@/lib/tokens'
 
 export async function signInUser(
   data: LoginSchema
 ): Promise<ActionResult<string>> {
   try {
+    const existingUser = await getUserByEmail(data.email);
+
+    if (!existingUser || !existingUser.email) return { status: 'error', error: 'Invalid credentials' }
+
+    if (!existingUser.emailVerified) {
+        const token = await generateToken(existingUser.email, TokenType.VERIFICATION);
+
+        return { status: 'error', error: 'Please verify your email address before logging in' }
+    }
+  
     const result = await signIn('credentials', {
       email: data.email,
       password: data.password,
@@ -69,6 +80,9 @@ export async function registerUser(
         profileComplete: true,
       },
     })
+
+    const verificationToken = await generateToken(email, TokenType.VERIFICATION);
+    
     return { status: 'success', data: user }
   } catch (error) {
     console.log(error)
