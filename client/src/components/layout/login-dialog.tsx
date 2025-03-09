@@ -18,7 +18,7 @@ import { toast } from 'react-toastify'
 import { useLoginDialog } from '@/contexts/login-dialog-context'
 
 export function LoginDialog() {
-  const { isOpen, closeLoginDialog } = useLoginDialog()
+  const { isOpenLoginDialog, closeLoginDialog } = useLoginDialog()
   const router = useRouter()
   const {
     register,
@@ -43,7 +43,7 @@ export function LoginDialog() {
   }
 
   return (
-    <Dialog open={isOpen} onOpenChange={closeLoginDialog}>
+    <Dialog open={isOpenLoginDialog} onOpenChange={closeLoginDialog}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle className="text-center text-2xl">

@@ -1,11 +1,10 @@
 'use client'
 
 import { Button } from '@mui/material'
-import Link from 'next/link'
 import { useLoginDialog } from '@/contexts/login-dialog-context'
 
 export function LoginRegisterArea() {
-  const { openLoginDialog } = useLoginDialog()
+  const { openLoginDialog, openRegisterDialog } = useLoginDialog()
 
   return (
     <>
@@ -33,10 +32,9 @@ export function LoginRegisterArea() {
             color: '#000000',
           },
         }}
+        onClick={openRegisterDialog}
       >
-        <Link href="/register" className="text-yellow-500 hover:underline">
-          註冊
-        </Link>
+        註冊
       </Button>
     </>
   )

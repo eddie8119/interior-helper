@@ -3,13 +3,16 @@
 import { createContext, useContext, useState } from 'react'
 
 interface LoginDialogContextType {
-  isOpen: boolean
+  isOpenLoginDialog: boolean
   openLoginDialog: () => void
   closeLoginDialog: () => void
+  isOpenRegisterDialog: boolean
+  openRegisterDialog: () => void
+  closeRegisterDialog: () => void
 }
 
 const LoginDialogContext = createContext<LoginDialogContextType | undefined>(
-  undefined,
+  undefined
 )
 
 export function LoginDialogProvider({
@@ -17,14 +20,24 @@ export function LoginDialogProvider({
 }: {
   children: React.ReactNode
 }) {
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpenLoginDialog, setisOpenLoginDialog] = useState(false)
+  const [isOpenRegisterDialog, setisOpenRegisterDialog] = useState(false)
 
-  const openLoginDialog = () => setIsOpen(true)
-  const closeLoginDialog = () => setIsOpen(false)
+  const openLoginDialog = () => setisOpenLoginDialog(true)
+  const closeLoginDialog = () => setisOpenLoginDialog(false)
+  const openRegisterDialog = () => setisOpenRegisterDialog(true)
+  const closeRegisterDialog = () => setisOpenRegisterDialog(false)
 
   return (
     <LoginDialogContext.Provider
-      value={{ isOpen, openLoginDialog, closeLoginDialog }}
+      value={{
+        isOpenLoginDialog,
+        openLoginDialog,
+        closeLoginDialog,
+        isOpenRegisterDialog,
+        openRegisterDialog,
+        closeRegisterDialog,
+      }}
     >
       {children}
     </LoginDialogContext.Provider>
