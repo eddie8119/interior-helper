@@ -15,13 +15,10 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { signInUser } from '@/actions/authActions'
 import { useRouter } from 'next/navigation'
 import { toast } from 'react-toastify'
+import { useLoginDialog } from '@/contexts/login-dialog-context'
 
-interface LoginDialogProps {
-  open: boolean
-  setOpen: (value: boolean) => void
-}
-
-export function LoginDialog({ open, setOpen }: LoginDialogProps) {
+export function LoginDialog() {
+  const { isOpen, closeLoginDialog } = useLoginDialog()
   const router = useRouter()
   const {
     register,
@@ -46,7 +43,7 @@ export function LoginDialog({ open, setOpen }: LoginDialogProps) {
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={isOpen} onOpenChange={closeLoginDialog}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle className="text-center text-2xl">

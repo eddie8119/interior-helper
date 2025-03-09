@@ -3,11 +3,13 @@ import { Geist, Geist_Mono } from 'next/font/google'
 import '../globals.css'
 import '../../styles/main.scss'
 import { ThemeProvider } from '@/contexts/theme-context'
+import { LoginDialogWrapper } from '@/components/providers/login-dialog-wrapper'
 import { Sidebar } from '@/components/layout/navigation/sidebar'
 import { MobileNav } from '@/components/layout/navigation/mobile-nav'
 import { Header } from '@/components/layout/header'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import { LoginDialogProvider } from '@/contexts/login-dialog-context'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -35,24 +37,27 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ThemeProvider>
-          <ToastContainer
-            position="bottom-right"
-            hideProgressBar
-            className="z-50"
-          />
-          <div className="flex h-screen bg-background">
-            {/* mob */}
-            <MobileNav />
+          <LoginDialogProvider>
+            <ToastContainer
+              position="bottom-right"
+              hideProgressBar
+              className="z-50"
+            />
+            <div className="flex h-screen bg-background">
+              {/* mob */}
+              <MobileNav />
 
-            <Sidebar />
+              <Sidebar />
 
-            <div className="mt-16 flex h-full flex-1 flex-col sm:mt-0">
-              <Header />
-              <main className="flex-1 overflow-y-auto p-6">
-                <div className="mx-auto max-w-7xl">{children}</div>
-              </main>
+              <div className="mt-16 flex h-full flex-1 flex-col sm:mt-0">
+                <Header />
+                <main className="flex-1 overflow-y-auto p-6">
+                  <div className="mx-auto max-w-7xl">{children}</div>
+                </main>
+              </div>
             </div>
-          </div>
+            <LoginDialogWrapper />
+          </LoginDialogProvider>
         </ThemeProvider>
       </body>
     </html>

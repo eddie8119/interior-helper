@@ -1,12 +1,11 @@
 'use client'
 
-import { useState } from 'react'
 import { Button } from '@mui/material'
 import Link from 'next/link'
-import { LoginDialog } from './login-dialog'
+import { useLoginDialog } from '@/contexts/login-dialog-context'
 
 export function LoginRegisterArea() {
-  const [open, setOpen] = useState(false)
+  const { openLoginDialog } = useLoginDialog()
 
   return (
     <>
@@ -20,7 +19,7 @@ export function LoginRegisterArea() {
             color: '#000000',
           },
         }}
-        onClick={() => setOpen(true)}
+        onClick={openLoginDialog}
       >
         登入
       </Button>
@@ -39,7 +38,6 @@ export function LoginRegisterArea() {
           註冊
         </Link>
       </Button>
-      <LoginDialog open={open} setOpen={setOpen} />
     </>
   )
 }
