@@ -11,6 +11,7 @@ export default function UserDetailsForm() {
   return (
     <>
       <TextField
+        fullWidth
         defaultValue={getValues('name')}
         label="Name"
         variant="outlined"
@@ -19,6 +20,7 @@ export default function UserDetailsForm() {
         helperText={errors.name?.message as string}
       />
       <TextField
+        fullWidth
         defaultValue={getValues('email')}
         label="Email"
         variant="outlined"
@@ -27,6 +29,7 @@ export default function UserDetailsForm() {
         helperText={errors.email?.message as string}
       />
       <TextField
+        fullWidth
         defaultValue={getValues('password')}
         label="Password"
         variant="outlined"

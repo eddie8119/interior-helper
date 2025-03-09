@@ -12,6 +12,7 @@ export default function ProfileForm() {
   return (
     <>
       <TextField
+        fullWidth
         defaultValue={getValues('company')}
         label="Company"
         variant="outlined"
@@ -20,6 +21,7 @@ export default function ProfileForm() {
         helperText={errors.company?.message as string}
       />
       <TextField
+        fullWidth
         defaultValue={getValues('city')}
         label="City"
         variant="outlined"
@@ -28,6 +30,7 @@ export default function ProfileForm() {
         helperText={errors.city?.message as string}
       />
       <TextField
+        fullWidth
         defaultValue={getValues('description')}
         label="Description"
         variant="outlined"

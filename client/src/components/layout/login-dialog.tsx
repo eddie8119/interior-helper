@@ -18,7 +18,7 @@ import { toast } from 'react-toastify'
 import { useLoginDialog } from '@/contexts/login-dialog-context'
 
 export function LoginDialog() {
-  const { isOpenLoginDialog, closeLoginDialog } = useLoginDialog()
+  const { isOpenLoginDialog, closeLoginDialog, openRegisterDialog } = useLoginDialog()
   const router = useRouter()
   const {
     register,
@@ -28,6 +28,11 @@ export function LoginDialog() {
     resolver: zodResolver(loginSchema),
     mode: 'onTouched',
   })
+
+  const goRegister = () => {
+    closeLoginDialog()
+    openRegisterDialog()
+  }
 
   const onSubmit = async (data: LoginSchema) => {
     const result = await signInUser(data)
@@ -51,9 +56,12 @@ export function LoginDialog() {
           </DialogTitle>
           <div className="text-center">
             還沒有帳號？
-            <Link href="/register" className="text-yellow-500 hover:underline">
+            <button
+              className="text-yellow-500 hover:underline"
+              onClick={goRegister}
+            >
               註冊
-            </Link>
+            </button>
           </div>
         </DialogHeader>
 
