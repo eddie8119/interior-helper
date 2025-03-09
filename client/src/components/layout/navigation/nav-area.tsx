@@ -7,6 +7,8 @@ import { usePathname } from 'next/navigation'
 import { useProjects } from '@/hooks/use-projects'
 import { Menu } from '@/types/project'
 import { ChevronDown, ChevronRight } from 'lucide-react'
+import { useProtectedNavigation } from '@/hooks/use-protected-navigation'
+
 interface NavAreaProps {
   isCollapsed?: boolean
 }
@@ -16,6 +18,7 @@ export function NavArea({ isCollapsed }: NavAreaProps) {
   const { projects } = useProjects()
   const [menus, setMenus] = useState<Menu[]>(menuLists)
   const [activeMenu, setActiveMenu] = useState<string | null>(null)
+  const { handleNavigation } = useProtectedNavigation()
 
   useEffect(() => {
     if (!projects?.length) return
@@ -52,12 +55,17 @@ export function NavArea({ isCollapsed }: NavAreaProps) {
           <div key={menu.id} className="space-y-1">
             <Link
               href={`/${menu.link}`}
+              onClick={(e) => {
+                setActiveMenu(menu.id)
+                if (!handleNavigation(menu.link)) {
+                  e.preventDefault() // 阻止導航
+                }
+              }}
               className={`flex items-center rounded-lg px-3 py-2 text-sm transition-colors ${
                 isActive
                   ? 'bg-card font-medium text-foreground'
                   : 'hover:bg-card/50 text-gray-button'
               }`}
-              onClick={() => setActiveMenu(menu.id)}
             >
               <Icon className="mr-2 h-5 w-5" />
               <span className={isCollapsed ? 'hidden' : 'block'}>
@@ -86,6 +94,11 @@ export function NavArea({ isCollapsed }: NavAreaProps) {
                         ? 'bg-card font-medium text-foreground'
                         : ''
                     }`}
+                    onClick={(e) => {
+                      if (!handleNavigation(`/projects/${subItem.id}`)) {
+                        e.preventDefault()
+                      }
+                    }}
                   >
                     {subItem.title}
                   </Link>

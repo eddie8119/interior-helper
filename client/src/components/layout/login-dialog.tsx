@@ -18,7 +18,8 @@ import { toast } from 'react-toastify'
 import { useLoginDialog } from '@/contexts/login-dialog-context'
 
 export function LoginDialog() {
-  const { isOpenLoginDialog, closeLoginDialog, openRegisterDialog } = useLoginDialog()
+  const { isOpenLoginDialog, closeLoginDialog, openRegisterDialog } =
+    useLoginDialog()
   const router = useRouter()
   const {
     register,
