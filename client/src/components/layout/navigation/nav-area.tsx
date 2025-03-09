@@ -27,7 +27,7 @@ export function NavArea({ isCollapsed }: NavAreaProps) {
 
     // 更新 menuLists 中的 subMenu
     const updatedMenus = menuLists.map((menu) => {
-      if (menu.title === '工程專案列表') {
+      if (menu.title.includes('工程專案列表')) {
         return {
           ...menu,
           subMenu: data,

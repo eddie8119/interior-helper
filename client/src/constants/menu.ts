@@ -12,13 +12,13 @@ export const menuLists: Menu[] = [
   },
   {
     id: '1',
-    title: '工程專案列表',
+    title: '試用版-工程專案列表',
     link: 'trial-projects',
     icon: ProjectIcon,
   },
   {
     id: '2',
-    title: '會員-工程專案列表',
+    title: '工程專案列表',
     link: 'projects',
     icon: ProjectIcon,
   },
