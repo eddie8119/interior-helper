@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { usePathname } from 'next/navigation'
 import {
   createProjectInputSchema,
   CreateProjectInputSchema,
@@ -35,6 +36,7 @@ interface BaseProjectDialogProps {
 
 export function BaseProjectDialog({ onSubmit }: BaseProjectDialogProps) {
   const [open, setOpen] = useState(false)
+  const pathname = usePathname()
   const {
     register,
     handleSubmit,
@@ -69,6 +71,7 @@ export function BaseProjectDialog({ onSubmit }: BaseProjectDialogProps) {
         sx={{
           backgroundColor: 'var(--main)',
           color: '#000000',
+          padding: '8px 16px',
           '&:hover': {
             backgroundColor: 'var(--main-light)',
             color: '#000000',

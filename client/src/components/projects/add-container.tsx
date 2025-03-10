@@ -55,7 +55,7 @@ export function AddContainer({ onCreateContainer }: AddContainerProps) {
           onClick={() => setIsCreating(true)}
         >
           <Plus className="mr-2 h-4 w-4" />
-          添加容器
+          添加工程類型
         </Button>
       )}
     </div>

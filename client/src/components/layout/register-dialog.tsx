@@ -8,7 +8,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
-import Link from 'next/link'
 import { FormProvider, useForm } from 'react-hook-form'
 import {
   profileSchema,
@@ -111,8 +110,20 @@ export function RegisterDialog() {
             )}
             <div className="flex flex-row items-center gap-6">
               {activeStep !== 0 && (
-                <Button onClick={onBack} fullWidth>
-                  Back
+                <Button
+                  sx={{
+                    backgroundColor: '',
+                    color: '#000000',
+
+                    '&:hover': {
+                      backgroundColor: 'var(--main-light)',
+                      color: '#000000',
+                    },
+                  }}
+                  onClick={onBack}
+                  fullWidth
+                >
+                  上一步
                 </Button>
               )}
               <LoadingButton

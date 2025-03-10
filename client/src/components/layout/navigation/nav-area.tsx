@@ -87,10 +87,11 @@ export function NavArea({ isCollapsed }: NavAreaProps) {
               <div className="ml-7 space-y-1">
                 {menu.subMenu?.map((subItem) => {
                   // 根據選單標題決定路由前綴
-                  const routePrefix = menu.title === '試用版-工程專案列表' 
-                    ? 'trial-projects' 
-                    : 'projects'
-                    
+                  const routePrefix =
+                    menu.title === '試用版-工程專案列表'
+                      ? 'trial-projects'
+                      : 'projects'
+
                   return (
                     <Link
                       key={subItem.id}
