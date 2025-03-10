@@ -85,24 +85,31 @@ export function NavArea({ isCollapsed }: NavAreaProps) {
             {/* 子菜單 */}
             {hasSubMenu && !isCollapsed && isMenuActive && (
               <div className="ml-7 space-y-1">
-                {menu.subMenu?.map((subItem) => (
-                  <Link
-                    key={subItem.id}
-                    href={`/projects/${subItem.id}`}
-                    className={`hover:bg-card/50 block truncate rounded-lg px-3 py-2 text-sm text-gray-button transition-colors ${
-                      pathname === `/projects/${subItem.id}`
-                        ? 'bg-card font-medium text-foreground'
-                        : ''
-                    }`}
-                    onClick={(e) => {
-                      if (!handleNavigation(`/projects/${subItem.id}`)) {
-                        e.preventDefault()
-                      }
-                    }}
-                  >
-                    {subItem.title}
-                  </Link>
-                ))}
+                {menu.subMenu?.map((subItem) => {
+                  // 根據選單標題決定路由前綴
+                  const routePrefix = menu.title === '試用版-工程專案列表' 
+                    ? 'trial-projects' 
+                    : 'projects'
+                    
+                  return (
+                    <Link
+                      key={subItem.id}
+                      href={`/${routePrefix}/${subItem.id}`}
+                      className={`hover:bg-card/50 block truncate rounded-lg px-3 py-2 text-sm text-gray-button transition-colors ${
+                        pathname === `/${routePrefix}/${subItem.id}`
+                          ? 'bg-card font-medium text-foreground'
+                          : ''
+                      }`}
+                      onClick={(e) => {
+                        if (!handleNavigation(`${routePrefix}/${subItem.id}`)) {
+                          e.preventDefault()
+                        }
+                      }}
+                    >
+                      {subItem.title}
+                    </Link>
+                  )
+                })}
               </div>
             )}
           </div>
