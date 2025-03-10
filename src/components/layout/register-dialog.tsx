@@ -40,6 +40,7 @@ export function RegisterDialog() {
   const {
     handleSubmit,
     setError,
+    getValues,
     formState: { errors, isValid, isSubmitting },
   } = methods
 
@@ -48,13 +49,11 @@ export function RegisterDialog() {
     openLoginDialog()
   }
 
-  const onSubmit = async (data: RegisterSchema) => {
-    console.log('Submitting data:', data)
-    const result = await registerUser(data)
-    console.log('result', result)
+  const onSubmit = async () => {
+    const result = await registerUser(getValues());
 
     if (result.status === 'success') {
-      router.push('/projects')
+      router.push('/register/success')
       closeRegisterDialog()
     } else {
       handleFormServerErrors(result, setError)
@@ -78,8 +77,7 @@ export function RegisterDialog() {
 
   const onNext = async () => {
     if (activeStep === stepSchemas.length - 1) {
-      const submitForm = handleSubmit(onSubmit) // "獲取函數" 因為 handleSubmit 返回的是一個函數，而不是 Promise
-      await submitForm() // 實際"執行"表單提交
+      await onSubmit();
     } else {
       setActiveStep((prev) => prev + 1)
     }
