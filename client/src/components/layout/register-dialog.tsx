@@ -50,13 +50,14 @@ export function RegisterDialog() {
 
   const onSubmit = async (data: RegisterSchema) => {
     const result = await registerUser(data)
+    console.log('result', result)
 
-    if (result.status === 'success') {
-      router.push('/projects')
-      closeRegisterDialog()
-    } else {
-      handleFormServerErrors(result, setError)
-    }
+    // if (result.status === 'success') {
+    //   router.push('/projects')
+    //   closeRegisterDialog()
+    // } else {
+    //   handleFormServerErrors(result, setError)
+    // }
   }
 
   const getStepContent = (step: number) => {
@@ -66,7 +67,7 @@ export function RegisterDialog() {
       case 1:
         return <ProfileForm />
       default:
-        return 'Unknown step'
+        return null
     }
   }
 
@@ -76,7 +77,8 @@ export function RegisterDialog() {
 
   const onNext = async () => {
     if (activeStep === stepSchemas.length - 1) {
-      await handleSubmit(onSubmit)()
+      const submitForm = handleSubmit(onSubmit) // "獲取函數" 因為 handleSubmit 返回的是一個函數，而不是 Promise
+      await submitForm() // 實際"執行"表單提交
     } else {
       setActiveStep((prev) => prev + 1)
     }
