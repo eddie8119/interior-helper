@@ -6,11 +6,11 @@ node_modules
 /server/node_modules
 
 # next.js
-/client/.next/
-/client/out/
+/.next/
+/out/
 
 # production
-/client/build
+/build
 
 # misc
 .DS_Store
@@ -24,15 +24,13 @@ yarn-error.log*
 
 # env files
 .env*
-/client/.env*
-/server/.env*
 
 # vercel
 .vercel
 
 # typescript
 *.tsbuildinfo
-/client/next-env.d.ts
+/next-env.d.ts
 
 # IDE
 .idea
