@@ -49,15 +49,16 @@ export function RegisterDialog() {
   }
 
   const onSubmit = async (data: RegisterSchema) => {
+    console.log('Submitting data:', data)
     const result = await registerUser(data)
     console.log('result', result)
 
-    // if (result.status === 'success') {
-    //   router.push('/projects')
-    //   closeRegisterDialog()
-    // } else {
-    //   handleFormServerErrors(result, setError)
-    // }
+    if (result.status === 'success') {
+      router.push('/projects')
+      closeRegisterDialog()
+    } else {
+      handleFormServerErrors(result, setError)
+    }
   }
 
   const getStepContent = (step: number) => {
