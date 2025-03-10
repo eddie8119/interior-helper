@@ -5,7 +5,7 @@ export const registerSchema = z.object({
   name: z.string().min(2),
   email: z.string().email(),
   password: z.string().min(6, {
-    message: '',
+    message: 'Password must be at least 6 characters',
   }),
 })
 
@@ -20,3 +20,5 @@ export const profileSchema = z.object({
 export type RegisterSchema = z.infer<
   typeof registerSchema & typeof profileSchema
 >
+
+export const combinedRegisterSchema = registerSchema.and(profileSchema);

@@ -37,7 +37,7 @@ model User {
     role            Role      @default(MEMBER)
     accounts        Account[]
     projects        Project[]
-    Member          Member?
+    member          Member?
 
     @@index([email])
 }

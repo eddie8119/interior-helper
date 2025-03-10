@@ -2,7 +2,7 @@
 
 import bcrypt from 'bcryptjs'
 import { prisma } from '@/lib/prisma'
-import { RegisterSchema, registerSchema } from '@/lib/schemas/registerSchema'
+import { combinedRegisterSchema, RegisterSchema, registerSchema } from '@/lib/schemas/registerSchema'
 import { ActionResult } from '@/types'
 import { TokenType, User } from '@prisma/client'
 import { LoginSchema } from '@/lib/schemas/loginSchema'
@@ -62,13 +62,13 @@ export async function registerUser(
   data: RegisterSchema
 ): Promise<ActionResult<User>> {
   try {
-    const validated = registerSchema.safeParse(data)
+    const validated = combinedRegisterSchema.safeParse(data);
 
     if (!validated.success) {
       return { status: 'error', error: validated.error.errors }
     }
 
-    const { name, email, password } = validated.data
+    const { name, email, password, city, company, description } = validated.data
     const hashedPassword = await bcrypt.hash(password, 10)
 
     const existingUser = await prisma.user.findUnique({
@@ -85,10 +85,18 @@ export async function registerUser(
         email,
         passwordHash: hashedPassword,
         profileComplete: true,
+        member:{
+          create:{
+            city,
+            company,
+            description
+          }
+        }
       },
     })
 
-    const verificationToken = await generateToken(email, TokenType.VERIFICATION)
+    // const verificationToken = await generateToken(email, TokenType.VERIFICATION)
+    // await sendVerificationEmail(verificationToken.email, verificationToken.token);
 
     return { status: 'success', data: user }
   } catch (error) {
