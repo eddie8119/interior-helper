@@ -50,7 +50,7 @@ export function RegisterDialog() {
   }
 
   const onSubmit = async () => {
-    const result = await registerUser(getValues());
+    const result = await registerUser(getValues())
 
     if (result.status === 'success') {
       router.push('/register/success')
@@ -77,7 +77,7 @@ export function RegisterDialog() {
 
   const onNext = async () => {
     if (activeStep === stepSchemas.length - 1) {
-      await onSubmit();
+      await onSubmit()
     } else {
       setActiveStep((prev) => prev + 1)
     }

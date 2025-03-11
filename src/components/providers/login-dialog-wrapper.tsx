@@ -1,7 +1,7 @@
 'use client'
 
-import { LoginDialog } from '@/components/layout/login-dialog'
-import { RegisterDialog } from '@/components/layout/register-dialog'
+import { LoginDialog } from '@/components/auth/login-dialog'
+import { RegisterDialog } from '@/components/auth/register-dialog'
 
 export function LoginDialogWrapper() {
   return (

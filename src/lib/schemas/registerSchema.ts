@@ -21,4 +21,4 @@ export type RegisterSchema = z.infer<
   typeof registerSchema & typeof profileSchema
 >
 
-export const combinedRegisterSchema = registerSchema.and(profileSchema);
+export const combinedRegisterSchema = registerSchema.and(profileSchema)

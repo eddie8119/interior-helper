@@ -2,7 +2,11 @@
 
 import bcrypt from 'bcryptjs'
 import { prisma } from '@/lib/prisma'
-import { combinedRegisterSchema, RegisterSchema, registerSchema } from '@/lib/schemas/registerSchema'
+import {
+  combinedRegisterSchema,
+  RegisterSchema,
+  registerSchema,
+} from '@/lib/schemas/registerSchema'
 import { ActionResult } from '@/types'
 import { TokenType, User } from '@prisma/client'
 import { LoginSchema } from '@/lib/schemas/loginSchema'
@@ -62,7 +66,7 @@ export async function registerUser(
   data: RegisterSchema
 ): Promise<ActionResult<User>> {
   try {
-    const validated = combinedRegisterSchema.safeParse(data);
+    const validated = combinedRegisterSchema.safeParse(data)
 
     if (!validated.success) {
       return { status: 'error', error: validated.error.errors }
@@ -85,13 +89,13 @@ export async function registerUser(
         email,
         passwordHash: hashedPassword,
         profileComplete: true,
-        member:{
-          create:{
+        member: {
+          create: {
             city,
             company,
-            description
-          }
-        }
+            description,
+          },
+        },
       },
     })
 
