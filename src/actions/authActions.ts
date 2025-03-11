@@ -2,11 +2,8 @@
 
 import bcrypt from 'bcryptjs'
 import { prisma } from '@/lib/prisma'
-import {
-  combinedRegisterSchema,
-  RegisterSchema,
-  registerSchema,
-} from '@/lib/schemas/registerSchema'
+import { combinedRegisterSchema, RegisterSchema, registerSchema } from '@/lib/schemas/registerSchema'
+import { sendPasswordResetEmail, sendVerificationEmail } from '@/lib/mail';
 import { ActionResult } from '@/types'
 import { TokenType, User } from '@prisma/client'
 import { LoginSchema } from '@/lib/schemas/loginSchema'
@@ -24,15 +21,17 @@ export async function signInUser(
       return { status: 'error', error: 'Invalid credentials' }
 
     if (!existingUser.emailVerified) {
-      const token = await generateToken(
-        existingUser.email,
-        TokenType.VERIFICATION
-      )
+      // const token = await generateToken(
+      //   existingUser.email,
+      //   TokenType.VERIFICATION
+      // )
 
-      return {
-        status: 'error',
-        error: 'Please verify your email address before logging in',
-      }
+      // await sendVerificationEmail(token.email, token.token)
+
+      // return {
+      //   status: 'error',
+      //   error: 'Please verify your email address before logging in',
+      // }
     }
 
     const result = await signIn('credentials', {
@@ -66,7 +65,7 @@ export async function registerUser(
   data: RegisterSchema
 ): Promise<ActionResult<User>> {
   try {
-    const validated = combinedRegisterSchema.safeParse(data)
+    const validated = combinedRegisterSchema.safeParse(data);
 
     if (!validated.success) {
       return { status: 'error', error: validated.error.errors }
@@ -89,13 +88,13 @@ export async function registerUser(
         email,
         passwordHash: hashedPassword,
         profileComplete: true,
-        member: {
-          create: {
+        member:{
+          create:{
             city,
             company,
-            description,
-          },
-        },
+            description
+          }
+        }
       },
     })
 
