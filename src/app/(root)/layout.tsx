@@ -10,7 +10,8 @@ import { Header } from '@/components/layout/header'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { LoginDialogProvider } from '@/contexts/login-dialog-context'
-import { AuthProvider } from '@/components/providers/auth-provider'
+import { SessionProvider } from 'next-auth/react'
+import { auth } from '@/auth'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -27,17 +28,20 @@ export const metadata: Metadata = {
   description: '管理您的室內設計專案，追蹤進度並有效組織工作流程。',
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const session = await auth()
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <AuthProvider>
+        {/* session，根組件配置 確保整個應用在服務器端和客戶端之間的狀態一致  避免Hydration Mismatch*/}
+        <SessionProvider session={session}>
           <ThemeProvider>
             <LoginDialogProvider>
               <ToastContainer
@@ -61,7 +65,7 @@ export default function RootLayout({
               <LoginDialogWrapper />
             </LoginDialogProvider>
           </ThemeProvider>
-        </AuthProvider>
+        </SessionProvider>
       </body>
     </html>
   )

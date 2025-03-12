@@ -1,7 +1,8 @@
-import { useSession } from 'next-auth/react'
+'use client'
 import { useRouter } from 'next/navigation'
 import { useLoginDialog } from '@/contexts/login-dialog-context'
 import { publicRoutes } from '@/routes'
+import { useSession } from 'next-auth/react'
 
 export const useProtectedNavigation = () => {
   const router = useRouter()
@@ -18,7 +19,7 @@ export const useProtectedNavigation = () => {
       return regex.test(normalizedLink)
     })
 
-    if (isPublicRoute || session) {
+    if (isPublicRoute || session?.user) {
       // 如果是公開路由或已登入，直接導航
       router.push(normalizedLink)
       return true
