@@ -2,8 +2,12 @@
 
 import bcrypt from 'bcryptjs'
 import { prisma } from '@/lib/prisma'
-import { combinedRegisterSchema, RegisterSchema, registerSchema } from '@/lib/schemas/registerSchema'
-import { sendPasswordResetEmail, sendVerificationEmail } from '@/lib/mail';
+import {
+  combinedRegisterSchema,
+  RegisterSchema,
+  registerSchema,
+} from '@/lib/schemas/registerSchema'
+import { sendPasswordResetEmail, sendVerificationEmail } from '@/lib/mail'
 import { ActionResult } from '@/types'
 import { TokenType, User } from '@prisma/client'
 import { LoginSchema } from '@/lib/schemas/loginSchema'
@@ -25,9 +29,7 @@ export async function signInUser(
       //   existingUser.email,
       //   TokenType.VERIFICATION
       // )
-
       // await sendVerificationEmail(token.email, token.token)
-
       // return {
       //   status: 'error',
       //   error: 'Please verify your email address before logging in',
@@ -65,7 +67,7 @@ export async function registerUser(
   data: RegisterSchema
 ): Promise<ActionResult<User>> {
   try {
-    const validated = combinedRegisterSchema.safeParse(data);
+    const validated = combinedRegisterSchema.safeParse(data)
 
     if (!validated.success) {
       return { status: 'error', error: validated.error.errors }
@@ -88,13 +90,13 @@ export async function registerUser(
         email,
         passwordHash: hashedPassword,
         profileComplete: true,
-        member:{
-          create:{
+        member: {
+          create: {
             city,
             company,
-            description
-          }
-        }
+            description,
+          },
+        },
       },
     })
 
