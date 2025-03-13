@@ -1,4 +1,5 @@
 'use client'
+
 import { useRouter } from 'next/navigation'
 import { useLoginDialog } from '@/contexts/login-dialog-context'
 import { publicRoutes } from '@/routes'

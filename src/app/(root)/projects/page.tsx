@@ -1,7 +1,5 @@
-import React from 'react'
 import { Metadata } from 'next'
-import { getProjects } from '@/actions/projectActions'
-import { ProjectsDisplayServer } from '@/components/projects/display/projects-display-server'
+import PremiumProjectDisplayWrapper from '@/components/projects/features/premiumProjectDisplayWrapper'
 
 export const metadata: Metadata = {
   title: '專案列表 | Interior Helper',
@@ -18,19 +16,9 @@ export const metadata: Metadata = {
   },
 }
 export default async function ProjectsPage() {
-  const response = await getProjects()
-  if (response.status !== 'success') {
-    return <div>Error loading projects</div>
-  }
-
   return (
     <section className="flex h-full flex-col">
-      <ProjectsDisplayServer
-        projects={response.data}
-        url="projects"
-        title="專案列表"
-        description="這裡是您的所有專案，點擊可查看詳細資訊"
-      />
+      <PremiumProjectDisplayWrapper />
     </section>
   )
 }

@@ -1,3 +1,5 @@
+'use client'
+
 import { useRouter } from 'next/navigation'
 import { createProject } from '@/actions/projectActions'
 import { CreateProjectInputSchema } from '@/lib/schemas/createProjectSchema'

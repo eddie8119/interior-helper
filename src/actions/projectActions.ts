@@ -116,17 +116,17 @@ export async function deleteProject(id: string) {
     })
 
     if (!existingProject) {
-      return { error: 'Project not found or unauthorized' }
+      return { status: 'error', error: 'Project not found or unauthorized' }
     }
 
     await prisma.project.delete({
       where: { id },
     })
 
-    return { success: true }
+    return { status: 'success', data: null }
   } catch (error) {
     console.error('Error deleting project:', error)
-    return { error: 'Failed to delete project' }
+    return { status: 'error', error: 'Failed to delete project' }
   }
 }
 
