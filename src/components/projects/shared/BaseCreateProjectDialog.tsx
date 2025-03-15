@@ -28,13 +28,13 @@ import {
 import { LoadingButton } from '@mui/lab'
 import { PROJECT_TYPES } from '@/constants/selection'
 
-interface BaseProjectDialogProps {
+interface BaseCreateProjectDialogProps {
   onSubmit: (
     data: CreateProjectInputSchema
   ) => Promise<{ status: string; error?: any }>
 }
 
-export function BaseProjectDialog({ onSubmit }: BaseProjectDialogProps) {
+export function BaseCreateProjectDialog({ onSubmit }: BaseCreateProjectDialogProps) {
   const [open, setOpen] = useState(false)
   const pathname = usePathname()
   const {

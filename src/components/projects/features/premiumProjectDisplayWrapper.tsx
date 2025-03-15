@@ -1,5 +1,3 @@
-'use client'
-
 import { PremiumProjectDisplay } from '@/components/projects/features/PremiumProjectDisplay'
 import { getProjects } from '@/actions/projectActions'
 import { CreateProjectDialogServer } from '@/components/projects/features/CreateProjectDialogServer'

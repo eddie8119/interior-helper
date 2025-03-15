@@ -3,14 +3,17 @@
 import { useRouter } from 'next/navigation'
 import { createProject } from '@/actions/projectActions'
 import { CreateProjectInputSchema } from '@/lib/schemas/createProjectSchema'
-import { BaseProjectDialog } from '../shared/BaseCreateProjectDialog'
+import { BaseCreateProjectDialog } from '../shared/BaseCreateProjectDialog'
 
-export function withServerAction(WrappedComponent: typeof BaseProjectDialog) {
+export function CreateProjectDialogServerWrapper(
+  WrappedComponent: typeof BaseCreateProjectDialog
+) {
   return function ServerActionProjectDialog() {
     const router = useRouter()
 
     const handleSubmit = async (data: CreateProjectInputSchema) => {
       const result = await createProject(data)
+      
       if (result.status === 'success') {
         router.refresh()
       }
