@@ -4,7 +4,9 @@ import { useProjects } from '@/hooks/use-projects'
 import { CreateProjectInputSchema } from '@/lib/schemas/createProjectSchema'
 import { BaseCreateProjectDialog } from '../shared/BaseCreateProjectDialog'
 
-export function withClientHook(WrappedComponent: typeof BaseCreateProjectDialog) {
+export function withClientHook(
+  WrappedComponent: typeof BaseCreateProjectDialog
+) {
   return function ClientHookProjectDialog() {
     const { addProject } = useProjects()
 
@@ -18,12 +20,12 @@ export function withClientHook(WrappedComponent: typeof BaseCreateProjectDialog)
           budgetTotal: null,
           costTotal: null,
           progress: 0,
-          containers: "[]",
-          team: "[]",
-          userId: "local",
+          containers: '[]',
+          team: '[]',
+          userId: 'local',
           daysLeft: null,
           created: now,
-          updated: now
+          updated: now,
         })
         return { status: 'success' }
       } catch (error) {

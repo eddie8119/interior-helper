@@ -4,7 +4,7 @@ import { Project } from '@prisma/client'
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
-import { formatDate } from '@/lib/utils'
+import { formatDateTime } from '@/lib/format'
 import { useProjectFeatures } from '../hooks/useProjectFeatures'
 import { useProjectPermissions } from '../hooks/useProjectPermissions'
 
@@ -45,13 +45,11 @@ export function ProjectCard({
         </div>
       </CardHeader>
       <CardContent>
-        <p className="text-muted-foreground text-sm">
-          {project.type} 專案
-        </p>
+        <p className="text-muted-foreground text-sm">{project.type} 專案</p>
       </CardContent>
       <CardFooter className="flex justify-between">
         <div className="text-muted-foreground text-sm">
-          建立於 {formatDate(project.created)}
+          建立於 {formatDateTime(project.created)}
         </div>
         {features.share && (
           <Button variant="outline" size="sm">

@@ -10,51 +10,66 @@ import {
 import { sendPasswordResetEmail, sendVerificationEmail } from '@/lib/mail'
 import { ActionResult } from '@/types'
 import { TokenType, User } from '@prisma/client'
-import { LoginSchema } from '@/lib/schemas/loginSchema'
+import { LoginSchema, loginSchema } from '@/lib/schemas/loginSchema'
 import { AuthError } from 'next-auth'
 import { signIn, signOut, auth } from '@/auth'
 import { generateToken } from '@/lib/tokens'
 
 export async function signInUser(
   data: LoginSchema
-): Promise<ActionResult<string>> {
+): Promise<ActionResult<null>> {
   try {
-    const existingUser = await getUserByEmail(data.email)
+    const validated = loginSchema.safeParse(data)
 
-    if (!existingUser || !existingUser.email)
-      return { status: 'error', error: 'Invalid credentials' }
+    if (!validated.success) {
+      return { status: 'error', error: validated.error.errors }
+    }
 
-    if (!existingUser.emailVerified) {
-      // const token = await generateToken(
-      //   existingUser.email,
-      //   TokenType.VERIFICATION
-      // )
-      // await sendVerificationEmail(token.email, token.token)
-      // return {
-      //   status: 'error',
-      //   error: 'Please verify your email address before logging in',
-      // }
+    const { email, password } = validated.data
+
+    const user = await prisma.user.findUnique({
+      where: { email },
+    })
+
+    if (!user) {
+      return {
+        status: 'error',
+        error: '找不到使用者',
+      }
+    }
+
+    if (!user.passwordHash) {
+      return {
+        status: 'error',
+        error: '帳號設定錯誤',
+      }
+    }
+
+    const isValidPassword = await bcrypt.compare(password, user.passwordHash)
+
+    if (!isValidPassword) {
+      return {
+        status: 'error',
+        error: '密碼錯誤',
+      }
     }
 
     const result = await signIn('credentials', {
-      email: data.email,
-      password: data.password,
+      email: email,
+      password: password,
       redirect: false,
     })
-    return { status: 'success', data: 'logged in' }
-  } catch (error) {
-    console.log(error)
 
-    if (error instanceof AuthError) {
-      // 這是 NextAuth 的認證錯誤
-      switch (error.type) {
-        case 'CredentialsSignin':
-          return { status: 'error', error: 'Invalid credentials' }
-        default:
-          return { status: 'error', error: 'Something went wrong' }
-      }
-    } else {
-      return { status: 'error', error: 'Something else went wrong' }
+    if (!result?.ok) {
+      throw new Error('登入失敗')
+    }
+
+    return { status: 'success', data: null }
+  } catch (error) {
+    console.error(error)
+    return {
+      status: 'error',
+      error: '登入失敗',
     }
   }
 }

@@ -1,7 +1,7 @@
 'use client'
 
 import { Project } from '@prisma/client'
-import { ProjectCard } from '../project-card'
+import { ProjectCard } from '../shared/project-card'
 
 interface BaseProjectsDisplayProps {
   projects: Project[]

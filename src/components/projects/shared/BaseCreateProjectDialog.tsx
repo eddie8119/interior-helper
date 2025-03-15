@@ -29,9 +29,7 @@ import { PROJECT_TYPES } from '@/constants/selection'
 import { ActionResult } from '@/types'
 
 interface BaseCreateProjectDialogProps {
-  onSubmit: (
-    data: CreateProjectInputSchema
-  ) => Promise<ActionResult<null>>
+  onSubmit: (data: CreateProjectInputSchema) => Promise<ActionResult<null>>
 }
 
 export function BaseCreateProjectDialog({

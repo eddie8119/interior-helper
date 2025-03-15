@@ -13,7 +13,9 @@ export function CreateProjectDialogServerWrapper(
   return function ServerActionProjectDialog() {
     const router = useRouter()
 
-    const handleSubmit = async (data: CreateProjectInputSchema): Promise<ActionResult<null>> => {
+    const handleSubmit = async (
+      data: CreateProjectInputSchema
+    ): Promise<ActionResult<null>> => {
       try {
         const result = await createProject(data)
 

@@ -15,7 +15,6 @@ interface PremiumProjectDisplayProps {
   userTier: UserTier
   showAddButton?: boolean
   AddProjectDialog?: React.ComponentType
-  
 }
 
 export function PremiumProjectDisplay({
@@ -33,7 +32,7 @@ export function PremiumProjectDisplay({
     try {
       const result = await deleteProject(id)
       if (result.status === 'success') {
-        setProjects(prev => prev.filter(p => p.id !== id))
+        setProjects((prev) => prev.filter((p) => p.id !== id))
         toast.success('專案已刪除')
       } else {
         throw new Error(result.error)

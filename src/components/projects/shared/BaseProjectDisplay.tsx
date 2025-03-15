@@ -31,7 +31,7 @@ export function BaseProjectDisplay({
   const permissions = useProjectPermissions(userTier)
 
   const canAddProject = permissions.canCreateProject(projects.length)
-
+  console.log('projects', projects)
   return (
     <>
       <header className="sticky top-0 z-10 flex items-center justify-between bg-background pb-6">
@@ -58,7 +58,7 @@ export function BaseProjectDisplay({
           </div>
         ) : (
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {/* {projects.map((project) => (
+            {projects.map((project) => (
               <div key={project.id}>
                 <ProjectCard
                   project={project}
@@ -68,7 +68,7 @@ export function BaseProjectDisplay({
                   permissions={permissions}
                 />
               </div>
-            ))} */}
+            ))}
           </div>
         )}
       </main>
