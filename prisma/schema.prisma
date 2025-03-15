@@ -84,12 +84,11 @@ model Project {
     id          String      @id @default(uuid())
     title       String
     type        ProjectType
-    startDate   DateTime?
-    endDate     DateTime?
+    startDate   DateTime
+    endDate     DateTime
     budgetTotal Float?      @default(0)
     costTotal   Float?      @default(0)
     progress    Float       @default(0)
-    daysLeft    Int?
     containers  Json        @default("[]")
     team        Json?       @default("[]")
     created     DateTime    @default(now())

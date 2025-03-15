@@ -4,8 +4,13 @@ import { ProjectType } from '@prisma/client'
 const projectTypeSchema = z.nativeEnum(ProjectType)
 
 export const createProjectInputSchema = z.object({
-  title: z.string().min(1, '請輸入專案標題').max(10, '標題不能超過10個字'),
-  type: projectTypeSchema.describe('專案類型'),
+  title: z.string().min(1, '請輸入專案標題').max(15, '標題不能超過15個字'),
+  type: z.enum([
+    ProjectType.residential,
+    ProjectType.luxury,
+    ProjectType.commercial,
+    ProjectType.office,
+  ]),
 })
 
 export const createProjectSchema = createProjectInputSchema.extend({

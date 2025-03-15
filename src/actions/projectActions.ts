@@ -83,14 +83,11 @@ export async function createProject(
       data: {
         title,
         type,
-        startDate: null,
-        endDate: null,
-        budgetTotal: 0,
-        costTotal: 0,
-        progress: 0,
+        startDate: new Date(),
+        endDate: new Date(),
         daysLeft: null,
         containers: constructionContainer,
-        // team: JSON.stringify([]),
+        team: JSON.stringify([]),
         userId,
       },
     })
