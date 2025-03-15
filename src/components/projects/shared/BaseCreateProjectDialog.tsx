@@ -26,11 +26,12 @@ import {
 } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 import { PROJECT_TYPES } from '@/constants/selection'
+import { ActionResult } from '@/types'
 
 interface BaseCreateProjectDialogProps {
   onSubmit: (
     data: CreateProjectInputSchema
-  ) => Promise<{ status: string; error?: any }>
+  ) => Promise<ActionResult<null>>
 }
 
 export function BaseCreateProjectDialog({
