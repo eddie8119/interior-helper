@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { usePathname } from 'next/navigation'
 import {
   createProjectInputSchema,
   CreateProjectInputSchema,
@@ -34,9 +33,10 @@ interface BaseCreateProjectDialogProps {
   ) => Promise<{ status: string; error?: any }>
 }
 
-export function BaseCreateProjectDialog({ onSubmit }: BaseCreateProjectDialogProps) {
+export function BaseCreateProjectDialog({
+  onSubmit,
+}: BaseCreateProjectDialogProps) {
   const [open, setOpen] = useState(false)
-  const pathname = usePathname()
   const {
     register,
     handleSubmit,
@@ -48,18 +48,28 @@ export function BaseCreateProjectDialog({ onSubmit }: BaseCreateProjectDialogPro
     mode: 'onTouched',
   })
 
+  // 專注於 UI 和表單邏輯
   const handleFormSubmit = async (data: CreateProjectInputSchema) => {
     const result = await onSubmit(data)
+
     if (result.status === 'success') {
       setOpen(false)
       reset()
     } else {
+      // 處理 Zod 驗證錯誤
       if (Array.isArray(result.error)) {
         result.error.forEach((e) => {
           setError(e.path[0] as any, {
             type: 'manual',
             message: e.message,
           })
+        })
+      }
+      // 處理一般錯誤
+      else if (typeof result.error === 'string') {
+        setError('root', {
+          type: 'manual',
+          message: result.error,
         })
       }
     }
