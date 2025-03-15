@@ -6,23 +6,21 @@ import { toast } from 'react-toastify'
 import { Project } from '@prisma/client'
 import { UserTier } from '../constants/projectLimits'
 
-interface FreeProjectDisplayProps {
+interface TrialProjectDisplayProps {
   projects: Project[]
   title?: string
   description?: string
   url: string
   userTier: UserTier
   showAddButton: boolean
-  AddProjectDialog: React.ComponentType
 }
 
-export function FreeProjectDisplay({
+export function TrialProjectDisplay({
   title = '免費版專案列表',
   description = '這裡是您的專案列表，免費版本最多可以創建 3 個專案',
   showAddButton,
   url,
-  AddProjectDialog,
-}: FreeProjectDisplayProps) {
+}: TrialProjectDisplayProps) {
   const { projects, deleteProject } = useProjects()
 
   const handleDelete = async (id: string) => {
@@ -43,7 +41,6 @@ export function FreeProjectDisplay({
       showAddButton={showAddButton}
       url={url}
       userTier="free"
-      AddProjectDialog={AddProjectDialog}
     />
   )
 }

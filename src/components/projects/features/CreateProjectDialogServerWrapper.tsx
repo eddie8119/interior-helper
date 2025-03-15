@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation'
 import { createProject } from '@/actions/projectActions'
 import { CreateProjectInputSchema } from '@/lib/schemas/createProjectSchema'
-import { BaseProjectDialog } from './base-project-dialog'
+import { BaseProjectDialog } from '../shared/BaseCreateProjectDialog'
 
 export function withServerAction(WrappedComponent: typeof BaseProjectDialog) {
   return function ServerActionProjectDialog() {

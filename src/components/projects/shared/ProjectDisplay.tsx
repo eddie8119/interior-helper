@@ -1,7 +1,7 @@
 'use client'
 
 import { Project } from '@prisma/client'
-import { FreeProjectDisplay } from '../features/FreeProjectDisplay'
+import { TrialProjectDisplay } from '../features/TrialProjectDisplay'
 import { PremiumProjectDisplay } from '../features/PremiumProjectDisplay'
 import { UserTier } from '../constants/projectLimits'
 
@@ -20,5 +20,5 @@ export function ProjectDisplay({ userTier, ...props }: ProjectDisplayProps) {
     return <PremiumProjectDisplay {...props} userTier={userTier} />
   }
 
-  return <FreeProjectDisplay {...props} userTier={userTier} />
+  return <TrialProjectDisplay {...props} userTier={userTier} />
 }

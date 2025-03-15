@@ -1,8 +1,8 @@
 import { useProjects } from '@/hooks/use-projects'
 import { CreateProjectInputSchema } from '@/lib/schemas/createProjectSchema'
-import { BaseProjectDialog } from './base-project-dialog'
+import { BaseCreateProjectDialog } from '../shared/BaseCreateProjectDialog'
 
-export function withClientHook(WrappedComponent: typeof BaseProjectDialog) {
+export function CreateProjectDialogClientWrapper(WrappedComponent: typeof BaseCreateProjectDialog) {
   return function ClientHookProjectDialog() {
     const { addProject } = useProjects()
 

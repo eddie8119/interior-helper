@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation'
 import { deleteProject } from '@/actions/projectActions'
 import { BaseProjectsDisplay } from './base-projects-display'
 import { Project } from '@prisma/client'
-import { AddProjectDialogServer } from '../dialog/add-project-dialog-server'
+import { AddProjectDialogServer } from '../features/CreateProjectDialogServer'
 
 interface WithServerDeleteProps {
   projects: Project[]

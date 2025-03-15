@@ -1,8 +1,8 @@
-import { ProjectDisplay } from '@/components/projects/shared/ProjectDisplay'
+import { FreeProjectDisplay } from '@/components/projects/features/TrialProjectDisplay'
 
 export default function TrialProjectDisplayWrapper() {
   return (
-    <ProjectDisplay
+    <FreeProjectDisplay
       projects={[]}
       title="試用版專案列表"
       description="這裡是您的試用版專案，功能受限但可以體驗基本操作"

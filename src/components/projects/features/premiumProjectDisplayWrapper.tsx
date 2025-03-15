@@ -1,8 +1,8 @@
 'use client'
 
-import { ProjectDisplay } from '@/components/projects/shared/ProjectDisplay'
+import { PremiumProjectDisplay } from '@/components/projects/features/PremiumProjectDisplay'
 import { getProjects } from '@/actions/projectActions'
-import { AddProjectDialogServer } from '@/components/projects/dialog/add-project-dialog-server'
+import { CreateProjectDialogServer } from '@/components/projects/features/CreateProjectDialogServer'
 
 export default async function PremiumProjectDisplayWrapper() {
   const projectsResponse = await getProjects()
@@ -11,13 +11,13 @@ export default async function PremiumProjectDisplayWrapper() {
   }
 
   return (
-    <ProjectDisplay
+    <PremiumProjectDisplay
       projects={projectsResponse.data}
       userTier="premium"
       url="projects"
       title="專案列表"
       description="這裡是您的所有專案，點擊可查看詳細資訊"
-      AddProjectDialog={AddProjectDialogServer}
+      AddProjectDialog={CreateProjectDialogServer}
       showAddButton={true}
     />
   )

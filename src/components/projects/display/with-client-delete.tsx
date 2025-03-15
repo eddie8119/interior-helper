@@ -3,7 +3,7 @@
 import { BaseProjectsDisplay } from './base-projects-display'
 import { Project } from '@prisma/client'
 import { useProjects } from '@/hooks/use-projects'
-import { AddProjectDialogClient } from '../dialog/add-project-dialog-client'
+import { AddProjectDialogClient } from '../features/CreateProjectDialogClient'
 
 interface WithClientDeleteProps {
   projects: Project[]
