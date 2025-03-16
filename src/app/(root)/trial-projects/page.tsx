@@ -1,5 +1,5 @@
 import { Metadata } from 'next'
-import TrialProjectDisplayWrapper from '@/components/projects/features/trialProjectDisplayWrapper'
+import TrialProjectDisplayWrapper from '@/components/projects/features/TrialProjectDisplayWrapper'
 
 export const metadata: Metadata = {
   title: '試用版專案列表 | Interior Helper',

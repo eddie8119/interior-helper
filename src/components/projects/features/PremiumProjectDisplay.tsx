@@ -19,8 +19,8 @@ interface PremiumProjectDisplayProps {
 
 export default function PremiumProjectDisplay({
   projects,
-  title = '付費版專案列表',
-  description = '這裡是您的所有專案，您可以無限制地創建專案',
+  title,
+  description,
   url,
   userTier,
   showAddButton,

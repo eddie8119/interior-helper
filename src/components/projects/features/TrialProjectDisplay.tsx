@@ -18,8 +18,8 @@ interface TrialProjectDisplayProps {
 
 export default function TrialProjectDisplay({
   projects,
-  title = '試用版專案列表',
-  description = '這裡是您的專案列表，試用版本最多可以創建 2 個專案',
+  title,
+  description,
   url,
   userTier,
   showAddButton,

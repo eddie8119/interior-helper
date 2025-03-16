@@ -13,6 +13,7 @@ export const projectStorage = {
   getProjects(): ActionResult<Project[]> {
     try {
       const savedProjects = localStorage.getItem(STORAGE_KEYS.PROJECTS)
+
       const projects = savedProjects ? JSON.parse(savedProjects) : []
       return { status: 'success', data: projects }
     } catch (error) {
