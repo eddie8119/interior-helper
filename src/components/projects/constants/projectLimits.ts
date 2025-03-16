@@ -1,4 +1,15 @@
 export const PROJECT_LIMITS = {
+  trial: {
+    maxProjects: 2,
+    features: {
+      export: false,
+      share: false,
+      templates: false,
+      realTimeCollaboration: false,
+      advancedAnalytics: false,
+    },
+    deleteMethod: 'client',
+  },
   free: {
     maxProjects: 3,
     features: {
@@ -8,7 +19,7 @@ export const PROJECT_LIMITS = {
       realTimeCollaboration: false,
       advancedAnalytics: false,
     },
-    deleteMethod: 'client',
+    deleteMethod: 'server',
   },
   premium: {
     maxProjects: Infinity,

@@ -8,23 +8,23 @@ import { useProjectPermissions } from '../hooks/useProjectPermissions'
 
 interface BaseProjectDisplayProps {
   projects: Project[]
-  onDeleteProject: (id: string) => Promise<void>
   title?: string
   description?: string
   showAddButton?: boolean
   url: string
   userTier: UserTier
+  deleteProject: (id: string) => Promise<void>
   AddProjectDialog?: React.ComponentType
 }
 
 export function BaseProjectDisplay({
   projects,
-  onDeleteProject,
   title = '專案列表',
   description = '這裡是您的所有專案，點擊可查看詳細資訊',
   showAddButton = true,
   url,
   userTier,
+  deleteProject,
   AddProjectDialog,
 }: BaseProjectDisplayProps) {
   const features = useProjectFeatures(userTier)
@@ -40,7 +40,7 @@ export function BaseProjectDisplay({
           <p className="text-muted-foreground">{description}</p>
           {permissions.isFreeUser && (
             <p className="text-muted-foreground text-sm">
-              免費版本最多可以創建 {features.maxProjects} 個專案
+              試用版本最多可以創建 {features.maxProjects} 個專案
             </p>
           )}
         </div>
@@ -62,7 +62,7 @@ export function BaseProjectDisplay({
               <div key={project.id}>
                 <ProjectCard
                   project={project}
-                  onDelete={onDeleteProject}
+                  deleteProject={deleteProject}
                   url={url}
                   features={features}
                   permissions={permissions}

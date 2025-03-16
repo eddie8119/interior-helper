@@ -1,7 +1,7 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
 import { BaseProjectDisplay } from '../shared/BaseProjectDisplay'
-import { useProjects } from '@/hooks/use-projects'
 import { toast } from 'react-toastify'
 import { Project } from '@prisma/client'
 import { UserTier } from '../constants/projectLimits'
@@ -13,19 +13,23 @@ interface TrialProjectDisplayProps {
   url: string
   userTier: UserTier
   showAddButton: boolean
+  AddProjectDialog?: React.ComponentType
 }
 
-export function TrialProjectDisplay({
-  title = '免費版專案列表',
-  description = '這裡是您的專案列表，免費版本最多可以創建 3 個專案',
-  showAddButton,
+export default function TrialProjectDisplay({
+  projects,
+  title = '試用版專案列表',
+  description = '這裡是您的專案列表，試用版本最多可以創建 2 個專案',
   url,
+  userTier,
+  showAddButton,
+  AddProjectDialog,
 }: TrialProjectDisplayProps) {
-  const { projects, deleteProject } = useProjects()
+  const router = useRouter()
 
-  const handleDelete = async (id: string) => {
+  const handleDeleteProject = async (id: string) => {
     try {
-      deleteProject(id)
+      router.refresh()
       toast.success('專案已刪除')
     } catch (error) {
       toast.error('刪除專案時發生錯誤')
@@ -35,12 +39,13 @@ export function TrialProjectDisplay({
   return (
     <BaseProjectDisplay
       projects={projects}
-      onDeleteProject={handleDelete}
       title={title}
       description={description}
-      showAddButton={showAddButton}
       url={url}
-      userTier="free"
+      userTier={userTier}
+      showAddButton={showAddButton}
+      deleteProject={handleDeleteProject}
+      AddProjectDialog={AddProjectDialog}
     />
   )
 }

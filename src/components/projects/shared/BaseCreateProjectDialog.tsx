@@ -27,9 +27,10 @@ import {
 import { LoadingButton } from '@mui/lab'
 import { PROJECT_TYPES } from '@/constants/selection'
 import { ActionResult } from '@/types'
+import { Project } from '@prisma/client'
 
 interface BaseCreateProjectDialogProps {
-  onSubmit: (data: CreateProjectInputSchema) => Promise<ActionResult<null>>
+  onSubmit: (data: CreateProjectInputSchema) => Promise<ActionResult<Project>>
 }
 
 export function BaseCreateProjectDialog({
