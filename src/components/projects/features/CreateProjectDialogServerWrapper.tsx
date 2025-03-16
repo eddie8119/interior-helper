@@ -1,28 +1,29 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
+import { toast } from 'react-toastify'
+import { ActionResult } from '@/types'
+import { Project } from '@prisma/client'
 import { createProject } from '@/actions/projectActions'
 import { CreateProjectInputSchema } from '@/lib/schemas/createProjectSchema'
 import { BaseCreateProjectDialog } from '../shared/BaseCreateProjectDialog'
-import { toast } from 'react-toastify'
-import { ActionResult } from '@/types'
 
 export function CreateProjectDialogServerWrapper(
   WrappedComponent: typeof BaseCreateProjectDialog
 ) {
-  return function ServerActionProjectDialog() {
+  return function ServerProjectDialog() {
     const router = useRouter()
 
     const handleSubmit = async (
       data: CreateProjectInputSchema
-    ): Promise<ActionResult<null>> => {
+    ): Promise<ActionResult<Project>> => {
       try {
         const result = await createProject(data)
 
         if (result.status === 'success') {
           toast.success('專案創建成功')
           router.refresh()
-          return { status: 'success', data: null }
+          return result
         }
         return { status: 'error', error: result.error }
       } catch (error) {

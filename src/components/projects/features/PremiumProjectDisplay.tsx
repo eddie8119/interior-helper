@@ -23,8 +23,8 @@ export default function PremiumProjectDisplay({
   description = '這裡是您的所有專案，您可以無限制地創建專案',
   url,
   userTier,
-  AddProjectDialog,
   showAddButton,
+  AddProjectDialog,
 }: PremiumProjectDisplayProps) {
   const router = useRouter()
 
@@ -53,9 +53,9 @@ export default function PremiumProjectDisplay({
       description={description}
       url={url}
       userTier={userTier}
+      showAddButton={showAddButton}
       deleteProject={handleDeleteProject}
       AddProjectDialog={AddProjectDialog}
-      showAddButton={showAddButton}
     />
   )
 }

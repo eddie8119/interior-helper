@@ -15,8 +15,8 @@ export default async function PremiumProjectDisplayWrapper() {
       url="projects"
       title="專案列表"
       description="這裡是您的所有專案，點擊可查看詳細資訊"
-      AddProjectDialog={CreateProjectDialogServer}
       showAddButton={true}
+      AddProjectDialog={CreateProjectDialogServer}
     />
   )
 }
