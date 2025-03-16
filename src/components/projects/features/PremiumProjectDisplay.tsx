@@ -1,7 +1,7 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
 import { Project } from '@prisma/client'
-import { useState } from 'react'
 import { deleteProject } from '@/actions/projectActions'
 import { toast } from 'react-toastify'
 import { BaseProjectDisplay } from '../shared/BaseProjectDisplay'
@@ -18,7 +18,7 @@ interface PremiumProjectDisplayProps {
 }
 
 export default function PremiumProjectDisplay({
-  projects: initialProjects,
+  projects,
   title = '付費版專案列表',
   description = '這裡是您的所有專案，您可以無限制地創建專案',
   url,
@@ -26,7 +26,7 @@ export default function PremiumProjectDisplay({
   AddProjectDialog,
   showAddButton,
 }: PremiumProjectDisplayProps) {
-  const [projects, setProjects] = useState(initialProjects)
+  const router = useRouter()
 
   const handleDeleteProject = async (id: string) => {
     try {
@@ -35,7 +35,8 @@ export default function PremiumProjectDisplay({
         // 樂觀更新（Optimistic Updates）：立即更新 UI，不等待伺服器響應
         // 更好的用戶體驗：用戶可以立即看到刪除的結果
         // 減少感知延遲：不需要等待頁面重新加載
-        setProjects((prev) => prev.filter((p) => p.id !== id))
+        // setProjects((prev) => prev.filter((p) => p.id !== id))
+        router.refresh()
         toast.success('專案已刪除')
       } else {
         throw new Error(result.error)
@@ -48,11 +49,11 @@ export default function PremiumProjectDisplay({
   return (
     <BaseProjectDisplay
       projects={projects}
-      deleteProject={handleDeleteProject}
       title={title}
       description={description}
       url={url}
       userTier={userTier}
+      deleteProject={handleDeleteProject}
       AddProjectDialog={AddProjectDialog}
       showAddButton={showAddButton}
     />
