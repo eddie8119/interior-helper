@@ -16,7 +16,7 @@ interface TrialProjectDisplayProps {
   AddProjectDialog?: React.ComponentType
 }
 
-export default function TrialProjectDisplay({
+export function TrialProjectDisplay({
   projects,
   title,
   description,

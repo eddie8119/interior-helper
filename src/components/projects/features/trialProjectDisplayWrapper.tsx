@@ -1,10 +1,12 @@
+'use client'
+
 import { TrialProjectDisplay } from './TrialProjectDisplay'
 import { projectStorage } from '@/lib/projectStorage'
 import { CreateProjectDialogClient } from './CreateProjectDialogClient'
 
 export default function TrialProjectDisplayWrapper() {
   const projectsResponse = projectStorage.getProjects()
-  console.log(projectsResponse)
+
   if (projectsResponse.status !== 'success') {
     return <div>Error loading projects</div>
   }

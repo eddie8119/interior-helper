@@ -4,6 +4,7 @@ import { CreateProjectInputSchema } from './schemas/createProjectSchema'
 import { constructionContainer } from '@/constants/default-data'
 
 const STORAGE_KEYS = {
+  TRIAL_PROJECTS: 'trial_projects',
   PROJECTS: 'projects',
 }
 const MAX_TRIAL_PROJECTS = 2
@@ -13,8 +14,10 @@ export const projectStorage = {
   getProjects(): ActionResult<Project[]> {
     try {
       const savedProjects = localStorage.getItem(STORAGE_KEYS.PROJECTS)
-
-      const projects = savedProjects ? JSON.parse(savedProjects) : []
+      console.log('savedProjects', savedProjects)
+      const projects: Project[] = savedProjects
+        ? (JSON.parse(savedProjects) as Project[])
+        : []
       return { status: 'success', data: projects }
     } catch (error) {
       return { status: 'error', error: '獲取專案失敗' }
