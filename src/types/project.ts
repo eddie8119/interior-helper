@@ -25,7 +25,6 @@ export interface ProjectBasic {
   budgetTotal?: number | null
   costTotal?: number | null
   progress: number
-  daysLeft?: number | null
   containers: Container[]
   team: any[]
   createdAt: Date

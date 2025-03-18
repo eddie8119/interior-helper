@@ -85,7 +85,6 @@ export async function createProject(
         type,
         startDate: new Date(),
         endDate: new Date(),
-        daysLeft: null,
         containers: constructionContainer,
         team: JSON.stringify([]),
         userId,

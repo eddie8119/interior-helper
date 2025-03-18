@@ -2,7 +2,7 @@
 
 import { Task } from '@/types/project'
 import { Droppable } from '@hello-pangea/dnd'
-import { TaskCard } from '@/components/projects/drag/task-card'
+import { TaskCard } from '@/components/projects/drag/TaskCard'
 
 interface TaskListProps {
   droppableId: string

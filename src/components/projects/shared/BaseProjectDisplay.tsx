@@ -14,7 +14,7 @@ interface BaseProjectDisplayProps {
   url: string
   userTier: UserTier
   deleteProject: (id: string) => Promise<void>
-  AddProjectDialog?: React.ComponentType
+  AddProjectDialog: React.ComponentType
 }
 
 export function BaseProjectDisplay({
@@ -43,7 +43,7 @@ export function BaseProjectDisplay({
             </p>
           )}
         </div>
-        {showAddButton && canAddProject && <AddProjectDialog />}
+        {showAddButton && <AddProjectDialog />}
       </header>
       <main className="flex-1 overflow-y-auto">
         {projects.length === 0 ? (

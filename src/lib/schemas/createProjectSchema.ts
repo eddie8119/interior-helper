@@ -19,7 +19,6 @@ export const createProjectSchema = createProjectInputSchema.extend({
   budgetTotal: z.number().nullable().optional().default(0),
   costTotal: z.number().nullable().optional().default(0),
   progress: z.number().optional().default(0),
-  daysLeft: z.number().nullable().optional(),
   containers: z.array(z.any()).optional(),
   team: z.array(z.any()).optional(),
 })

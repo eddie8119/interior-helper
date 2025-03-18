@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
 import { getProject } from '@/actions/projectActions'
-import { ProjectContainer } from '@/components/projects/project-container'
+import { ProjectContainerPremium } from '@/components/projects/ProjectContainerPremium'
 
 interface ProjectTasksServerContainerProps {
   params: {
@@ -19,5 +19,5 @@ export async function ProjectTasksServerContainer({
     return notFound()
   }
 
-  return <ProjectContainer project={response.data} />
+  return <ProjectContainerPremium project={response.data} />
 }

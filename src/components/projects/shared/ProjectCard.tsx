@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { Project } from '@prisma/client'
 import { Card } from '@/components/ui/card'
 import { DeleteButtonWithDialog } from '@/components/ui/delete-button-with-dialog'
+import { formatDateTime } from '@/lib/format'
 
 interface ProjectCardProps {
   project: Project
@@ -16,7 +17,7 @@ export function ProjectCard({ project, deleteProject, url }: ProjectCardProps) {
         <Card className="relative overflow-y-auto rounded-xl border bg-card p-6 transition-all hover:border-main-light dark:bg-gray-800">
           <div className="flex flex-col">
             <span className="text-sm text-gray-400 dark:text-gray-500">
-              {/* {project.created.toLocaleDateString()} */}
+              {formatDateTime(project.created)}
             </span>
             <div className="mt-4 space-y-1">
               <h3

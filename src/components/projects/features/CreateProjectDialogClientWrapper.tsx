@@ -33,14 +33,13 @@ export function CreateProjectDialogClientWrapper(
           router.refresh()
           return result
         } else {
-          // 顯示錯誤訊息
-          toast.error('創建專案失敗')
-          return result
+          toast.error(result.error as string)
         }
+        return result
       } catch (error) {
-        console.error('創建專案失敗:', error)
-        toast.error('創建專案失敗')
-        return { status: 'error', error: '創建專案失敗' }
+        const errorMessage = '創建專案失敗'
+        toast.error(errorMessage)
+        return { status: 'error', error: errorMessage }
       }
     }
 

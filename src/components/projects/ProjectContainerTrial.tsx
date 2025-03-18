@@ -1,10 +1,10 @@
 'use client'
 
 import { notFound } from 'next/navigation'
-
 import { useProjects } from '@/hooks/use-projects'
 import { useTasks } from '@/hooks/use-tasks'
-import { DraggableContainersClient } from './container/draggable-containers-client'
+import { DraggableContainersClient } from './features/DraggableContainersClient'
+import { formatDateTime } from '@/lib/format'
 
 interface ProjectContainerTrialProps {
   projectId: string
@@ -39,7 +39,9 @@ export function ProjectContainerTrial({
       <header className="sticky top-0 z-10 flex items-center bg-background">
         <h1 className="text-2xl font-semibold">{project.title}</h1>
       </header>
-      <p>上次編輯時間：{}</p>
+      <p className="text-muted-foreground text-sm">
+        上次編輯時間：{formatDateTime(project.updated)}
+      </p>
 
       <DraggableContainersClient
         project={project}

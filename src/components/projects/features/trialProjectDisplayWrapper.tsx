@@ -15,10 +15,10 @@ export default function TrialProjectDisplayWrapper() {
     <TrialProjectDisplay
       projects={projectsResponse.data}
       title="試用版專案列表"
-      description="這裡是您的試用版專案，功能受限但可以體驗基本操作"
+      description="這裡是您的試用版專案，精選核心功能，讓您先睹為快"
       url="trial-projects"
       userTier="trial"
-      showAddButton={false}
+      showAddButton={true}
       AddProjectDialog={CreateProjectDialogClient}
     />
   )

@@ -7,7 +7,7 @@ const STORAGE_KEYS = {
   TRIAL_PROJECTS: 'trial_projects',
   PROJECTS: 'projects',
 }
-const MAX_TRIAL_PROJECTS = 2
+const MAX_TRIAL_PROJECTS = 3
 
 export const projectStorage = {
   // 獲取所有專案
@@ -28,9 +28,7 @@ export const projectStorage = {
     try {
       // 檢查是否超出試用版限制
       const result = this.getProjects()
-      if (result.status === 'error') {
-        return result
-      }
+      if (result.status === 'error') return result
 
       const projects = result.data || []
       if (projects.length >= MAX_TRIAL_PROJECTS) {
