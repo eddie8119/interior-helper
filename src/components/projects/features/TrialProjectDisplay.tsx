@@ -5,6 +5,7 @@ import { BaseProjectDisplay } from '../shared/BaseProjectDisplay'
 import { toast } from 'react-toastify'
 import { Project } from '@prisma/client'
 import { UserTier } from '../constants/projectLimits'
+import { projectStorage } from '@/lib/projectStorage'
 
 interface TrialProjectDisplayProps {
   projects: Project[]
@@ -29,8 +30,13 @@ export function TrialProjectDisplay({
 
   const handleDeleteProject = async (id: string) => {
     try {
-      router.refresh()
-      toast.success('專案已刪除')
+      const result = projectStorage.deleteProject(id)
+      if (result.status === 'success') {
+        router.refresh()
+        toast.success('專案已刪除')
+      } else {
+        throw new Error(result.error as string)
+      }
     } catch (error) {
       toast.error('刪除專案時發生錯誤')
     }

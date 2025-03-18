@@ -31,7 +31,6 @@ export function BaseProjectDisplay({
   const permissions = useProjectPermissions(userTier)
 
   const canAddProject = permissions.canCreateProject(projects.length)
-  console.log('projects', projects)
   return (
     <>
       <header className="sticky top-0 z-10 flex items-center justify-between bg-background pb-6">

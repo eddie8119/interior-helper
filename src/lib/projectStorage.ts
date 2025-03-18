@@ -14,7 +14,6 @@ export const projectStorage = {
   getProjects(): ActionResult<Project[]> {
     try {
       const savedProjects = localStorage.getItem(STORAGE_KEYS.PROJECTS)
-      console.log('savedProjects', savedProjects)
       const projects: Project[] = savedProjects
         ? (JSON.parse(savedProjects) as Project[])
         : []
@@ -74,7 +73,11 @@ export const projectStorage = {
   // 刪除專案
   deleteProject(id: string): ActionResult<null> {
     try {
-      const projects = this.getProjects().data
+      const result = this.getProjects()
+      if (result.status === 'error') {
+        return result
+      }
+      const projects = result.data || []
       const filteredProjects = projects.filter((p) => p.id !== id)
       localStorage.setItem(
         STORAGE_KEYS.PROJECTS,
