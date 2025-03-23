@@ -10,9 +10,9 @@ import { Task } from '@prisma/client'
 
 // 創建任務
 export async function createTask(
+  projectId: string,
   data: CreateTaskInputSchema,
-  constructionType: string,
-  projectId: string
+  constructionType: string
 ): Promise<ActionResult<Task>> {
   try {
     const validated = createTaskInputSchema.safeParse(data)
@@ -58,9 +58,9 @@ export async function createTask(
 
 // 更新任務
 export async function updateTask(
+  projectId: string,
   taskId: string,
-  updates: Partial<Task>,
-  projectId: string
+  updates: Partial<Task>
 ): Promise<ActionResult<Task>> {
   try {
     const existingTask = await prisma.task.findUnique({

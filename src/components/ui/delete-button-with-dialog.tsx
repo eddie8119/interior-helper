@@ -1,11 +1,14 @@
 'use client'
 
+import { ActionResult } from '@/types'
 import { DeleteButton } from './delete-button'
 import { DeleteDialog } from './delete-dialog'
 import { useState } from 'react'
+import { Project } from '@prisma/client'
 
 interface DeleteButtonWithDialogProps {
-  deleteItem: () => void
+  // 刪除project / container 共用 deleteItem
+  deleteItem: () => Promise<ActionResult<Project>>
   title: string
   description: string
   className?: string
@@ -19,8 +22,8 @@ export function DeleteButtonWithDialog({
 }: DeleteButtonWithDialogProps) {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
 
-  const handleDeleteItem = () => {
-    deleteItem()
+  const handleDeleteItem = async () => {
+    await deleteItem()
     setIsDeleteDialogOpen(false)
   }
 
