@@ -1,8 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Project } from '@prisma/client'
 import { defaultProjects } from '@/constants/default-data'
-import defaultData from '@/constants/default-data.json'
-const { constructionContainer } = defaultData
 
 // Storage keys
 const STORAGE_KEYS = {
@@ -46,19 +44,6 @@ export function useProjects() {
     setProjects(projects)
   }
 
-  // 添加專案
-  const addProject = (project: Omit<Project, 'id' | 'createdAt'>) => {
-    const newProject: Project = {
-      ...project,
-      id: crypto.randomUUID(),
-      createdAt: new Date(),
-      containers: constructionContainer,
-    }
-
-    const updatedProjects = [...projects, newProject]
-    saveProjects(updatedProjects)
-  }
-
   // 更新專案
   const updateProject = (projectId: string, updates: Partial<Project>) => {
     const updatedProjects = projects.map((project) =>
@@ -72,19 +57,9 @@ export function useProjects() {
     saveProjects(updatedProjects)
   }
 
-  // 刪除專案
-  const deleteProject = (projectId: string) => {
-    const updatedProjects = projects.filter(
-      (project) => project.id !== projectId
-    )
-    saveProjects(updatedProjects)
-  }
-
   return {
     projects,
     isLoading,
-    addProject,
     updateProject,
-    deleteProject,
   }
 }

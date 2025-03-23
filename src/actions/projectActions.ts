@@ -8,7 +8,6 @@ import {
 } from '@/lib/schemas/createProjectSchema'
 import { ActionResult } from '@/types'
 import { Project } from '@prisma/client'
-import { auth } from '@/auth'
 import defaultData from '@/constants/default-data.json'
 import { getAuthUserId } from './authActions'
 const { constructionContainer } = defaultData
@@ -38,14 +37,14 @@ export async function getProjects(): Promise<ActionResult<Project[]>> {
 
 // 獲取單個專案詳情
 export async function getProject(
-  id: string
+  projectId: string
 ): Promise<ActionResult<Project & { tasks: any[] }>> {
   try {
     const userId = await getAuthUserId()
 
     const project = await prisma.project.findUnique({
       where: {
-        id,
+        id: projectId,
         userId,
       },
       include: {
@@ -98,15 +97,46 @@ export async function createProject(
   }
 }
 
+// 更新專案
+export async function updateProject(
+  projectId: string,
+  updates: Partial<Project>
+) {
+  try {
+    const userId = await getAuthUserId()
+
+    const existingProject = await prisma.project.findUnique({
+      where: {
+        id: projectId,
+        userId,
+      },
+    })
+
+    if (!existingProject) {
+      return { status: 'error', error: 'Project not found or unauthorized' }
+    }
+
+    const updatedProject = await prisma.project.update({
+      where: { id: projectId },
+      data: updates,
+    })
+
+    return { status: 'success', data: updatedProject }
+  } catch (error) {
+    console.error('Error updating project:', error)
+    return { status: 'error', error: 'Failed to update project' }
+  }
+}
+
 // 刪除專案
-export async function deleteProject(id: string) {
+export async function deleteProject(projectId: string) {
   try {
     const userId = await getAuthUserId()
 
     // 確認專案屬於當前用戶
     const existingProject = await prisma.project.findUnique({
       where: {
-        id,
+        id: projectId,
         userId,
       },
     })
@@ -116,7 +146,7 @@ export async function deleteProject(id: string) {
     }
 
     await prisma.project.delete({
-      where: { id },
+      where: { id: projectId },
     })
 
     return { status: 'success', data: null }
