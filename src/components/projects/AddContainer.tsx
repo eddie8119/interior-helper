@@ -1,23 +1,26 @@
 'use client'
 
 import { useState } from 'react'
+import { Project } from '@prisma/client'
+import { ActionResult } from '@/types'
 import { Card } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Plus } from 'lucide-react'
 
 interface AddContainerProps {
-  onCreateContainer: (data: { type: string }) => void
+  // 只接收 type 參數
+  onCreateContainer: (data: { type: string }) => Promise<ActionResult<Project>>
 }
 
 export function AddContainer({ onCreateContainer }: AddContainerProps) {
   const [isCreating, setIsCreating] = useState(false)
   const [newContainerType, setNewContainerType] = useState('')
 
-  const handleCreateContainer = () => {
+  const handleCreateContainer = async () => {
     if (!newContainerType.trim()) return
 
-    onCreateContainer({
+    await onCreateContainer({
       type: newContainerType,
     })
 
