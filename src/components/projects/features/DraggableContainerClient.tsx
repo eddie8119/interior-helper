@@ -2,39 +2,39 @@
 
 import { Project, Task } from '@prisma/client'
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd'
-import { getProjects } from '@/actions/projectActions'
-import { useDragEnd } from '@/hooks/use-drag-end'
+import { useContainers } from '@/hooks/use-containers'
+import { dragEnd } from '@/lib/dragEnd'
 import { AddContainer } from '@/components/projects/AddContainer'
-import { ContainerCard } from '@/components/projects/drag/ContainerCard'
+import { ContainerCard } from '@/components/projects/shared/ContainerCard'
 
 const DROPPABLE_TYPE = {
   CONTAINER: 'container',
   TASK: 'task',
 }
 
-interface DraggableContainersServerProps {
+interface DraggableContainerClientProps {
   project: Project
   projectTasks: Task[]
   onUpdateTask?: (taskId: string, data: Partial<Task>) => void
   onUpdateProject?: (projectId: string, data: Partial<Project>) => void
 }
 
-export function DraggableContainersServer({
+export function DraggableContainerClient({
   project,
   projectTasks,
-  // onUpdateTask,
-  // onUpdateProject,
-}: DraggableContainersServerProps) {
-  // const { updateContainers, deleteContainer, createContainer } = useContainers(
-  //   project,
-  //   onUpdateProject
-  // )
+  onUpdateTask,
+  onUpdateProject,
+}: DraggableContainerClientProps) {
+  const { updateContainers, deleteContainer, createContainer } = useContainers(
+    project,
+    onUpdateProject
+  )
 
-  const onDragEnd = useDragEnd({
+  const onDragEnd = dragEnd({
     project,
     projectTasks,
-    // updateContainers,
-    // onUpdateTask,
+    updateContainers,
+    onUpdateTask,
   })
 
   return (
@@ -77,7 +77,7 @@ export function DraggableContainersServer({
             {provided.placeholder}
 
             {/* 添加容器按鈕 */}
-            {/* <AddContainer onCreateContainer={createContainer} /> */}
+            <AddContainer onCreateContainer={createContainer} />
           </div>
         )}
       </Droppable>

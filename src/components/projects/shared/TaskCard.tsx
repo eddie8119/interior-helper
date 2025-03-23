@@ -2,11 +2,11 @@
 
 import { useState } from 'react'
 import { Draggable } from '@hello-pangea/dnd'
-import { Task } from '@/types/project'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
 import { Check, X } from 'lucide-react'
+import { Task } from '@prisma/client'
 
 interface TaskCardProps {
   task: Task

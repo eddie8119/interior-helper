@@ -100,7 +100,7 @@ export async function createProject(
 export async function updateProject(
   projectId: string,
   updates: Partial<Project>
-) {
+): Promise<ActionResult<Project>> {
   try {
     const userId = await getAuthUserId()
 

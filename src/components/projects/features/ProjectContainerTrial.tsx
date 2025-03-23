@@ -3,7 +3,7 @@
 import { notFound } from 'next/navigation'
 import { useProjects } from '@/hooks/use-projects'
 import { useTasks } from '@/hooks/use-tasks'
-import { DraggableContainersClient } from './features/DraggableContainersClient'
+import { DraggableContainerClient } from './DraggableContainerClient'
 import { formatDateTime } from '@/lib/format'
 
 interface ProjectContainerTrialProps {
@@ -43,7 +43,7 @@ export function ProjectContainerTrial({
         上次編輯時間：{formatDateTime(project.updated)}
       </p>
 
-      <DraggableContainersClient
+      <DraggableContainerClient
         project={project}
         projectTasks={projectTasks}
         onUpdateTask={updateTask}

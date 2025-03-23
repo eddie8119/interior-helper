@@ -43,7 +43,7 @@ export function ProjectCard({ project, deleteProject, url }: ProjectCardProps) {
               </div>
               <div className="mt-2 flex justify-between text-sm text-gray-500 dark:text-gray-400">
                 <span>{project.progress}%</span>
-                {project.daysLeft && <span>{project.daysLeft} Days Left</span>}
+                {/* {project.daysLeft && <span>{project.daysLeft} Days Left</span>} */}
               </div>
             </div>
           </div>

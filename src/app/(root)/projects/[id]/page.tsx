@@ -1,6 +1,6 @@
 import { Metadata } from 'next'
 import { getProject } from '@/actions/projectActions'
-import { ProjectTasksServerContainer } from '@/components/projects/project-tasks-server-container'
+import { ProjectTasksServerContainer } from '@/components/projects/ProjectTasksServerContainer'
 
 interface ProjectPageProps {
   params: {

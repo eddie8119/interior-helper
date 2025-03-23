@@ -1,5 +1,5 @@
 import { Metadata } from 'next'
-import { ProjectContainerTrial } from '@/components/projects/ProjectContainerTrial'
+import { ProjectContainerTrial } from '@/components/projects/features/ProjectContainerTrial'
 import { getProjectById } from '@/app/actions/project-details'
 
 interface ProjectPageProps {
