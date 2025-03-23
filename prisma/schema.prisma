@@ -104,14 +104,19 @@ model Task {
     id               String     @id @default(uuid())
     constructionType String
     title            String
-    content          String?    @db.Text
-    status           TaskStatus @default(todo)
-    priority         Priority   @default(low)
+    content          String?     @db.Text
+    status           TaskStatus  @default(todo)
+    priority         Priority    @default(low)
     dueDate          DateTime?
-    created          DateTime   @default(now())
-    updated          DateTime   @default(now())
+    created          DateTime    @default(now())
+    updated          DateTime    @default(now())
     projectId        String
-    project          Project    @relation(fields: [projectId], references: [id], onDelete: Cascade)
+    project          Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+    material         String?  
+    unit             String?
+    amount           Float?      @default(0)    
+    cost             Float?      @default(0)
+    budget           Float?      @default(0)
 
     @@index([projectId])
     @@index([title])
