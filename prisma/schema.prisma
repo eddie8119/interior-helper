@@ -89,7 +89,7 @@ model Project {
     budgetTotal Float?      @default(0)
     costTotal   Float?      @default(0)
     progress    Float       @default(0)
-    containers  Json        @default("[]")
+    containers  Container[]
     team        Json?       @default("[]")
     created     DateTime    @default(now())
     updated     DateTime    @default(now())
@@ -98,6 +98,22 @@ model Project {
     tasks       Task[]
 
     @@index([userId])
+}
+
+model Container {
+    id          String    @id @default(uuid())
+    type        String
+    order       Int
+    metadata    Json?     // 保留靈活性
+    projectId   String
+    project     Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+    tasks       Task[]
+    budgetTotal Float?    @default(0)
+    costTotal   Float?    @default(0)
+    created     DateTime  @default(now())
+    updated     DateTime  @default(now())
+
+    @@index([projectId])
 }
 
 model Task {
@@ -110,6 +126,8 @@ model Task {
     dueDate          DateTime?
     created          DateTime    @default(now())
     updated          DateTime    @default(now())
+    containerId      String
+    container        Container @relation(fields: [containerId], references: [id])
     projectId        String
     project          Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
     material         String?  
