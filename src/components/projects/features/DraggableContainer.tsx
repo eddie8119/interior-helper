@@ -1,3 +1,5 @@
+import { useCallback } from 'react'
+import { useRouter } from 'next/navigation'
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd'
 import { dragEnd } from '@/lib/dragEnd'
 import { AddContainer } from '@/components/projects/AddContainer'
@@ -6,7 +8,7 @@ import { Project, Task } from '@prisma/client'
 import { Container } from '@/types/project'
 import { ActionResult } from '@/types'
 import { CreateTaskInputSchema } from '@/lib/schemas/createTaskSchema'
-import { useCallback } from 'react'
+import { toast } from 'react-toastify'
 
 const DROPPABLE_TYPE = {
   CONTAINER: 'container',
@@ -57,6 +59,8 @@ export function DraggableContainer({
   containerActions,
   taskActions,
 }: DraggableContainersProps) {
+  const router = useRouter()
+
   const onDragEnd = dragEnd({
     project,
     projectTasks,
@@ -68,9 +72,21 @@ export function DraggableContainer({
 
   const handleCreateContainer = useCallback(
     async (data: { type: string }) => {
-      // 這裡可以訪問到外層作用域的 project.id
-      // project.id 的處理被封裝在 DraggableContainer 中
-      return containerActions.createContainer(project.id, data)
+      try {
+        // 這裡可以訪問到外層作用域的 project.id
+        // project.id 的處理被封裝在 DraggableContainer 中
+        const result = await containerActions.createContainer(project.id, data)
+        if (result.status === 'success') {
+          // toast.success('專案創建成功')
+          router.refresh()
+        } else {
+          toast.error(result.error as string)
+        }
+      } catch (error) {
+        const errorMessage = '發生意外錯誤，請稍後再試'
+        toast.error(errorMessage)
+        return { status: 'error', error: errorMessage }
+      }
     },
     [containerActions, project.id]
   )
