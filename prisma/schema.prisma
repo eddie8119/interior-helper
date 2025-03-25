@@ -84,8 +84,8 @@ model Project {
     id          String      @id @default(uuid())
     title       String
     type        ProjectType
-    startDate   DateTime
-    endDate     DateTime
+    startDate   DateTime    @default(now())
+    dueDate     DateTime?   
     budgetTotal Float?      @default(0)
     costTotal   Float?      @default(0)
     progress    Float       @default(0)
@@ -95,7 +95,6 @@ model Project {
     updated     DateTime    @default(now())
     userId      String
     user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-    tasks       Task[]
 
     @@index([userId])
 }
@@ -104,7 +103,6 @@ model Container {
     id          String    @id @default(uuid())
     type        String
     order       Int
-    metadata    Json?     // 保留靈活性
     projectId   String
     project     Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
     tasks       Task[]
@@ -117,27 +115,25 @@ model Container {
 }
 
 model Task {
-    id               String     @id @default(uuid())
+    id               String      @id @default(uuid())
     constructionType String
     title            String
-    content          String?     @db.Text
+    description      String?     
     status           TaskStatus  @default(todo)
     priority         Priority    @default(low)
+    startDate   DateTime    @default(now()) 
     dueDate          DateTime?
     created          DateTime    @default(now())
     updated          DateTime    @default(now())
     containerId      String
-    container        Container @relation(fields: [containerId], references: [id])
-    projectId        String
-    project          Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+    container        Container   @relation(fields: [containerId], references: [id], onDelete: Cascade)
     material         String?  
     unit             String?
     amount           Float?      @default(0)    
     cost             Float?      @default(0)
     budget           Float?      @default(0)
 
-    @@index([projectId])
-    @@index([title])
+    @@index([containerId])
 }
 
 enum ProjectType {
