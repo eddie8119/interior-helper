@@ -21,7 +21,7 @@ export interface ProjectBasic {
   title: string
   type: ProjectType
   startDate?: Date | null
-  endDate?: Date | null
+  dueDate?: Date | null
   budgetTotal?: number | null
   costTotal?: number | null
   progress: number

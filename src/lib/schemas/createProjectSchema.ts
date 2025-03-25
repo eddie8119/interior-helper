@@ -15,7 +15,7 @@ export const createProjectInputSchema = z.object({
 
 export const createProjectSchema = createProjectInputSchema.extend({
   startDate: z.date().nullable().optional(),
-  endDate: z.date().nullable().optional(),
+  dueDate: z.date().nullable().optional(),
   budgetTotal: z.number().nullable().optional().default(0),
   costTotal: z.number().nullable().optional().default(0),
   progress: z.number().optional().default(0),

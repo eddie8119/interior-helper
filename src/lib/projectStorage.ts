@@ -46,7 +46,7 @@ export const projectStorage = {
         title,
         type,
         startDate: now,
-        endDate: now,
+        dueDate: now,
         budgetTotal: 0,
         costTotal: 0,
         progress: 0,

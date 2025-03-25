@@ -14,7 +14,7 @@ export interface UpdateProjectData {
   title?: string
   type?: ProjectType
   startDate?: string | null
-  endDate?: string | null
+  dueDate?: string | null
   budgetTotal?: number | null
   costTotal?: number | null
   progress?: number
