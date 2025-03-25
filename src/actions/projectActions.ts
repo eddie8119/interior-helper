@@ -7,8 +7,8 @@ import {
 } from '@/lib/schemas/createProjectSchema'
 import { ActionResult } from '@/types'
 import { Project } from '@prisma/client'
-import defaultData from '@/constants/default-data.json'
 import { getAuthUserId } from './authActions'
+import defaultData from '@/constants/default-data.json'
 const { constructionContainer } = defaultData
 
 // 獲取當前用戶的所有專案
@@ -21,7 +21,7 @@ export async function getProjects(): Promise<ActionResult<Project[]>> {
         userId,
       },
       include: {
-        tasks: true,
+        containers: true,
       },
       orderBy: {
         created: 'desc',
@@ -77,22 +77,48 @@ export async function createProject(
 
     const userId = await getAuthUserId()
 
-    const project = await prisma.project.create({
-      data: {
-        title,
-        type,
-        startDate: new Date(),
-        endDate: new Date(),
-        containers: constructionContainer,
-        team: JSON.stringify([]),
-        userId,
-      },
+    // 使用事務（transaction）確保原子性
+    const result = await prisma.$transaction(async (tx) => {
+      // 1. 創建專案
+      const project = await tx.project.create({
+        data: {
+          title,
+          type,
+          team: JSON.stringify([]),
+          userId,
+        },
+      })
+
+      // 2. 創建預設容器
+      await tx.container.createMany({
+        data: constructionContainer.map((container) => ({
+          type: container.type,
+          order: container.order,
+          projectId: project.id,
+        })),
+      })
+
+      // 3. 返回包含容器的完整專案
+      return await tx.project.findUnique({
+        where: { id: project.id },
+        include: {
+          containers: {
+            include: {
+              tasks: true
+            }
+          }
+        },
+      })
     })
 
-    return { status: 'success', data: project }
+    if (!result) {
+      return { status: 'error', error: 'Failed to create project' }
+    }
+
+    return { status: 'success', data: result }
   } catch (error) {
-    console.error(error)
-    return { status: 'error', error: 'Something went wrong' }
+    console.error('Failed to create project:', error)
+    return { status: 'error', error: 'Failed to create project' }
   }
 }
 
