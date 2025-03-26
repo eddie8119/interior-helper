@@ -1,19 +1,47 @@
 'use server'
 
 import { prisma } from '@/lib/prisma'
-import { Prisma, Project } from '@prisma/client'
-import { Container } from '@/types/project'
+import { Container } from '@prisma/client'
 import { ActionResult } from '@/types'
 import { getAuthUserId } from './authActions'
+import defaultData from '@/constants/default-data.json'
+const { constructionContainer } = defaultData
+
+// 獲取當前專案的容器
+export async function getContainer(
+  projectId: string
+): Promise<ActionResult<Container[]>> {
+  try {
+    const userId = await getAuthUserId()
+
+    const containers = await prisma.container.findMany({
+      where: {
+        projectId,
+        project: {
+          userId, // JOIN 查詢，效率很高
+        },
+      },
+      include: {
+        tasks: true,
+      },
+    })
+
+    return { status: 'success', data: containers }
+  } catch (error) {
+    console.error(error)
+    return { status: 'error', error: 'Failed to get containers' }
+  }
+}
 
 // 添加容器到專案
 export async function createContainer(
   projectId: string,
   data: { type: string }
-): Promise<ActionResult<Project>> {
+): Promise<ActionResult<Container>> {
   try {
     const userId = await getAuthUserId()
 
+    // 驗證專案存在且屬於當前用戶
     const project = await prisma.project.findUnique({
       where: {
         id: projectId,
@@ -25,27 +53,29 @@ export async function createContainer(
       return { status: 'error', error: 'Project not found' }
     }
 
-    const projectContainers = project.containers as any[] as Container[]
-    const newContainer: Container = {
-      id: crypto.randomUUID(),
-      type: data.type,
-      order: Number(projectContainers.length),
-    }
-
-    const updatedProject = await prisma.project.update({
-      where: { id: projectId },
-      data: {
-        containers: [
-          ...projectContainers,
-          newContainer,
-        ] as unknown as Prisma.JsonValue,
+    // 獲取當前專案的容器數量
+    const containersCount = await prisma.container.count({
+      where: {
+        projectId,
       },
     })
 
-    return { status: 'success', data: updatedProject }
+    // 創建新容器
+    const container = await prisma.container.create({
+      data: {
+        type: data.type,
+        order: containersCount, // 使用現有容器數量作為順序
+        projectId,
+      },
+      include: {
+        tasks: true,
+      },
+    })
+
+    return { status: 'success', data: container }
   } catch (error) {
     console.error(error)
-    return { status: 'error', error: 'Failed to add container' }
+    return { status: 'error', error: 'Failed to create container' }
   }
 }
 
@@ -54,14 +84,18 @@ export async function updateContainer(
   projectId: string,
   containerId: string,
   updates: Partial<Container>
-): Promise<ActionResult<Project>> {
+): Promise<ActionResult<Container>> {
   try {
     const userId = await getAuthUserId()
 
+    // 驗證專案存在且屬於當前用戶
     const project = await prisma.project.findUnique({
       where: {
         id: projectId,
         userId,
+      },
+      include: {
+        containers: true,
       },
     })
 
@@ -69,19 +103,16 @@ export async function updateContainer(
       return { status: 'error', error: 'Project not found' }
     }
 
-    const projectContainers = project.containers as any[] as Container[]
-    const updatedContainers = projectContainers.map((container) =>
-      container.id === containerId ? { ...container, ...updates } : container
-    )
-
-    const updatedProject = await prisma.project.update({
-      where: { id: projectId, userId },
-      data: {
-        containers: updatedContainers,
+    // 更新容器
+    const updatedContainer = await prisma.container.update({
+      where: {
+        id: containerId,
+        projectId: project.id, // 確保容器屬於正確的專案
       },
+      data: updates,
     })
 
-    return { status: 'success', data: updatedProject }
+    return { status: 'success', data: updatedContainer }
   } catch (error) {
     console.error(error)
     return { status: 'error', error: 'Failed to update container' }
@@ -92,9 +123,11 @@ export async function updateContainer(
 export async function deleteContainer(
   projectId: string,
   containerId: string
-): Promise<ActionResult<Project>> {
+): Promise<ActionResult<Container>> {
   try {
     const userId = await getAuthUserId()
+
+    // 驗證專案存在且屬於當前用戶
     const project = await prisma.project.findUnique({
       where: {
         id: projectId,
@@ -106,18 +139,15 @@ export async function deleteContainer(
       return { status: 'error', error: 'Project not found' }
     }
 
-    const projectContainers = project.containers as any[] as Container[]
-    const updatedContainers = projectContainers.filter(
-      (container) => container.id !== containerId
-    )
-
-    const updatedProject = await prisma.project.update({
-      where: { id: projectId, userId },
-      data: {
-        containers: updatedContainers as unknown as Prisma.JsonValue,
+    // 刪除容器（因為設置了 onDelete: Cascade，相關的 tasks 會自動刪除）
+    const deletedContainer = await prisma.container.delete({
+      where: {
+        id: containerId,
+        projectId: project.id,
       },
     })
-    return { status: 'success', data: updatedProject }
+
+    return { status: 'success', data: deletedContainer }
   } catch (error) {
     console.error(error)
     return { status: 'error', error: 'Failed to delete container' }

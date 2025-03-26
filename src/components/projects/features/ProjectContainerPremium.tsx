@@ -1,6 +1,6 @@
 'use client'
 
-import { Project, Task } from '@prisma/client'
+import { Project, Container, Task } from '@prisma/client'
 import { DraggableContainer } from './DraggableContainer'
 import { formatDateTime } from '@/lib/format'
 import { updateProject } from '@/actions/projectActions'
@@ -12,16 +12,14 @@ import {
 import { createTask, updateTask, deleteTask } from '@/actions/taskActions'
 
 interface ProjectContainerPremiumProps {
-  project: Project & {
-    tasks: Task[]
-  }
+  project: Project
+  projectContainers: Container[]
 }
 
 export function ProjectContainerPremium({
   project,
+  projectContainers,
 }: ProjectContainerPremiumProps) {
-  console.log('Project tasks:', project.tasks)
-
   return (
     <main className="container mx-auto">
       <header className="sticky top-0 z-10 flex items-center bg-background">
@@ -33,6 +31,7 @@ export function ProjectContainerPremium({
 
       <DraggableContainer
         project={project}
+        projectContainers={projectContainers}
         projectTasks={project.tasks}
         onUpdateProject={updateProject}
         containerActions={{

@@ -17,6 +17,7 @@ const DROPPABLE_TYPE = {
 
 interface DraggableContainersProps {
   project: Project
+  projectContainers: Container[]
   projectTasks: Task[]
   onUpdateProject: (projectId: string, data: Partial<Project>) => void
   containerActions: {
@@ -54,6 +55,7 @@ interface DraggableContainersProps {
 
 export function DraggableContainer({
   project,
+  projectContainers,
   projectTasks,
   onUpdateProject,
   containerActions,
@@ -67,8 +69,6 @@ export function DraggableContainer({
     onUpdateContainers: containerActions.updateContainer,
     onUpdateTask: taskActions.updateTask,
   })
-
-  const projectContainers = project.containers as any[] as Container[]
 
   const handleCreateContainer = useCallback(
     async (data: { type: string }) => {
@@ -88,9 +88,30 @@ export function DraggableContainer({
         return { status: 'error', error: errorMessage }
       }
     },
-    [containerActions, project.id]
+    [containerActions, project.id, router]
   )
 
+  const handleDeleteContainer = useCallback(
+    async (containerId: string) => {
+      try {
+        const result = await containerActions.deleteContainer(
+          project.id,
+          containerId
+        )
+        if (result.status === 'success') {
+          router.refresh()
+        } else {
+          toast.error(result.error as string)
+        }
+      } catch (error) {
+        const errorMessage = '發生意外錯誤，請稍後再試'
+        toast.error(errorMessage)
+        return { status: 'error', error: errorMessage }
+      }
+    },
+    [containerActions, project.id, router]
+  )
+  console.log(222222, projectContainers)
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       {/* 容器列表 */}
@@ -106,10 +127,10 @@ export function DraggableContainer({
             className="flex gap-4 overflow-auto pb-4"
           >
             {projectContainers.map((container, index) => {
-              const containerTasks = projectTasks.filter(
-                (task) => task.constructionType === container.type
-              )
-
+              //   const containerTasks = projectTasks.filter(
+              //     (task) => task.constructionType === container.type
+              //   )
+              const containerTasks = []
               return (
                 <Draggable
                   key={container.id}
@@ -121,10 +142,7 @@ export function DraggableContainer({
                       type={container.type}
                       tasks={containerTasks}
                       onDeleteContainer={() =>
-                        containerActions.deleteContainer(
-                          project.id,
-                          container.id
-                        )
+                        handleDeleteContainer(container.id)
                       }
                       dragProvided={provided}
                       dragSnapshot={snapshot}
