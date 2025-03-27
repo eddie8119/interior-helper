@@ -37,7 +37,7 @@ export async function getProjects(): Promise<ActionResult<Project[]>> {
 // 獲取單個專案詳情
 export async function getProject(
   projectId: string
-): Promise<ActionResult<Project & { tasks: any[] }>> {
+): Promise<ActionResult<Project>> {
   try {
     const userId = await getAuthUserId()
 
@@ -45,9 +45,6 @@ export async function getProject(
       where: {
         id: projectId,
         userId,
-      },
-      include: {
-        tasks: true,
       },
     })
 
@@ -78,6 +75,7 @@ export async function createProject(
     const userId = await getAuthUserId()
 
     // 使用事務（transaction）確保原子性
+    // 避免數據不一致的情況
     const result = await prisma.$transaction(async (tx) => {
       // 1. 創建專案
       const project = await tx.project.create({
@@ -104,9 +102,9 @@ export async function createProject(
         include: {
           containers: {
             include: {
-              tasks: true
-            }
-          }
+              tasks: true,
+            },
+          },
         },
       })
     })

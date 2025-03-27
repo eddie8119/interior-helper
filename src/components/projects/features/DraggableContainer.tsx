@@ -24,16 +24,16 @@ interface DraggableContainersProps {
     createContainer: (
       projectId: string,
       data: { type: string }
-    ) => Promise<ActionResult<Project>>
+    ) => Promise<ActionResult<Container>>
     updateContainer: (
       projectId: string,
       containerId: string,
       updates: Partial<Container>
-    ) => Promise<ActionResult<Project>>
+    ) => Promise<ActionResult<Container>>
     deleteContainer: (
       projectId: string,
       containerId: string
-    ) => Promise<ActionResult<Project>>
+    ) => Promise<ActionResult<Container>>
   }
   taskActions: {
     createTask: (
@@ -111,7 +111,6 @@ export function DraggableContainer({
     },
     [containerActions, project.id, router]
   )
-  console.log(222222, projectContainers)
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       {/* 容器列表 */}
@@ -127,10 +126,10 @@ export function DraggableContainer({
             className="flex gap-4 overflow-auto pb-4"
           >
             {projectContainers.map((container, index) => {
-              //   const containerTasks = projectTasks.filter(
-              //     (task) => task.constructionType === container.type
-              //   )
-              const containerTasks = []
+              const containerTasks = projectTasks.filter(
+                (task) => task.constructionType === container.type
+              )
+
               return (
                 <Draggable
                   key={container.id}

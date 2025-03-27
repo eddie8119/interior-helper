@@ -47,7 +47,6 @@ export async function createTask(
         cost: cost || null,
         priority: priority || 'low',
         dueDate: dueDate || null,
-        
       },
     })
 
@@ -69,14 +68,14 @@ export async function updateTask(
 
     // 單一原子操作
     const updatedTask = await prisma.task.update({
-      where: { 
+      where: {
         id: taskId,
         containerId,
         container: {
           project: {
-            userId // 同時檢查權限
-          }
-        }
+            userId, // 同時檢查權限
+          },
+        },
       },
       data: updates,
     })
@@ -93,20 +92,20 @@ export async function deleteTask(
   containerId: string
 ): Promise<ActionResult<Task>> {
   try {
-const userId = await getAuthUserId()
+    const userId = await getAuthUserId()
 
-// 使用單一查詢同時處理權限和刪除 避免時序問題
-const deletedTask = await prisma.task.delete({
-  where: { 
-    id: taskId,
-    containerId,
-    container: {
-      project: {
-        userId 
-      }
-    }
-  }
-})
+    // 使用單一查詢同時處理權限和刪除 避免時序問題
+    const deletedTask = await prisma.task.delete({
+      where: {
+        id: taskId,
+        containerId,
+        container: {
+          project: {
+            userId,
+          },
+        },
+      },
+    })
 
     return { status: 'success', data: deletedTask }
   } catch (error) {
@@ -123,16 +122,16 @@ export async function getContainerTasks(
     const userId = await getAuthUserId()
 
     const tasks = await prisma.task.findMany({
-      where: { 
+      where: {
         containerId,
         container: {
           project: {
-            userId 
-          }
-        }
-      }
+            userId,
+          },
+        },
+      },
     })
-    
+
     if (!tasks) {
       return { status: 'error', error: 'Task not found or unauthorized' }
     }
@@ -143,9 +142,36 @@ export async function getContainerTasks(
   }
 }
 
+// 獲取當前專案的任務
+export async function getProjectTasks(
+  projectId: string
+): Promise<ActionResult<Task[]>> {
+  try {
+    const userId = await getAuthUserId()
+
+    const tasks = await prisma.task.findMany({
+      where: {
+        container: {
+          projectId,
+          project: {
+            userId,
+          },
+        },
+      },
+    })
+
+    if (!tasks) {
+      return { status: 'error', error: 'Task not found or unauthorized' }
+    }
+    return { status: 'success', data: tasks }
+  } catch (error) {
+    console.error(error)
+    return { status: 'error', error: 'Something went wrong' }
+  }
+}
 
 // 是不是有關連到model User 的 model 都會需要先驗證 userId?
-// 並利用userId 做查詢 效率會更快 
+// 並利用userId 做查詢 效率會更快
 // 同時實現權限控制和查詢優化
 
 // 原因：

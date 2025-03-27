@@ -14,11 +14,13 @@ import { createTask, updateTask, deleteTask } from '@/actions/taskActions'
 interface ProjectContainerPremiumProps {
   project: Project
   projectContainers: Container[]
+  projectTasks: Task[]
 }
 
 export function ProjectContainerPremium({
   project,
   projectContainers,
+  projectTasks,
 }: ProjectContainerPremiumProps) {
   return (
     <main className="container mx-auto">
@@ -32,7 +34,7 @@ export function ProjectContainerPremium({
       <DraggableContainer
         project={project}
         projectContainers={projectContainers}
-        projectTasks={project.tasks}
+        projectTasks={projectTasks}
         onUpdateProject={updateProject}
         containerActions={{
           createContainer,
