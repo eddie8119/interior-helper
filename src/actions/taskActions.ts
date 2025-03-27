@@ -7,10 +7,11 @@ import {
 } from '@/lib/schemas/createTaskSchema'
 import { ActionResult } from '@/types'
 import { Task } from '@prisma/client'
+import { getAuthUserId } from './authActions'
 
 // 創建任務
 export async function createTask(
-  projectId: string,
+  containerId: string,
   data: CreateTaskInputSchema,
   constructionType: string
 ): Promise<ActionResult<Task>> {
@@ -23,7 +24,7 @@ export async function createTask(
 
     const {
       title,
-      content,
+      description,
       material,
       unit,
       amount,
@@ -37,8 +38,8 @@ export async function createTask(
       data: {
         title,
         constructionType,
-        projectId,
-        content: content || null,
+        containerId,
+        description: description || null,
         material: material || null,
         unit: unit || null,
         amount: amount || null,
@@ -46,6 +47,7 @@ export async function createTask(
         cost: cost || null,
         priority: priority || 'low',
         dueDate: dueDate || null,
+        
       },
     })
 
@@ -58,21 +60,24 @@ export async function createTask(
 
 // 更新任務
 export async function updateTask(
-  projectId: string,
+  containerId: string,
   taskId: string,
   updates: Partial<Task>
 ): Promise<ActionResult<Task>> {
   try {
-    const existingTask = await prisma.task.findUnique({
-      where: { id: taskId, projectId },
-    })
+    const userId = await getAuthUserId()
 
-    if (!existingTask) {
-      return { status: 'error', error: 'Task not found' }
-    }
-
+    // 單一原子操作
     const updatedTask = await prisma.task.update({
-      where: { id: taskId, projectId },
+      where: { 
+        id: taskId,
+        containerId,
+        container: {
+          project: {
+            userId // 同時檢查權限
+          }
+        }
+      },
       data: updates,
     })
     return { status: 'success', data: updatedTask }
@@ -85,24 +90,65 @@ export async function updateTask(
 // 刪除任務
 export async function deleteTask(
   taskId: string,
-  projectId: string
+  containerId: string
 ): Promise<ActionResult<Task>> {
   try {
-    const existingTask = await prisma.task.findUnique({
-      where: { id: taskId, projectId },
-    })
+const userId = await getAuthUserId()
 
-    if (!existingTask) {
-      return { status: 'error', error: 'Task not found' }
+// 使用單一查詢同時處理權限和刪除 避免時序問題
+const deletedTask = await prisma.task.delete({
+  where: { 
+    id: taskId,
+    containerId,
+    container: {
+      project: {
+        userId 
+      }
     }
+  }
+})
 
-    await prisma.task.delete({
-      where: { id: taskId, projectId },
-    })
-
-    return { status: 'success', data: null }
+    return { status: 'success', data: deletedTask }
   } catch (error) {
     console.error('Error deleting task:', error)
     return { status: 'error', error: 'Failed to delete task' }
   }
 }
+
+// 獲取當前容器的任務
+export async function getContainerTasks(
+  containerId: string
+): Promise<ActionResult<Task[]>> {
+  try {
+    const userId = await getAuthUserId()
+
+    const tasks = await prisma.task.findMany({
+      where: { 
+        containerId,
+        container: {
+          project: {
+            userId 
+          }
+        }
+      }
+    })
+    
+    if (!tasks) {
+      return { status: 'error', error: 'Task not found or unauthorized' }
+    }
+    return { status: 'success', data: tasks }
+  } catch (error) {
+    console.error(error)
+    return { status: 'error', error: 'Something went wrong' }
+  }
+}
+
+
+// 是不是有關連到model User 的 model 都會需要先驗證 userId?
+// 並利用userId 做查詢 效率會更快 
+// 同時實現權限控制和查詢優化
+
+// 原因：
+// User ID 通常有索引
+// 可以快速過濾掉不相關的數據
+// 減少不必要的資料庫查詢
