@@ -87,10 +87,10 @@ export function DraggableContainer({
     async (containerId: string) => {
       try {
         const result = await containerActions.deleteContainer(
-          project.id,
           containerId
         )
         if (result.status === 'success') {
+        toast.success('工程刪除成功')
           router.refresh()
         } else {
           toast.error(result.error as string)
