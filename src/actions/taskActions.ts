@@ -59,7 +59,6 @@ export async function createTask(
 
 // 更新任務
 export async function updateTask(
-  containerId: string,
   taskId: string,
   updates: Partial<Task>
 ): Promise<ActionResult<Task>> {
@@ -70,7 +69,6 @@ export async function updateTask(
     const updatedTask = await prisma.task.update({
       where: {
         id: taskId,
-        containerId,
         container: {
           project: {
             userId, // 同時檢查權限
@@ -87,10 +85,7 @@ export async function updateTask(
 }
 
 // 刪除任務
-export async function deleteTask(
-  taskId: string,
-  containerId: string
-): Promise<ActionResult<Task>> {
+export async function deleteTask(taskId: string): Promise<ActionResult<Task>> {
   try {
     const userId = await getAuthUserId()
 
@@ -98,7 +93,6 @@ export async function deleteTask(
     const deletedTask = await prisma.task.delete({
       where: {
         id: taskId,
-        containerId,
         container: {
           project: {
             userId,

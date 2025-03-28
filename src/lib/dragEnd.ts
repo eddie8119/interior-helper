@@ -1,6 +1,6 @@
+import { ActionResult } from '@/types'
 import { DropResult } from '@hello-pangea/dnd'
-import { Project, Task } from '@prisma/client'
-import { Container } from '@/types/project'
+import { Project, Container, Task } from '@prisma/client'
 
 const DROPPABLE_TYPE = {
   CONTAINER: 'container',
@@ -9,23 +9,16 @@ const DROPPABLE_TYPE = {
 
 interface DragEndProps {
   project: Project
+  projectContainers: Container[]
   projectTasks: Task[]
-  onUpdateContainers: (
-    projectId: string,
-    containerId: string,
-    updates: Partial<Container>
-  ) => void
-  onUpdateTask: (
-    projectId: string,
-    taskId: string,
-    updates: Partial<Task>
-  ) => void
+  onUpdateContainer: (containerId: string, updates: Partial<Container>) => void
+  onUpdateTask: (taskId: string, updates: Partial<Task>) => void
 }
 
 export function dragEnd({
-  project,
+  projectContainers,
   projectTasks,
-  onUpdateContainers,
+  onUpdateContainer,
   onUpdateTask,
 }: DragEndProps) {
   const handleDragEnd = (result: DropResult) => {
@@ -42,9 +35,7 @@ export function dragEnd({
 
     // 處理容器拖拽
     if (type === DROPPABLE_TYPE.CONTAINER) {
-      const newContainers = Array.from(
-        project.containers as any[] as Container[]
-      )
+      const newContainers = Array.from(projectContainers)
       const [removed] = newContainers.splice(source.index, 1)
       newContainers.splice(destination.index, 0, removed)
 
@@ -54,7 +45,7 @@ export function dragEnd({
         order: index,
       }))
 
-      onUpdateContainers(updatedContainers)
+      onUpdateContainer(draggableId, updatedContainers)
       return
     }
 

@@ -26,14 +26,10 @@ interface DraggableContainersProps {
       data: { type: string }
     ) => Promise<ActionResult<Container>>
     updateContainer: (
-      projectId: string,
       containerId: string,
       updates: Partial<Container>
     ) => Promise<ActionResult<Container>>
-    deleteContainer: (
-      projectId: string,
-      containerId: string
-    ) => Promise<ActionResult<Container>>
+    deleteContainer: (containerId: string) => Promise<ActionResult<Container>>
   }
   taskActions: {
     createTask: (
@@ -42,14 +38,10 @@ interface DraggableContainersProps {
       constructionType: string
     ) => Promise<ActionResult<Task>>
     updateTask: (
-      projectId: string,
       taskId: string,
       updates: Partial<Task>
     ) => Promise<ActionResult<Task>>
-    deleteTask: (
-      projectId: string,
-      taskId: string
-    ) => Promise<ActionResult<Task>>
+    deleteTask: (taskId: string) => Promise<ActionResult<Task>>
   }
 }
 
@@ -64,9 +56,9 @@ export function DraggableContainer({
   const router = useRouter()
 
   const onDragEnd = dragEnd({
-    project,
+    projectContainers,
     projectTasks,
-    onUpdateContainers: containerActions.updateContainer,
+    onUpdateContainer: containerActions.updateContainer,
     onUpdateTask: taskActions.updateTask,
   })
 
@@ -160,3 +152,10 @@ export function DraggableContainer({
     </DragDropContext>
   )
 }
+
+// containerTasks寫法
+// 在父層級一次性獲取所有任務，然後在前端過濾 vs 每個 container 都發送一次 API 請求
+
+// 更快的響應時間：資料已經在前端，過濾操作非常快
+// 更好的用戶體驗：不會有多次載入的延遲
+// 減輕伺服器負擔：避免多次資料庫查詢

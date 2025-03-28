@@ -4,8 +4,6 @@ import { prisma } from '@/lib/prisma'
 import { Container } from '@prisma/client'
 import { ActionResult } from '@/types'
 import { getAuthUserId } from './authActions'
-import defaultData from '@/constants/default-data.json'
-const { constructionContainer } = defaultData
 
 // 獲取當前專案的容器
 export async function getContainer(
@@ -81,33 +79,19 @@ export async function createContainer(
 
 // 更新容器
 export async function updateContainer(
-  projectId: string,
   containerId: string,
   updates: Partial<Container>
 ): Promise<ActionResult<Container>> {
   try {
     const userId = await getAuthUserId()
 
-    // 驗證專案存在且屬於當前用戶
-    const project = await prisma.project.findUnique({
-      where: {
-        id: projectId,
-        userId,
-      },
-      include: {
-        containers: true,
-      },
-    })
-
-    if (!project) {
-      return { status: 'error', error: 'Project not found' }
-    }
-
     // 更新容器
     const updatedContainer = await prisma.container.update({
       where: {
         id: containerId,
-        projectId: project.id, // 確保容器屬於正確的專案
+        project: {
+          userId,
+        },
       },
       data: updates,
     })
@@ -121,29 +105,18 @@ export async function updateContainer(
 
 // 刪除容器
 export async function deleteContainer(
-  projectId: string,
   containerId: string
 ): Promise<ActionResult<Container>> {
   try {
     const userId = await getAuthUserId()
 
-    // 驗證專案存在且屬於當前用戶
-    const project = await prisma.project.findUnique({
-      where: {
-        id: projectId,
-        userId,
-      },
-    })
-
-    if (!project) {
-      return { status: 'error', error: 'Project not found' }
-    }
-
     // 刪除容器（因為設置了 onDelete: Cascade，相關的 tasks 會自動刪除）
     const deletedContainer = await prisma.container.delete({
       where: {
         id: containerId,
-        projectId: project.id,
+        project: {
+          userId,
+        },
       },
     })
 
@@ -153,3 +126,6 @@ export async function deleteContainer(
     return { status: 'error', error: 'Failed to delete container' }
   }
 }
+
+// where 索引提供越多越好嗎 ?
+// 額外的條件不會提高查詢效率 反而可能讓資料庫做額外的檢查
