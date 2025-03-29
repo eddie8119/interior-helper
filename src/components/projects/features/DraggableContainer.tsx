@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd'
 import { dragEnd } from '@/lib/dragEnd'
@@ -60,23 +60,39 @@ export function DraggableContainer({
   const router = useRouter()
 
   // 根據 order 排序容器，由小到大
-  const sortedContainers = [...projectContainers].sort(
-    (a, b) => a.order - b.order
+  const sortContainers = useCallback(
+    (containers: Container[]) =>
+      [...containers].sort((a, b) => a.order - b.order),
+    []
   )
 
+  const [containers, setContainers] = useState<Container[]>(() =>
+    sortContainers(projectContainers)
+  )
+
+  useEffect(() => {
+    setContainers(sortContainers(projectContainers))
+  }, [projectContainers, sortContainers])
+
   const handleUpdateContainersOrder = useCallback(
-    async (updates: Partial<Container>[]) => {
-      const result = await containerActions.updateContainersOrder(
-        project.id,
-        updates
-      )
-      if (result.status === 'success') {
-        router.refresh()
-      } else {
-        toast.error(result.error as string)
+    async (updates: Container[]) => {
+      try {
+        // 樂觀更新：立即更新本地 state
+        setContainers(updates)
+        const result = await containerActions.updateContainersOrder(
+          project.id,
+          updates
+        )
+        if (result.status === 'error') {
+          setContainers(sortContainers(projectContainers))
+          toast.error(result.error as string)
+        }
+      } catch (error) {
+        setContainers(sortContainers(projectContainers))
+        toast.error('Failed to update containers order')
       }
     },
-    [containerActions, project.id, router]
+    [containerActions, projectContainers, containerActions, project.id]
   )
 
   const handleCreateContainer = useCallback(
@@ -120,7 +136,7 @@ export function DraggableContainer({
   )
 
   const onDragEnd = dragEnd({
-    projectContainers: sortedContainers,
+    projectContainers: containers,
     projectTasks,
     onUpdateContainersOrder: handleUpdateContainersOrder,
     onUpdateTask: taskActions.updateTask,
@@ -139,7 +155,7 @@ export function DraggableContainer({
             {...provided.droppableProps}
             className="flex gap-4 overflow-auto pb-4"
           >
-            {sortedContainers.map((container, index) => {
+            {containers.map((container, index) => {
               const containerTasks = projectTasks.filter(
                 (task) => task.constructionType === container.type
               )

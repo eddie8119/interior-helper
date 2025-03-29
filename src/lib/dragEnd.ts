@@ -1,4 +1,3 @@
-import { ActionResult } from '@/types'
 import { DropResult } from '@hello-pangea/dnd'
 import { Container, Task } from '@prisma/client'
 
@@ -10,7 +9,7 @@ const DROPPABLE_TYPE = {
 interface DragEndProps {
   projectContainers: Container[]
   projectTasks: Task[]
-  onUpdateContainersOrder: (updates: Partial<Container>[]) => Promise<void>
+  onUpdateContainersOrder: (updates: Container[]) => Promise<void>
   onUpdateTask: (taskId: string, updates: Partial<Task>) => void
 }
 
