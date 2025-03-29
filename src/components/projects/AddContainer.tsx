@@ -29,7 +29,7 @@ export function AddContainer({ onCreateContainer }: AddContainerProps) {
   }
 
   return (
-    <div className="min-w-[300px]">
+    <div className="h-[350px] w-[300px]">
       {isCreating ? (
         <Card className="p-4">
           <Input
@@ -41,6 +41,7 @@ export function AddContainer({ onCreateContainer }: AddContainerProps) {
           <div className="flex justify-end gap-2">
             <Button
               variant="outline"
+              className="border-red-500 text-red-500"
               onClick={() => {
                 setIsCreating(false)
                 setNewContainerType('')
@@ -48,13 +49,18 @@ export function AddContainer({ onCreateContainer }: AddContainerProps) {
             >
               取消
             </Button>
-            <Button onClick={handleCreateContainer}>確認</Button>
+            <Button
+              className="bg-[var(--main)]"
+              onClick={handleCreateContainer}
+            >
+              確認
+            </Button>
           </div>
         </Card>
       ) : (
         <Button
           variant="outline"
-          className="h-full w-full border-dashed"
+          className="h-full w-full border-dashed border-[var(--main)]"
           onClick={() => setIsCreating(true)}
         >
           <Plus className="mr-2 h-4 w-4" />

@@ -180,7 +180,7 @@ export function DraggableContainer({
           <div
             ref={provided.innerRef}
             {...provided.droppableProps}
-            className="flex gap-4 overflow-auto pb-4"
+            className="flex gap-4 overflow-auto"
           >
             {containers.map((container, index) => {
               // 可以減少發送 API 請求

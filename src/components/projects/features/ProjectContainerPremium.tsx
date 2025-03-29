@@ -25,12 +25,14 @@ export function ProjectContainerPremium({
 }: ProjectContainerPremiumProps) {
   return (
     <main className="container mx-auto">
-      <header className="sticky top-0 z-10 flex items-center bg-background">
-        <h1 className="text-2xl font-semibold">{project.title}</h1>
-      </header>
-      <p className="text-muted-foreground text-sm">
-        上次編輯時間：{formatDateTime(project.updated)}
-      </p>
+      <div className="mb-5">
+        <header className="sticky top-0 z-10 flex items-center bg-background">
+          <h1 className="text-2xl font-semibold">{project.title}</h1>
+        </header>
+        <p className="text-muted-foreground text-sm">
+          上次編輯時間：{formatDateTime(project.updated)}
+        </p>
+      </div>
 
       <DraggableContainer
         project={project}

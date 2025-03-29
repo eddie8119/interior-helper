@@ -49,11 +49,11 @@ export function ContainerCard({
     <div
       ref={dragProvided.innerRef}
       {...dragProvided.draggableProps}
-      className={`min-w-[300px] ${dragSnapshot.isDragging ? 'z-10' : ''}`}
+      className={`min-h-[350px] min-w-[300px] max-w-[300px] ${dragSnapshot.isDragging ? 'z-10' : ''}`}
     >
       <Card
         {...dragProvided.dragHandleProps}
-        className={`p-4 transition-all duration-200 ${
+        className={`h-full w-full p-4 transition-all duration-200 ${
           dragSnapshot.isDragging
             ? 'shadow-lg ring-2 ring-[#D4763B] ring-opacity-50'
             : ''
@@ -67,26 +67,28 @@ export function ContainerCard({
               onChange={(e) => setEditedValue(e.target.value)}
               onBlur={handleSave}
               onKeyDown={handleKeyDown}
+              className="h-[36px]"
             />
           ) : (
             <h3 className="text-lg font-semibold" onClick={handleStartEdit}>
               {container.type}({tasks.length})
             </h3>
           )}
-
-          <DeleteButtonWithDialog
-            deleteItem={handleDeleteContainer} //deleteItem: project /container 共用
-            title="確認刪除"
-            description={`您確定要刪除此容器嗎？此操作無法復原。`}
-            className="!relative !right-0 !top-0 !block !opacity-100"
-          />
+          {!isEditing && (
+            <DeleteButtonWithDialog
+              deleteItem={handleDeleteContainer} //deleteItem: project /container 共用
+              title="確認刪除"
+              description={`您確定要刪除此容器嗎？此操作無法復原。`}
+              className="!relative !right-0 !top-0 !block !opacity-100"
+            />
+          )}
         </div>
 
         {/* 任務列表 */}
         <TaskList droppableId={container.type} tasks={tasks} />
 
         {/* 添加任務按鈕 */}
-        <button className="mt-4 w-full rounded-lg border border-dashed border-gray-300 p-2 text-center text-sm text-gray-500 hover:border-[#D4763B] hover:text-[#D4763B] dark:border-gray-600 dark:hover:border-[#D4763B]">
+        <button className="mt-4 w-full rounded-md border border-[var(--main)] p-2 text-center text-sm hover:bg-[var(--main)]">
           + 添加任務
         </button>
       </Card>
