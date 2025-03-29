@@ -8,6 +8,7 @@ import {
   createContainer,
   deleteContainer,
   updateContainer,
+  updateContainersOrder,
 } from '@/actions/containerActions'
 import { createTask, updateTask, deleteTask } from '@/actions/taskActions'
 
@@ -40,6 +41,7 @@ export function ProjectContainerPremium({
           createContainer,
           updateContainer,
           deleteContainer,
+          updateContainersOrder,
         }}
         taskActions={{
           createTask,

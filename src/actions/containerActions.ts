@@ -77,6 +77,41 @@ export async function createContainer(
   }
 }
 
+// 更新專案容器順序
+export async function updateContainersOrder(
+  projectId: string,
+  updates: Partial<Container>[]
+): Promise<ActionResult<Container[]>> {
+  try {
+    const userId = await getAuthUserId()
+
+    // 使用 transaction 確保所有更新都成功或都失敗
+    const updatedContainers = await prisma.$transaction(async (tx) => {
+      // 批量更新所有容器
+      const updatePromises = updates.map((update) =>
+        tx.container.update({
+          where: {
+            id: update.id,
+            projectId, // 確保容器屬於正確的專案
+            project: {
+              userId,
+            },
+          },
+          data: {
+            order: update.order,
+          },
+        })
+      )
+
+      return await Promise.all(updatePromises)
+    })
+
+    return { status: 'success', data: updatedContainers }
+  } catch (error) {
+    console.error('Error updating containers order:', error)
+    return { status: 'error', error: 'Failed to update container order' }
+  }
+}
 // 更新容器
 export async function updateContainer(
   containerId: string,

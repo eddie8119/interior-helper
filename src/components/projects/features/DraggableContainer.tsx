@@ -29,6 +29,10 @@ interface DraggableContainersProps {
       containerId: string,
       updates: Partial<Container>
     ) => Promise<ActionResult<Container>>
+    updateContainersOrder: (
+      projectId: string,
+      updates: Partial<Container>[]
+    ) => Promise<ActionResult<Container[]>>
     deleteContainer: (containerId: string) => Promise<ActionResult<Container>>
   }
   taskActions: {
@@ -55,12 +59,25 @@ export function DraggableContainer({
 }: DraggableContainersProps) {
   const router = useRouter()
 
-  const onDragEnd = dragEnd({
-    projectContainers,
-    projectTasks,
-    onUpdateContainer: containerActions.updateContainer,
-    onUpdateTask: taskActions.updateTask,
-  })
+  // 根據 order 排序容器，由小到大
+  const sortedContainers = [...projectContainers].sort(
+    (a, b) => a.order - b.order
+  )
+
+  const handleUpdateContainersOrder = useCallback(
+    async (updates: Partial<Container>[]) => {
+      const result = await containerActions.updateContainersOrder(
+        project.id,
+        updates
+      )
+      if (result.status === 'success') {
+        router.refresh()
+      } else {
+        toast.error(result.error as string)
+      }
+    },
+    [containerActions, project.id, router]
+  )
 
   const handleCreateContainer = useCallback(
     async (data: { type: string }) => {
@@ -86,11 +103,9 @@ export function DraggableContainer({
   const handleDeleteContainer = useCallback(
     async (containerId: string) => {
       try {
-        const result = await containerActions.deleteContainer(
-          containerId
-        )
+        const result = await containerActions.deleteContainer(containerId)
         if (result.status === 'success') {
-        toast.success('工程刪除成功')
+          toast.success('工程刪除成功')
           router.refresh()
         } else {
           toast.error(result.error as string)
@@ -103,6 +118,13 @@ export function DraggableContainer({
     },
     [containerActions, project.id, router]
   )
+
+  const onDragEnd = dragEnd({
+    projectContainers: sortedContainers,
+    projectTasks,
+    onUpdateContainersOrder: handleUpdateContainersOrder,
+    onUpdateTask: taskActions.updateTask,
+  })
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       {/* 容器列表 */}
@@ -117,7 +139,7 @@ export function DraggableContainer({
             {...provided.droppableProps}
             className="flex gap-4 overflow-auto pb-4"
           >
-            {projectContainers.map((container, index) => {
+            {sortedContainers.map((container, index) => {
               const containerTasks = projectTasks.filter(
                 (task) => task.constructionType === container.type
               )
