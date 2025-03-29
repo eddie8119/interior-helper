@@ -4,8 +4,9 @@ import { DraggableProvided, DraggableStateSnapshot } from '@hello-pangea/dnd'
 import { TaskList } from '@/components/projects/shared/TaskList'
 import { DeleteButtonWithDialog } from '@/components/ui/delete-button-with-dialog'
 import { ActionResult } from '@/types'
-import { useCallback, useState } from 'react'
-import { Input } from '@mui/material'
+import { useCallback } from 'react'
+import { Input } from '@/components/ui/input'
+import { useEditableInput } from '@/hooks/useEditableInput'
 
 interface ContainerCardProps {
   tasks: Task[]
@@ -26,35 +27,23 @@ export function ContainerCard({
   dragProvided,
   dragSnapshot,
 }: ContainerCardProps) {
-  const [isEditing, setIsEditing] = useState<boolean>(false)
-  const [editedTitle, setEditedTitle] = useState<string>(container.type)
-
-  const handleSave = async () => {
-    if (editedTitle.trim() === '') return
-    try {
-      if (editedTitle.trim() !== container.type) {
-        await onUpdateContainer({
-          type: editedTitle.trim(),
-        })
-      }
-    } catch (error) {
-      console.error(error)
-    }
-    setIsEditing(false)
-  }
-
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      handleSave()
-    } else if (e.key === 'Escape') {
-      setEditedTitle(container.type)
-      setIsEditing(false)
-    }
-  }
-
   const handleDeleteContainer = useCallback(() => {
     return onDeleteContainer() // 已經封裝了所需參數
   }, [onDeleteContainer])
+
+  const {
+    isEditing,
+    editedValue,
+    setEditedValue,
+    handleStartEdit,
+    handleSave,
+    handleKeyDown,
+  } = useEditableInput({
+    initialValue: container.type,
+    onSave: async (value) => {
+      return onUpdateContainer({ type: value })
+    },
+  })
 
   return (
     <div
@@ -73,20 +62,14 @@ export function ContainerCard({
         <div className="group relative mb-4 flex items-center justify-between">
           {isEditing ? (
             <Input
-              value={editedTitle}
-              onChange={(e) => setEditedTitle(e.target.value)}
+              type={'text'}
+              value={editedValue}
+              onChange={(e) => setEditedValue(e.target.value)}
               onBlur={handleSave}
               onKeyDown={handleKeyDown}
-              autoFocus
-              className="w-full"
             />
           ) : (
-            <h3
-              className="text-lg font-semibold"
-              onClick={() => {
-                setIsEditing(true)
-              }}
-            >
+            <h3 className="text-lg font-semibold" onClick={handleStartEdit}>
               {container.type}({tasks.length})
             </h3>
           )}
