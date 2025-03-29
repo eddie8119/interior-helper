@@ -1,26 +1,57 @@
 import { Card } from '@/components/ui/card'
-import { Project, Task } from '@prisma/client'
+import { Container, Task } from '@prisma/client'
 import { DraggableProvided, DraggableStateSnapshot } from '@hello-pangea/dnd'
 import { TaskList } from '@/components/projects/shared/TaskList'
 import { DeleteButtonWithDialog } from '@/components/ui/delete-button-with-dialog'
 import { ActionResult } from '@/types'
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
+import { Input } from '@mui/material'
 
 interface ContainerCardProps {
-  type: string
   tasks: Task[]
-  onDeleteContainer: () => Promise<ActionResult<Project>>
+  container: Container
+  onUpdateContainer: (
+    updates: Partial<Container>
+  ) => Promise<ActionResult<Container>>
+  onDeleteContainer: () => Promise<ActionResult<Container>>
   dragProvided: DraggableProvided
   dragSnapshot: DraggableStateSnapshot
 }
 
 export function ContainerCard({
-  type,
   tasks,
+  container,
+  onUpdateContainer,
   onDeleteContainer,
   dragProvided,
   dragSnapshot,
 }: ContainerCardProps) {
+  const [isEditing, setIsEditing] = useState<boolean>(false)
+  const [editedTitle, setEditedTitle] = useState<string>(container.type)
+
+  const handleSave = async () => {
+    if (editedTitle.trim() === '') return
+    try {
+      if (editedTitle.trim() !== container.type) {
+        await onUpdateContainer({
+          type: editedTitle.trim(),
+        })
+      }
+    } catch (error) {
+      console.error(error)
+    }
+    setIsEditing(false)
+  }
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      handleSave()
+    } else if (e.key === 'Escape') {
+      setEditedTitle(container.type)
+      setIsEditing(false)
+    }
+  }
+
   const handleDeleteContainer = useCallback(() => {
     return onDeleteContainer() // 已經封裝了所需參數
   }, [onDeleteContainer])
@@ -40,9 +71,26 @@ export function ContainerCard({
         }`}
       >
         <div className="group relative mb-4 flex items-center justify-between">
-          <h3 className="text-lg font-semibold">
-            {type}({tasks.length})
-          </h3>
+          {isEditing ? (
+            <Input
+              value={editedTitle}
+              onChange={(e) => setEditedTitle(e.target.value)}
+              onBlur={handleSave}
+              onKeyDown={handleKeyDown}
+              autoFocus
+              className="w-full"
+            />
+          ) : (
+            <h3
+              className="text-lg font-semibold"
+              onClick={() => {
+                setIsEditing(true)
+              }}
+            >
+              {container.type}({tasks.length})
+            </h3>
+          )}
+
           <DeleteButtonWithDialog
             deleteItem={handleDeleteContainer} //deleteItem: project /container 共用
             title="確認刪除"
@@ -52,7 +100,7 @@ export function ContainerCard({
         </div>
 
         {/* 任務列表 */}
-        <TaskList droppableId={type} tasks={tasks} />
+        <TaskList droppableId={container.type} tasks={tasks} />
 
         {/* 添加任務按鈕 */}
         <button className="mt-4 w-full rounded-lg border border-dashed border-gray-300 p-2 text-center text-sm text-gray-500 hover:border-[#D4763B] hover:text-[#D4763B] dark:border-gray-600 dark:hover:border-[#D4763B]">

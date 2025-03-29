@@ -135,6 +135,33 @@ export function DraggableContainer({
     [containerActions, project.id, router]
   )
 
+  const handleUpdateContainer = useCallback(
+    async (containerId: string, updates: Partial<Container>) => {
+      try {
+        const result = await containerActions.updateContainer(
+          containerId,
+          updates
+        )
+        if (result.status === 'success') {
+          setContainers((prevContainers) =>
+            prevContainers.map((container) =>
+              container.id === containerId
+                ? { ...container, ...updates }
+                : container
+            )
+          )
+        } else {
+          toast.error(result.error as string)
+        }
+      } catch (error) {
+        const errorMessage = '發生意外錯誤，請稍後再試'
+        toast.error(errorMessage)
+        return { status: 'error', error: errorMessage }
+      }
+    },
+    [containerActions, project.id, router]
+  )
+
   const onDragEnd = dragEnd({
     projectContainers: containers,
     projectTasks,
@@ -156,6 +183,7 @@ export function DraggableContainer({
             className="flex gap-4 overflow-auto pb-4"
           >
             {containers.map((container, index) => {
+              // 可以減少發送 API 請求
               const containerTasks = projectTasks.filter(
                 (task) => task.constructionType === container.type
               )
@@ -168,8 +196,11 @@ export function DraggableContainer({
                 >
                   {(provided, snapshot) => (
                     <ContainerCard
-                      type={container.type}
+                      container={container}
                       tasks={containerTasks}
+                      onUpdateContainer={(updates: Partial<Container>) => {
+                        handleUpdateContainer(container.id, updates)
+                      }}
                       onDeleteContainer={() =>
                         handleDeleteContainer(container.id)
                       }
