@@ -3,7 +3,6 @@
 import { Project, Container, Task } from '@prisma/client'
 import { DraggableContainer } from './DraggableContainer'
 import { formatDateTime } from '@/lib/format'
-import { updateProject } from '@/actions/projectActions'
 import {
   createContainer,
   deleteContainer,
@@ -38,7 +37,6 @@ export function ProjectContainerPremium({
         project={project}
         projectContainers={projectContainers}
         projectTasks={projectTasks}
-        onUpdateProject={updateProject}
         containerActions={{
           createContainer,
           updateContainer,

@@ -4,7 +4,7 @@ import { DraggableProvided, DraggableStateSnapshot } from '@hello-pangea/dnd'
 import { TaskList } from '@/components/projects/shared/TaskList'
 import { DeleteButtonWithDialog } from '@/components/core/DeleteButtonWithDialog'
 import { ActionResult } from '@/types'
-import { useCallback } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Input } from '@/components/core/Input'
 import { useEditableInput } from '@/hooks/useEditableInput'
 
@@ -31,6 +31,14 @@ export function ContainerCard({
     return onDeleteContainer() // 已經封裝了所需參數
   }, [onDeleteContainer])
 
+  const handleSave = useCallback( async(value: string) => {
+    const result = await onUpdateContainer({ type: value })
+    if (result.status === 'success') {
+      setValueShow(value)
+    } 
+    return result
+  },[onUpdateContainer])
+
   const {
     isEditing,
     editedValue,
@@ -40,10 +48,15 @@ export function ContainerCard({
     handleKeyDown,
   } = useEditableInput({
     initialValue: container.type,
-    onSave: async (value) => {
-      return onUpdateContainer({ type: value })
-    },
+    onSave: handleSave
   })
+
+  // 此變數用於樂觀更新
+  const [valueShow, setValueShow] = useState<string>(editedValue)
+
+  useEffect(() => {
+    setValueShow(editedValue)
+  }, [editedValue])
 
   return (
     <div
@@ -63,7 +76,7 @@ export function ContainerCard({
           {isEditing ? (
             <Input
               type="text"
-              value={editedValue}
+              value={valueShow}
               onChange={(e) => setEditedValue(e.target.value)}
               onBlur={handleBlur}
               onKeyDown={handleKeyDown}
@@ -71,7 +84,7 @@ export function ContainerCard({
             />
           ) : (
             <h3 className="text-lg font-semibold" onClick={handleStartEdit}>
-              {container.type}({tasks.length})
+              {valueShow}({tasks.length})
             </h3>
           )}
           {!isEditing && (

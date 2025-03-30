@@ -19,7 +19,6 @@ interface DraggableContainersProps {
   project: Project
   projectContainers: Container[]
   projectTasks: Task[]
-  onUpdateProject: (projectId: string, data: Partial<Project>) => void
   containerActions: {
     createContainer: (
       projectId: string,
@@ -53,7 +52,6 @@ export function DraggableContainer({
   project,
   projectContainers,
   projectTasks,
-  onUpdateProject,
   containerActions,
   taskActions,
 }: DraggableContainersProps) {
@@ -102,8 +100,8 @@ export function DraggableContainer({
         // project.id 的處理被封裝在 DraggableContainer 中
         const result = await containerActions.createContainer(project.id, data)
         if (result.status === 'success') {
-          // toast.success('專案創建成功')
-          router.refresh()
+          toast.success('工程創建成功')
+          setContainers((prev) => [...prev, result.data])
         } else {
           toast.error(result.error as string)
         }
@@ -122,7 +120,7 @@ export function DraggableContainer({
         const result = await containerActions.deleteContainer(containerId)
         if (result.status === 'success') {
           toast.success('工程刪除成功')
-          router.refresh()
+          setContainers((prev) => prev.filter((c) => c.id !== containerId))
         } else {
           toast.error(result.error as string)
         }

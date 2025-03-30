@@ -47,7 +47,7 @@ export function useEditableInput<T>({
         }
       }
     } catch (error) {
-      console.error(error)
+    //   console.error(error)
     }
     setIsEditing(false)
   }, [editedValue, initialValue, onSave])
