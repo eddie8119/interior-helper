@@ -7,7 +7,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog'
+} from '@/components/core/Dialog'
 import { FormProvider, useForm } from 'react-hook-form'
 import {
   profileSchema,

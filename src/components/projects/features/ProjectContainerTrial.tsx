@@ -1,8 +1,8 @@
 'use client'
 
 import { notFound } from 'next/navigation'
-import { useProjects } from '@/hooks/use-projects'
-import { useTasks } from '@/hooks/use-tasks'
+import { useProjects } from '@/hooks/useProjects'
+import { useTasks } from '@/hooks/useTasks'
 import { DraggableContainerClient } from './DraggableContainerClient'
 import { formatDateTime } from '@/lib/format'
 

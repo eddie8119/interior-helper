@@ -4,7 +4,7 @@ import {
   getMemberByUserId,
   getMemberPhotosByUserId,
 } from '@/actions/memberActions'
-import ImageUploadButton from '@/components/member/image-upload-button'
+import ImageUploadButton from '@/components/member/ImageUploadButton'
 
 export default async function PhotosPage() {
   const userId = await getAuthUserId()

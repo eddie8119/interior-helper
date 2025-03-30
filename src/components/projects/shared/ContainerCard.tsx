@@ -1,11 +1,11 @@
-import { Card } from '@/components/ui/card'
+import { Card } from '@/components/core/Card'
 import { Container, Task } from '@prisma/client'
 import { DraggableProvided, DraggableStateSnapshot } from '@hello-pangea/dnd'
 import { TaskList } from '@/components/projects/shared/TaskList'
-import { DeleteButtonWithDialog } from '@/components/ui/delete-button-with-dialog'
+import { DeleteButtonWithDialog } from '@/components/core/DeleteButtonWithDialog'
 import { ActionResult } from '@/types'
 import { useCallback } from 'react'
-import { Input } from '@/components/ui/input'
+import { Input } from '@/components/core/Input'
 import { useEditableInput } from '@/hooks/useEditableInput'
 
 interface ContainerCardProps {

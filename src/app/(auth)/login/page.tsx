@@ -1,7 +1,7 @@
 'use client'
 
 import { LoginForm } from '@/components/auth/login-form'
-import { Card } from '@/components/ui/card'
+import { Card } from '@/components/core/Card'
 import { useRouter } from 'next/navigation'
 
 export default function LoginPage() {

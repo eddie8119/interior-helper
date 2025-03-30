@@ -1,5 +1,5 @@
 import React from 'react'
-import EditForm from '@/components/member/edit-form'
+import EditForm from '@/components/member/EditForm'
 import { getAuthUserId } from '@/actions/authActions'
 import { getMemberByUserId } from '@/actions/memberActions'
 import { notFound } from 'next/navigation'

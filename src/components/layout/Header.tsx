@@ -1,4 +1,4 @@
-import { HeaderRightSection } from './header-right-section'
+import { HeaderRightSection } from './HeaderRightSection'
 
 export function Header() {
   return (

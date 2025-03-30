@@ -1,7 +1,7 @@
 'use client'
 
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
+import { Button } from '@/components/core/Button'
+import { Input } from '@/components/core/Input'
 import Link from 'next/link'
 import { useForm } from 'react-hook-form'
 import { LoginSchema, loginSchema } from '@/lib/schemas/loginSchema'

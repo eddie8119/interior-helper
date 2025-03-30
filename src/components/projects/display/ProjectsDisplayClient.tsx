@@ -1,7 +1,7 @@
 'use client'
 
-import { withClientDelete } from './with-client-delete'
-import { BaseProjectsDisplay } from './base-projects-display'
+import { withClientDelete } from './WithClientDelete'
+import { BaseProjectsDisplay } from './BaseProjectsDisplay'
 
 interface ProjectsDisplayClientProps {
   url: string

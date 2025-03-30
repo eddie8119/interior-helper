@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 import { deleteProject } from '@/actions/projectActions'
-import { BaseProjectsDisplay } from './base-projects-display'
+import { BaseProjectsDisplay } from './BaseProjectsDisplay'
 import { Project } from '@prisma/client'
 import { AddProjectDialogServer } from '../features/CreateProjectDialogServer'
 
@@ -14,7 +14,7 @@ interface WithServerDeleteProps {
   showAddButton?: boolean
 }
 
-export function withServerDelete(WrappedComponent: typeof BaseProjectsDisplay) {
+export function WithServerDelete(WrappedComponent: typeof BaseProjectsDisplay) {
   return function ServerDeleteProjectsDisplay({
     projects,
     url,

@@ -1,7 +1,7 @@
 'use client'
 
-import { withServerDelete } from './with-server-delete'
-import { BaseProjectsDisplay } from './base-projects-display'
+import { withServerDelete } from './WithServerDelete'
+import { BaseProjectsDisplay } from './BaseProjectsDisplay'
 import { Project } from '@prisma/client'
 
 interface ProjectsDisplayServerProps {

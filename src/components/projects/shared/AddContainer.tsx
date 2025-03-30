@@ -1,11 +1,11 @@
-import { Card } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
+import { Card } from '@/components/core/Card'
+import { Input } from '@/components/core/Input'
+import { Button } from '@/components/core/Button'
 import { Plus } from 'lucide-react'
 import { useEditableInput } from '@/hooks/useEditableInput'
 import { ActionResult } from '@/types'
 import { useCallback } from 'react'
-import { DeleteButton } from '../../ui/delete-button'
+import { DeleteButton } from '../../core/DeleteButton'
 
 interface AddContainerProps {
   onCreateContainer: (params: { type: string }) => Promise<ActionResult<any>>

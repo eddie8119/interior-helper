@@ -1,8 +1,8 @@
 'use client'
 
-import { BaseProjectsDisplay } from './base-projects-display'
+import { BaseProjectsDisplay } from './BaseProjectsDisplay'
 import { Project } from '@prisma/client'
-import { useProjects } from '@/hooks/use-projects'
+import { useProjects } from '@/hooks/useProjects'
 import { AddProjectDialogClient } from '../features/CreateProjectDialogClient'
 
 interface WithClientDeleteProps {
@@ -13,7 +13,7 @@ interface WithClientDeleteProps {
   showAddButton?: boolean
 }
 
-export function withClientDelete(WrappedComponent: typeof BaseProjectsDisplay) {
+export function WithClientDelete(WrappedComponent: typeof BaseProjectsDisplay) {
   return function ClientDeleteProjectsDisplay({
     url,
     title,

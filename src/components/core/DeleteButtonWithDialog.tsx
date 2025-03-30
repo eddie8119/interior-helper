@@ -1,8 +1,8 @@
 'use client'
 
 import { ActionResult } from '@/types'
-import { DeleteButton } from './delete-button'
-import { DeleteDialog } from './delete-dialog'
+import { DeleteButton } from './DeleteButton'
+import { DeleteDialog } from './DeleteDialog'
 import { useState } from 'react'
 import { Project } from '@prisma/client'
 

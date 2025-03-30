@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { Project } from '@prisma/client'
-import { Card } from '@/components/ui/card'
-import { DeleteButtonWithDialog } from '@/components/ui/delete-button-with-dialog'
+import { Card } from '@/components/core/Card'
+import { DeleteButtonWithDialog } from '@/components/core/DeleteButtonWithDialog'
 import { formatDateTime } from '@/lib/format'
 
 interface ProjectCardProps {

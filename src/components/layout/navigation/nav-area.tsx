@@ -4,10 +4,10 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { menuLists } from '@/constants/menu'
 import { usePathname } from 'next/navigation'
-import { useProjects } from '@/hooks/use-projects'
+import { useProjects } from '@/hooks/useProjects'
 import { Menu } from '@/types/project'
 import { ChevronDown, ChevronRight } from 'lucide-react'
-import { useProtectedNavigation } from '@/hooks/use-protected-navigation'
+import { useProtectedNavigation } from '@/hooks/useProtectedNavigation'
 
 interface NavAreaProps {
   isCollapsed?: boolean

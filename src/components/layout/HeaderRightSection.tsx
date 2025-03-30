@@ -1,6 +1,6 @@
-import { LoginRegisterArea } from '@/components/layout/login-register-area'
-import { ThemeToggle } from './theme-toggle'
-import UserMenu from './user-menu'
+import { LoginRegisterArea } from '@/components/layout/LoginRegisterArea'
+import { ThemeToggle } from './ThemeToggle'
+import UserMenu from './UserMenu'
 import { auth } from '@/auth'
 
 export async function HeaderRightSection() {

@@ -1,8 +1,13 @@
 'use client'
 
 import { Project } from '@prisma/client'
-import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from '@/components/core/Card'
+import { Button } from '@/components/core/Button'
 import Link from 'next/link'
 import { formatDateTime } from '@/lib/format'
 import { useProjectFeatures } from '../hooks/useProjectFeatures'

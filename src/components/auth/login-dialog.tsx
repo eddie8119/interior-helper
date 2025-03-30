@@ -5,7 +5,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog'
+} from '@/components/core/Dialog'
 import { useLoginDialog } from '@/contexts/login-dialog-context'
 import { LoginForm } from './login-form'
 

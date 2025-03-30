@@ -1,7 +1,7 @@
 'use client'
 
-import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
+import { Button } from '@/components/core/Button'
+import { Card } from '@/components/core/Card'
 import { Check } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'

@@ -15,7 +15,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog'
+} from '@/components/core/Dialog'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { handleFormServerErrors } from '@/lib/utils'

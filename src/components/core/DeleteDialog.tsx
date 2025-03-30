@@ -5,8 +5,8 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog'
-import { Button } from '@/components/ui/button'
+} from '@/components/core/Dialog'
+import { Button } from '@/components/core/Button'
 
 interface DeleteDialogProps {
   isOpen: boolean
