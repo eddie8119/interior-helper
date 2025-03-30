@@ -35,7 +35,7 @@ export function ProjectContainerTrial({
   }
 
   return (
-    <main className="container mx-auto">
+    <main className="page-primary-container">
       <header className="sticky top-0 z-10 flex items-center bg-background">
         <h1 className="text-2xl font-semibold">{project.title}</h1>
       </header>

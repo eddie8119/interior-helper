@@ -49,7 +49,7 @@ export default async function RootLayout({
                 hideProgressBar
                 className="z-50"
               />
-              <div className="flex h-screen bg-background">
+              <div className="flex h-screen w-screen bg-background">
                 {/* mob */}
                 <MobileNav />
 
@@ -57,9 +57,7 @@ export default async function RootLayout({
 
                 <div className="mt-16 flex h-full flex-1 flex-col sm:mt-0">
                   <Header />
-                  <main className="flex-1 overflow-y-auto p-7">
-                    <div className="mx-auto">{children}</div>
-                  </main>
+                  <main className="flex-1 p-4 sm:p-6 lg:p-8">{children}</main>
                 </div>
               </div>
               <LoginDialogWrapper />

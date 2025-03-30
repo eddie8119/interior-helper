@@ -158,3 +158,6 @@ enum TokenType {
     VERIFICATION
     PASSWORD_RESET
 }
+
+// model Container 有需要又關聯到 model User 嗎 ?
+// 不需要。間接關聯已足夠。 資料庫設計原則：避免冗餘關聯 /遵循最小權限原則 /保持資料一致性

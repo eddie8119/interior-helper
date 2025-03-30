@@ -4,7 +4,7 @@ export const createTaskInputSchema = z.object({
   title: z.string().min(2, {
     message: '請輸入至少2個字',
   }),
-  content: z
+  description: z
     .string()
     .min(1, {
       message: '請輸入至少1個字',
