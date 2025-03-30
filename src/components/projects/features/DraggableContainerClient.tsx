@@ -4,7 +4,7 @@ import { Project, Task } from '@prisma/client'
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd'
 import { useContainers } from '@/hooks/use-containers'
 import { dragEnd } from '@/lib/dragEnd'
-import { AddContainer } from '@/components/projects/AddContainer'
+import { AddContainer } from '@/components/projects/shared/AddContainer'
 import { ContainerCard } from '@/components/projects/shared/ContainerCard'
 
 const DROPPABLE_TYPE = {

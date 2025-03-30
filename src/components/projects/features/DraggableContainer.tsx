@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd'
 import { dragEnd } from '@/lib/dragEnd'
-import { AddContainer } from '@/components/projects/AddContainer'
+import { AddContainer } from '@/components/projects/shared/AddContainer'
 import { ContainerCard } from '@/components/projects/shared/ContainerCard'
 import { Project, Task } from '@prisma/client'
 import { Container } from '@/types/project'
@@ -180,7 +180,7 @@ export function DraggableContainer({
           <div
             ref={provided.innerRef}
             {...provided.droppableProps}
-            className="flex gap-4 overflow-auto"
+            className="flex gap-4 overflow-x-auto"
           >
             {containers.map((container, index) => {
               // 可以減少發送 API 請求

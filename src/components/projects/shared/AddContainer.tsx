@@ -5,6 +5,7 @@ import { Plus } from 'lucide-react'
 import { useEditableInput } from '@/hooks/useEditableInput'
 import { ActionResult } from '@/types'
 import { useCallback } from 'react'
+import { DeleteButton } from '../../ui/delete-button'
 
 interface AddContainerProps {
   onCreateContainer: (params: { type: string }) => Promise<ActionResult<any>>
@@ -17,12 +18,7 @@ export function AddContainer({ onCreateContainer }: AddContainerProps) {
         return { status: 'error' as const, error: '輸入不能為空' }
       try {
         const result = await onCreateContainer({ type: value.trim() })
-        if (result.status === 'success') {
-          setEditedValue('') // 清空輸入
-          return result
-        } else {
-          return { status: 'error' as const, error: result.error as string }
-        }
+        return result
       } catch (error) {
         return { status: 'error' as const, error: '創建容器失敗' }
       }
@@ -47,7 +43,7 @@ export function AddContainer({ onCreateContainer }: AddContainerProps) {
   return (
     <div className="h-[350px] w-[300px]">
       {isEditing ? (
-        <Card className="p-4">
+        <Card className="h-[350px] w-[300px] p-4">
           <Input
             type="text"
             value={editedValue}
@@ -58,13 +54,10 @@ export function AddContainer({ onCreateContainer }: AddContainerProps) {
             className="mb-2"
           />
           <div className="flex justify-end gap-2">
-            <Button
-              variant="outline"
-              className="border-cancel text-cancel"
-              onClick={handleCancel}
-            >
-              取消
-            </Button>
+            <DeleteButton
+              onDelete={handleCancel}
+              className="!relative !right-0 !top-0 !block !opacity-100"
+            />
             <Button className="bg-[var(--main)]" onClick={handleSave}>
               確認
             </Button>
@@ -73,7 +66,7 @@ export function AddContainer({ onCreateContainer }: AddContainerProps) {
       ) : (
         <Button
           variant="outline"
-          className="h-full w-full border-dashed border-[var(--main)]"
+          className="h-full min-w-[300px] max-w-[300px] border-dashed border-[var(--main)]"
           onClick={handleStartEdit}
         >
           <Plus className="mr-2 h-4 w-4" />

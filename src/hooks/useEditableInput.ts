@@ -41,12 +41,14 @@ export function useEditableInput<T>({
     if (editedValue.trim() === '') return
     try {
       if (editedValue.trim() !== initialValue) {
-        await onSave(editedValue.trim())
+        const result = await onSave(editedValue.trim())
+        if (result.status === 'success') {
+          setEditedValue(initialValue)
+        }
       }
     } catch (error) {
       console.error(error)
     }
-    setEditedValue(initialValue)
     setIsEditing(false)
   }, [editedValue, initialValue, onSave])
 

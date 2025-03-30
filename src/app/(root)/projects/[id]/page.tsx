@@ -1,6 +1,6 @@
 import { Metadata } from 'next'
 import { getProject } from '@/actions/projectActions'
-import { ProjectTasksServerContainer } from '@/components/projects/ProjectTasksServerContainer'
+import { ProjectContainerWrapper } from '@/components/projects/features/ProjectContainerWrapper'
 
 interface ProjectPageProps {
   params: {
@@ -51,5 +51,5 @@ export async function generateMetadata({
 }
 
 export default async function ProjectPage({ params }: ProjectPageProps) {
-  return <ProjectTasksServerContainer params={params} />
+  return <ProjectContainerWrapper params={params} />
 }

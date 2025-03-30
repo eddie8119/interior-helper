@@ -1,0 +1,9 @@
+.page-primary-container {
+  width: 100%;
+  margin: 0 auto;
+  @apply md:max-w-[700px] lg:max-w-[900px] xl:max-w-[1000px] 2xl:max-w-[1200px];
+
+  @media (min-width: 1700px) {
+    @apply max-w-[1500px];
+  }
+}

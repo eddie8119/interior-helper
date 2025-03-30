@@ -4,15 +4,15 @@ import { getContainer } from '@/actions/containerActions'
 import { getContainerTasks } from '@/actions/taskActions'
 import { ProjectContainerPremium } from '@/components/projects/features/ProjectContainerPremium'
 
-interface ProjectTasksServerContainerProps {
+interface ProjectContainerWrapperProps {
   params: {
     id: string
   }
 }
 
-export async function ProjectTasksServerContainer({
+export async function ProjectContainerWrapper({
   params,
-}: ProjectTasksServerContainerProps) {
+}: ProjectContainerWrapperProps) {
   const id = params.id
   const responseProject = await getProject(id)
   if (responseProject.status === 'error' || !responseProject.data) {

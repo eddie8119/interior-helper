@@ -37,7 +37,6 @@ export function ContainerCard({
     setEditedValue,
     handleStartEdit,
     handleBlur,
-    handleSave,
     handleKeyDown,
   } = useEditableInput({
     initialValue: container.type,
