@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect, useRef } from 'react'
 import { ActionResult } from '@/types'
 
 interface UseEditableInputProps<T> {
@@ -10,14 +10,34 @@ export function useEditableInput<T>({
   initialValue,
   onSave,
 }: UseEditableInputProps<T>) {
-  const [isEditing, setIsEditing] = useState(false)
-  const [editedValue, setEditedValue] = useState(initialValue)
+  const [isEditing, setIsEditing] = useState<boolean>(false)
+  const [editedValue, setEditedValue] = useState<string>(initialValue)
+  const blurTimeoutRef = useRef<NodeJS.Timeout>()
+
+  const handleBlur = useCallback(() => {
+    // Input 內設置了onBlur 導致按確認按鈕 會觸發onBlur
+    // 使用 setTimeout 延遲執行，給按鈕點擊事件一個機會
+    blurTimeoutRef.current = setTimeout(() => {
+      setEditedValue(initialValue)
+      setIsEditing(false)
+    }, 200)
+  }, [initialValue])
 
   const handleStartEdit = useCallback(() => {
     setIsEditing(true)
   }, [])
 
+  const handleCancel = useCallback(() => {
+    setEditedValue(initialValue)
+    setIsEditing(false)
+  }, [initialValue])
+
   const handleSave = useCallback(async () => {
+    // 清除可能存在的 blur timeout
+    if (blurTimeoutRef.current) {
+      clearTimeout(blurTimeoutRef.current)
+    }
+
     if (editedValue.trim() === '') return
     try {
       if (editedValue.trim() !== initialValue) {
@@ -26,6 +46,7 @@ export function useEditableInput<T>({
     } catch (error) {
       console.error(error)
     }
+    setEditedValue(initialValue)
     setIsEditing(false)
   }, [editedValue, initialValue, onSave])
 
@@ -41,11 +62,21 @@ export function useEditableInput<T>({
     [handleSave, initialValue]
   )
 
+  useEffect(() => {
+    return () => {
+      if (blurTimeoutRef.current) {
+        clearTimeout(blurTimeoutRef.current)
+      }
+    }
+  }, [])
+
   return {
     isEditing,
     editedValue,
     setEditedValue,
     handleStartEdit,
+    handleBlur,
+    handleCancel,
     handleSave,
     handleKeyDown,
   }

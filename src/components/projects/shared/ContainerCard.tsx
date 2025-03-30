@@ -36,6 +36,7 @@ export function ContainerCard({
     editedValue,
     setEditedValue,
     handleStartEdit,
+    handleBlur,
     handleSave,
     handleKeyDown,
   } = useEditableInput({
@@ -62,10 +63,10 @@ export function ContainerCard({
         <div className="group relative mb-4 flex items-center justify-between">
           {isEditing ? (
             <Input
-              type={'text'}
+              type="text"
               value={editedValue}
               onChange={(e) => setEditedValue(e.target.value)}
-              onBlur={handleSave}
+              onBlur={handleBlur}
               onKeyDown={handleKeyDown}
               className="h-[36px]"
             />
