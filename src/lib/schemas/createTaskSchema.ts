@@ -12,24 +12,26 @@ export const createTaskInputSchema = z.object({
     .optional(),
   material: z
     .string()
-    .min(1, {
-      message: '請輸入至少1個字',
+    .min(2, {
+      message: '請輸入至少2個字',
     })
     .optional(),
-  unit: z.string().optional(),
+
   amount: z
     .number()
     .min(0, {
       message: '不能低於0',
     })
     .optional(),
-  budget: z
+  unit: z.string().optional(),
+
+  costPrice: z
     .number()
     .min(0, {
       message: '不能低於0',
     })
     .optional(),
-  cost: z
+  sellingPrice: z
     .number()
     .min(0, {
       message: '不能低於0',
