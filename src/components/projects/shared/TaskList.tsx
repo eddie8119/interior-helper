@@ -3,10 +3,24 @@
 import { Droppable } from '@hello-pangea/dnd'
 import { TaskCard } from '@/components/projects/shared/TaskCard'
 import { Task } from '@prisma/client'
+import { ActionResult } from '@/types'
+import { CreateTaskInputSchema } from '@/lib/schemas/createTaskSchema'
 
 interface TaskListProps {
   droppableId: string
   tasks: Task[]
+  taskActions: {
+    createTask: (
+      projectId: string,
+      data: CreateTaskInputSchema,
+      constructionType: string
+    ) => Promise<ActionResult<Task>>
+    updateTask: (
+      taskId: string,
+      updates: Partial<Task>
+    ) => Promise<ActionResult<Task>>
+    deleteTask: (taskId: string) => Promise<ActionResult<Task>>
+  }
 }
 
 export function TaskList({ droppableId, tasks }: TaskListProps) {
@@ -16,7 +30,7 @@ export function TaskList({ droppableId, tasks }: TaskListProps) {
         <div
           ref={provided.innerRef}
           {...provided.droppableProps}
-          className={`min-h-[200px] space-y-3 rounded-lg transition-colors ${
+          className={`space-y-3 rounded-lg transition-colors ${
             snapshot.isDraggingOver ? 'bg-gray-50 dark:bg-gray-800' : ''
           }`}
         >

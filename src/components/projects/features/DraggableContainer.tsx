@@ -36,7 +36,7 @@ interface DraggableContainersProps {
   }
   taskActions: {
     createTask: (
-      projectId: string,
+      containerId: string,
       data: CreateTaskInputSchema,
       constructionType: string
     ) => Promise<ActionResult<Task>>
@@ -204,6 +204,7 @@ export function DraggableContainer({
                       }
                       dragProvided={provided}
                       dragSnapshot={snapshot}
+                      taskActions={taskActions}
                     />
                   )}
                 </Draggable>
