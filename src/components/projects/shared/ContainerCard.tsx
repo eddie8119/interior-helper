@@ -60,7 +60,7 @@ export function ContainerCard({
 
   // handle task
   const handleCreateTask = useCallback(
-    async (updates: Partial<Task>) => {
+    async (updates: Partial<Task>): Promise<ActionResult<Task>> => {
       try {
         const result = await taskActions.createTask(
           container.id,

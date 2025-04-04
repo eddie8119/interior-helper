@@ -5,12 +5,12 @@ import {
   taskSchema,
   materialSchema,
   TaskSchema,
-  combinedTaskSchema,
+  MaterialSchema,
 } from '@/lib/schemas/createTaskSchema'
 import { ActionResult } from '@/types'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Task } from '@prisma/client'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 interface AddTaskProps {
@@ -26,8 +26,11 @@ export function AddTask({ onCreateTask }: AddTaskProps) {
     handleSubmit,
     reset,
     formState: { errors, isValid, isSubmitting },
-  } = useForm<TaskSchema>({
-    resolver: zodResolver(combinedTaskSchema),
+    trigger,
+  } = useForm<TaskSchema & MaterialSchema>({
+    resolver: zodResolver(
+      isEditingMore ? taskSchema.and(materialSchema) : taskSchema
+    ),
     mode: 'onChange',
     defaultValues: {
       // 添加預設值
@@ -37,20 +40,35 @@ export function AddTask({ onCreateTask }: AddTaskProps) {
     },
   })
 
-  const onSubmit = async (data: Partial<Task>) => {
-    if (!isValid || isSubmitting) return
-
-    const result = await onCreateTask(data)
-    if (result.status === 'success') {
-      reset()
-      setIsEditing(false)
-      setIsEditingMore(false)
-    }
-  }
+  useEffect(() => {
+    trigger()
+  }, [isEditingMore, trigger])
 
   const handleCancel = () => {
+    reset()
     setIsEditing(false)
     setIsEditingMore(false)
+  }
+
+  const onSubmit = async (data: TaskSchema & MaterialSchema) => {
+    if (!isValid || isSubmitting) return
+
+    try {
+      const {title, description} = data
+      const submitData = isEditingMore
+        ? data
+        : {
+            title,
+            description,
+          }
+
+      const result = await onCreateTask(submitData)
+      if (result.status === 'success') {
+        handleCancel()
+      }
+    } catch (error) {
+      console.error('Error creating task:', error)
+    }
   }
 
   return (
@@ -69,7 +87,7 @@ export function AddTask({ onCreateTask }: AddTaskProps) {
               <textarea
                 placeholder="新增內容"
                 {...register('description')}
-                className={`h-20 w-full p-2 rounded-md border ${
+                className={`h-20 w-full rounded-md border p-2 ${
                   errors.description ? 'border-red-500' : 'border-gray-300'
                 }`}
               />
@@ -85,7 +103,7 @@ export function AddTask({ onCreateTask }: AddTaskProps) {
               <>
                 <div className="relative my-2 before:absolute before:left-0 before:top-0 before:h-[1px] before:w-full before:border-t before:border-dashed before:border-gray-400">
                   <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-white px-2 text-sm text-gray-500 dark:bg-gray-700">
-                    材料資訊
+                    材料資訊 (選填)
                   </span>
                 </div>
                 <div className="grid gap-3 md:grid-cols-2">
@@ -141,7 +159,7 @@ export function AddTask({ onCreateTask }: AddTaskProps) {
                 onClick={() => setIsEditingMore(!isEditingMore)}
                 className="h-8 rounded-md bg-blue-300 text-black hover:bg-[var(--main-light)]"
               >
-                {isEditingMore ? '收起選填欄位' : '展開選填欄位'}
+                {isEditingMore ? '收起選填欄位' : '輸入更多'}
               </Button>
             </div>
 

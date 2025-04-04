@@ -2,8 +2,10 @@
 
 import { prisma } from '@/lib/prisma'
 import {
-  createTaskInputSchema,
-  CreateTaskInputSchema,
+  taskSchema,
+  materialSchema,
+  TaskSchema,
+  MaterialSchema,
 } from '@/lib/schemas/createTaskSchema'
 import { ActionResult } from '@/types'
 import { Task } from '@prisma/client'
@@ -12,27 +14,41 @@ import { getAuthUserId } from './authActions'
 // 創建任務
 export async function createTask(
   containerId: string,
-  data: CreateTaskInputSchema,
+  data: TaskSchema & Partial<MaterialSchema>,
   constructionType: string
 ): Promise<ActionResult<Task>> {
   try {
-    const validated = createTaskInputSchema.safeParse(data)
-
-    if (!validated.success) {
-      return { status: 'error', error: validated.error.errors }
-    }
-
     const {
       title,
       description,
-      material,
-      unit,
-      amount,
-      costPrice,
-      sellingPrice,
       priority,
       dueDate,
-    } = validated.data
+      material,
+      amount,
+      unit,
+      costPrice,
+      sellingPrice,
+    } = data
+
+    const taskValidation = taskSchema.safeParse(data)
+
+    if (!taskValidation.success) {
+      return { status: 'error', error: taskValidation.error.errors }
+    }
+
+    // 如果有材料相關資料
+    if (material || amount || unit || costPrice || sellingPrice) {
+      const materialValidation = materialSchema.safeParse({
+        material,
+        amount,
+        unit,
+        costPrice,
+        sellingPrice,
+      })
+      if (!materialValidation.success) {
+        return { status: 'error', error: materialValidation.error.errors }
+      }
+    }
 
     const task = await prisma.task.create({
       data: {
