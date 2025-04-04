@@ -7,6 +7,8 @@ import { ActionResult } from '@/types'
 import { useCallback, useEffect, useState } from 'react'
 import { Input } from '@/components/core/Input'
 import { useEditableInput } from '@/hooks/useEditableInput'
+import { AddTask } from './AddTask'
+import { toast } from 'react-toastify'
 
 interface ContainerCardProps {
   tasks: Task[]
@@ -17,6 +19,18 @@ interface ContainerCardProps {
   onDeleteContainer: () => Promise<ActionResult<Container>>
   dragProvided: DraggableProvided
   dragSnapshot: DraggableStateSnapshot
+  taskActions: {
+    createTask: (
+      containerId: string,
+      data: Partial<Task>,
+      constructionType: string
+    ) => Promise<ActionResult<Task>>
+    updateTask: (
+      taskId: string,
+      updates: Partial<Task>
+    ) => Promise<ActionResult<Task>>
+    deleteTask: (taskId: string) => Promise<ActionResult<Task>>
+  }
 }
 
 export function ContainerCard({
@@ -26,18 +40,44 @@ export function ContainerCard({
   onDeleteContainer,
   dragProvided,
   dragSnapshot,
+  taskActions,
 }: ContainerCardProps) {
+  // handle container
   const handleDeleteContainer = useCallback(() => {
     return onDeleteContainer() // 已經封裝了所需參數
   }, [onDeleteContainer])
 
-  const handleSave = useCallback( async(value: string) => {
-    const result = await onUpdateContainer({ type: value })
-    if (result.status === 'success') {
-      setValueShow(value)
-    } 
-    return result
-  },[onUpdateContainer])
+  const handleSave = useCallback(
+    async (value: string) => {
+      const result = await onUpdateContainer({ type: value })
+      if (result.status === 'success') {
+        setValueShow(value)
+      }
+      return result
+    },
+    [onUpdateContainer]
+  )
+
+  // handle task
+  const handleCreateTask = useCallback(
+    async (updates: Partial<Task>) => {
+      try {
+        const result = await taskActions.createTask(
+          container.id,
+          updates,
+          container.type
+        )
+        if (result.status === 'error') {
+          toast.error(result.error as string)
+        }
+        return result
+      } catch (error) {
+        console.error('Error creating task:', error)
+        return { status: 'error', error: 'Failed to create task' }
+      }
+    },
+    [taskActions.createTask, container.id, container.type]
+  )
 
   const {
     isEditing,
@@ -48,7 +88,7 @@ export function ContainerCard({
     handleKeyDown,
   } = useEditableInput({
     initialValue: container.type,
-    onSave: handleSave
+    onSave: handleSave,
   })
 
   // 此變數用於樂觀更新
@@ -62,7 +102,7 @@ export function ContainerCard({
     <div
       ref={dragProvided.innerRef}
       {...dragProvided.draggableProps}
-      className={`min-h-[350px] min-w-[300px] max-w-[300px] ${dragSnapshot.isDragging ? 'z-10' : ''}`}
+      className={`min-w-[300px] max-w-[300px] ${dragSnapshot.isDragging ? 'z-10' : ''}`}
     >
       <Card
         {...dragProvided.dragHandleProps}
@@ -72,6 +112,7 @@ export function ContainerCard({
             : ''
         }`}
       >
+        {/* 容器header區域 */}
         <div className="group relative mb-4 flex items-center justify-between">
           {isEditing ? (
             <Input
@@ -98,12 +139,16 @@ export function ContainerCard({
         </div>
 
         {/* 任務列表 */}
-        <TaskList droppableId={container.type} tasks={tasks} />
+        <TaskList
+          droppableId={container.type}
+          tasks={tasks}
+          taskActions={taskActions}
+        />
 
         {/* 添加任務按鈕 */}
-        <button className="mt-4 w-full rounded-md border border-[var(--main)] p-2 text-center text-sm hover:bg-[var(--main)]">
-          + 添加任務
-        </button>
+        <AddTask
+          onCreateTask={(updates: Partial<Task>) => handleCreateTask(updates)}
+        />
       </Card>
     </div>
   )
