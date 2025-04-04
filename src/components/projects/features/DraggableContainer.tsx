@@ -1,13 +1,13 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd'
 import { dragEnd } from '@/lib/dragEnd'
 import { AddContainer } from '@/components/projects/shared/AddContainer'
 import { ContainerCard } from '@/components/projects/shared/ContainerCard'
 import { Project, Task } from '@prisma/client'
-import { Container } from '@/types/project'
+import { Container } from '@prisma/client'
 import { ActionResult } from '@/types'
-import { CreateTaskInputSchema } from '@/lib/schemas/createTaskSchema'
+import { TaskSchema, MaterialSchema } from '@/lib/schemas/createTaskSchema'
 import { toast } from 'react-toastify'
 
 const DROPPABLE_TYPE = {
@@ -37,12 +37,12 @@ interface DraggableContainersProps {
   taskActions: {
     createTask: (
       containerId: string,
-      data: CreateTaskInputSchema,
+      data: TaskSchema & Partial<MaterialSchema>,
       constructionType: string
     ) => Promise<ActionResult<Task>>
     updateTask: (
       taskId: string,
-      updates: Partial<Task>
+      updates: Partial<Task> & Partial<MaterialSchema>
     ) => Promise<ActionResult<Task>>
     deleteTask: (taskId: string) => Promise<ActionResult<Task>>
   }

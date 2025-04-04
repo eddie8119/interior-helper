@@ -1,5 +1,6 @@
 import { Card } from '@/components/core/Card'
 import { Container, Task } from '@prisma/client'
+import { TaskSchema, MaterialSchema } from '@/lib/schemas/createTaskSchema'
 import { DraggableProvided, DraggableStateSnapshot } from '@hello-pangea/dnd'
 import { TaskList } from '@/components/projects/shared/TaskList'
 import { DeleteButtonWithDialog } from '@/components/core/DeleteButtonWithDialog'
@@ -22,12 +23,12 @@ interface ContainerCardProps {
   taskActions: {
     createTask: (
       containerId: string,
-      data: Partial<Task>,
+      data: TaskSchema & Partial<MaterialSchema>,
       constructionType: string
     ) => Promise<ActionResult<Task>>
     updateTask: (
       taskId: string,
-      updates: Partial<Task>
+      updates: Partial<Task> & Partial<MaterialSchema>
     ) => Promise<ActionResult<Task>>
     deleteTask: (taskId: string) => Promise<ActionResult<Task>>
   }
@@ -60,7 +61,9 @@ export function ContainerCard({
 
   // handle task
   const handleCreateTask = useCallback(
-    async (updates: Partial<Task>): Promise<ActionResult<Task>> => {
+    async (
+      updates: TaskSchema & Partial<MaterialSchema>
+    ): Promise<ActionResult<Task>> => {
       try {
         const result = await taskActions.createTask(
           container.id,

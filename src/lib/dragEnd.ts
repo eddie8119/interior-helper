@@ -1,5 +1,6 @@
 import { DropResult } from '@hello-pangea/dnd'
 import { Container, Task } from '@prisma/client'
+import { MaterialSchema } from './schemas/createTaskSchema'
 
 const DROPPABLE_TYPE = {
   CONTAINER: 'container',
@@ -10,7 +11,10 @@ interface DragEndProps {
   projectContainers: Container[]
   projectTasks: Task[]
   onUpdateContainersOrder: (updates: Container[]) => Promise<void>
-  onUpdateTask: (taskId: string, updates: Partial<Task>) => void
+  onUpdateTask: (
+    taskId: string,
+    updates: Partial<Task> & Partial<MaterialSchema>
+  ) => void
 }
 
 export function dragEnd({

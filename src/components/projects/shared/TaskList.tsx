@@ -4,20 +4,20 @@ import { Droppable } from '@hello-pangea/dnd'
 import { TaskCard } from '@/components/projects/shared/TaskCard'
 import { Task } from '@prisma/client'
 import { ActionResult } from '@/types'
-import { CreateTaskInputSchema } from '@/lib/schemas/createTaskSchema'
+import { MaterialSchema, TaskSchema } from '@/lib/schemas/createTaskSchema'
 
 interface TaskListProps {
   droppableId: string
   tasks: Task[]
   taskActions: {
     createTask: (
-      projectId: string,
-      data: CreateTaskInputSchema,
+      containerId: string,
+      data: TaskSchema & Partial<MaterialSchema>,
       constructionType: string
     ) => Promise<ActionResult<Task>>
     updateTask: (
       taskId: string,
-      updates: Partial<Task>
+      updates: Partial<Task> & Partial<MaterialSchema>
     ) => Promise<ActionResult<Task>>
     deleteTask: (taskId: string) => Promise<ActionResult<Task>>
   }

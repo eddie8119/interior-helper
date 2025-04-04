@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation'
 import { getProject } from '@/actions/projectActions'
 import { getContainer } from '@/actions/containerActions'
-import { getContainerTasks } from '@/actions/taskActions'
+import { getProjectTasks } from '@/actions/taskActions'
 import { ProjectContainerPremium } from '@/components/projects/features/ProjectContainerPremium'
 
 interface ProjectContainerWrapperProps {
@@ -24,9 +24,8 @@ export async function ProjectContainerWrapper({
     return notFound()
   }
 
-  const responseContainerTasks = await getContainerTasks(
-    responseProject.data?.id
-  )
+  const responseContainerTasks = await getProjectTasks(responseProject.data?.id)
+
   if (
     responseContainerTasks.status === 'error' ||
     !responseContainerTasks.data

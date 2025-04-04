@@ -162,3 +162,7 @@ enum TokenType {
 
 // model Container 有需要又關聯到 model User 嗎 ?
 // 不需要。間接關聯已足夠。 資料庫設計原則：避免冗餘關聯 /遵循最小權限原則 /保持資料一致性
+
+// 想用projectId 獲取 特定 project 內所有的 tasks, 這樣會比用 containerId 效率會更高 對嗎?  但這樣 model Task 是不是需要關聯到 model Project ?
+// 額外的 projectId 欄位 違反資料庫的正規化原則
+// 維護額外的資料一致性

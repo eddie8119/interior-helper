@@ -21,8 +21,6 @@ export async function createTask(
     const {
       title,
       description,
-      priority,
-      dueDate,
       material,
       amount,
       unit,
@@ -61,8 +59,6 @@ export async function createTask(
         amount: amount || null,
         sellingPrice: sellingPrice || null,
         costPrice: costPrice || null,
-        priority: priority || 'low',
-        dueDate: dueDate || null,
       },
     })
 
@@ -76,7 +72,7 @@ export async function createTask(
 // 更新任務
 export async function updateTask(
   taskId: string,
-  updates: Partial<Task>
+  updates: Partial<Task> & Partial<MaterialSchema>
 ): Promise<ActionResult<Task>> {
   try {
     const userId = await getAuthUserId()

@@ -54,7 +54,7 @@ export function AddTask({ onCreateTask }: AddTaskProps) {
     if (!isValid || isSubmitting) return
 
     try {
-      const {title, description} = data
+      const { title, description } = data
       const submitData = isEditingMore
         ? data
         : {
@@ -72,7 +72,7 @@ export function AddTask({ onCreateTask }: AddTaskProps) {
   }
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="mt-4 flex flex-col gap-3">
       {isEditing && (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="grid grid-cols-1 gap-3 rounded-lg bg-white p-4 shadow-sm dark:bg-gray-700">
