@@ -11,8 +11,6 @@ export const taskSchema = z.object({
     })
     .optional()
     .nullable(), // 允許 `null`
-  priority: z.enum(['low', 'high']).optional().default('low'),
-  dueDate: z.coerce.date().optional(), // 允許字串轉日期
 })
 
 export const materialSchema = z.object({
@@ -49,4 +47,3 @@ export const materialSchema = z.object({
 
 export type TaskSchema = z.infer<typeof taskSchema>
 export type MaterialSchema = z.infer<typeof materialSchema>
-export const combinedTaskSchema = taskSchema.and(materialSchema)

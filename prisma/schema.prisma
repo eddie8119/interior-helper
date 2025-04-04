@@ -146,6 +146,7 @@ enum ProjectType {
 enum TaskStatus {
   todo
   progress
+  reviewing
   done
 }
 
