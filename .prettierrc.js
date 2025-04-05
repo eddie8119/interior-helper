@@ -1,8 +1,6 @@
-{
-    "semi": false,
-    "singleQuote": true,
-    "tabWidth": 2,
-    "trailingComma": "es5",
-    "plugins": ["prettier-plugin-organize-imports"],
-    "organizeImportsSkipDestructiveCodeActions": true
+module.exports = {
+  semi: false,
+  singleQuote: true,
+  tabWidth: 2,
+  trailingComma: 'es5',
 }
