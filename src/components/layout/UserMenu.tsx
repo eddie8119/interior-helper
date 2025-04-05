@@ -1,7 +1,6 @@
 'use client'
 
-import { signOutUser } from '@/actions/authActions'
-import React, { useState } from 'react'
+import { Edit as EditIcon, Logout as LogoutIcon } from '@mui/icons-material'
 import {
   Avatar,
   Menu,
@@ -11,8 +10,9 @@ import {
   ListItemText,
   IconButton,
 } from '@mui/material'
-import { Edit as EditIcon, Logout as LogoutIcon } from '@mui/icons-material'
 import Link from 'next/link'
+import React, { useState } from 'react'
+import { signOutUser } from '@/actions/authActions'
 
 interface UserMenuProps {
   userInfo: { name: string | null; image: string | null } | null

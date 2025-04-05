@@ -3,8 +3,8 @@
 import { notFound } from 'next/navigation'
 import { useProjects } from '@/hooks/useProjects'
 import { useTasks } from '@/hooks/useTasks'
-import { DraggableContainerClient } from './DraggableContainerClient'
 import { formatDateTime } from '@/lib/format'
+import { DraggableContainerClient } from './DraggableContainerClient'
 
 interface ProjectContainerTrialProps {
   projectId: string

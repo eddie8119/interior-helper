@@ -1,7 +1,7 @@
-import { Menu } from '@/types/project'
+import CalendarIcon from '@public/icons/menu/calendar.svg'
 import HomeIcon from '@public/icons/menu/home.svg'
 import ProjectIcon from '@public/icons/menu/project.svg'
-import CalendarIcon from '@public/icons/menu/calendar.svg'
+import { Menu } from '@/types/project'
 
 export const menuLists: Menu[] = [
   {

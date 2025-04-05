@@ -1,13 +1,13 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import Link from 'next/link'
-import { menuLists } from '@/constants/menu'
-import { usePathname } from 'next/navigation'
-import { useProjects } from '@/hooks/useProjects'
-import { Menu } from '@/types/project'
 import { ChevronDown, ChevronRight } from 'lucide-react'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { useState, useEffect } from 'react'
+import { menuLists } from '@/constants/menu'
+import { useProjects } from '@/hooks/useProjects'
 import { useProtectedNavigation } from '@/hooks/useProtectedNavigation'
+import { Menu } from '@/types/project'
 
 interface NavAreaProps {
   isCollapsed?: boolean

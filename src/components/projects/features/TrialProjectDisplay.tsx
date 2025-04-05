@@ -1,11 +1,11 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
-import { BaseProjectDisplay } from '../shared/BaseProjectDisplay'
-import { toast } from 'react-toastify'
 import { Project } from '@prisma/client'
-import { UserTier } from '../constants/projectLimits'
+import { useRouter } from 'next/navigation'
+import { toast } from 'react-toastify'
 import { projectStorage } from '@/lib/projectStorage'
+import { UserTier } from '../constants/projectLimits'
+import { BaseProjectDisplay } from '../shared/BaseProjectDisplay'
 
 interface TrialProjectDisplayProps {
   projects: Project[]

@@ -1,8 +1,6 @@
 'use client'
 
 import { Project, Container, Task } from '@prisma/client'
-import { DraggableContainer } from './DraggableContainer'
-import { formatDateTime } from '@/lib/format'
 import {
   createContainer,
   deleteContainer,
@@ -10,6 +8,8 @@ import {
   updateContainersOrder,
 } from '@/actions/containerActions'
 import { createTask, updateTask, deleteTask } from '@/actions/taskActions'
+import { formatDateTime } from '@/lib/format'
+import { DraggableContainer } from './DraggableContainer'
 
 interface ProjectContainerPremiumProps {
   project: Project

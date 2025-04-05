@@ -1,7 +1,7 @@
 'use server'
 
-import { prisma } from '@/lib/prisma'
 import { Photo } from '@prisma/client'
+import { prisma } from '@/lib/prisma'
 import { getAuthUserId } from './authActions'
 
 export async function getMemberByUserId(userId: string) {

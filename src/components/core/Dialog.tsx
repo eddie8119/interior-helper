@@ -8,10 +8,9 @@ import {
   DialogActions,
   IconButton,
 } from '@mui/material'
-import { forwardRef } from 'react'
-
-import * as React from 'react'
 import { X } from 'lucide-react'
+import { forwardRef } from 'react'
+import * as React from 'react'
 
 interface DialogProps {
   open?: boolean

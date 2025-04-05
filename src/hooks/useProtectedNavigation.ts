@@ -1,9 +1,9 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
+import { useSession } from 'next-auth/react'
 import { useLoginDialog } from '@/contexts/login-dialog-context'
 import { publicRoutes } from '@/routes'
-import { useSession } from 'next-auth/react'
 
 export const useProtectedNavigation = () => {
   const router = useRouter()

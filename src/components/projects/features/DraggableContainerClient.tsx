@@ -1,11 +1,11 @@
 'use client'
 
-import { Project, Task } from '@prisma/client'
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd'
-import { useContainers } from '@/hooks/useContainers'
-import { dragEnd } from '@/lib/dragEnd'
+import { Project, Task } from '@prisma/client'
 import { AddContainer } from '@/components/projects/shared/AddContainer'
 import { ContainerCard } from '@/components/projects/shared/ContainerCard'
+import { useContainers } from '@/hooks/useContainers'
+import { dragEnd } from '@/lib/dragEnd'
 
 const DROPPABLE_TYPE = {
   CONTAINER: 'container',

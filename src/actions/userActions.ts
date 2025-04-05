@@ -1,12 +1,12 @@
 'use server'
 
+import { Member } from '@prisma/client'
 import { prisma } from '@/lib/prisma'
 import {
   MemberEditSchema,
   memberEditSchema,
 } from '@/lib/schemas/memberEditSchema'
 import { ActionResult } from '@/types'
-import { Member } from '@prisma/client'
 import { getAuthUserId } from './authActions'
 
 export async function updateMemberProfile(

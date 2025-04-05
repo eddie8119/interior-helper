@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react'
 import { Project } from '@prisma/client'
+import { useState, useEffect } from 'react'
 import { defaultProjects } from '@/constants/default-data'
 
 // Storage keys

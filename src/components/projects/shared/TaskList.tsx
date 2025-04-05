@@ -1,8 +1,8 @@
 'use client'
 
 import { Droppable } from '@hello-pangea/dnd'
-import { TaskCard } from '@/components/projects/shared/TaskCard'
 import { Task } from '@prisma/client'
+import { TaskCard } from '@/components/projects/shared/TaskCard'
 import { ActionResult } from '@/types'
 
 interface TaskListProps {

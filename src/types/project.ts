@@ -1,6 +1,6 @@
+import { ProjectType } from '@prisma/client'
 import { FC, SVGProps } from 'react'
 import { ProjectMenu } from './navigation'
-import { ProjectType } from '@prisma/client'
 
 export interface Menu {
   id: string

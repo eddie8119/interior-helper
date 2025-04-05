@@ -1,19 +1,21 @@
 'use server'
 
+import { TokenType, User } from '@prisma/client'
 import bcrypt from 'bcryptjs'
+import { AuthError } from 'next-auth'
+import { signIn, signOut, auth } from '@/auth'
+import { sendPasswordResetEmail, sendVerificationEmail } from '@/lib/mail'
 import { prisma } from '@/lib/prisma'
+import { LoginSchema, loginSchema } from '@/lib/schemas/loginSchema'
 import {
   combinedRegisterSchema,
   RegisterSchema,
   registerSchema,
 } from '@/lib/schemas/registerSchema'
-import { sendPasswordResetEmail, sendVerificationEmail } from '@/lib/mail'
-import { ActionResult } from '@/types'
-import { TokenType, User } from '@prisma/client'
-import { LoginSchema, loginSchema } from '@/lib/schemas/loginSchema'
-import { AuthError } from 'next-auth'
-import { signIn, signOut, auth } from '@/auth'
 import { generateToken } from '@/lib/tokens'
+import { ActionResult } from '@/types'
+
+
 
 export async function signInUser(
   data: LoginSchema

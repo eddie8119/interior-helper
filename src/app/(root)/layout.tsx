@@ -1,17 +1,20 @@
 import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
+
 import '../globals.css'
 import '../../styles/main.scss'
-import { ThemeProvider } from '@/contexts/theme-context'
-import { LoginDialogWrapper } from '@/components/providers/login-dialog-wrapper'
-import { Sidebar } from '@/components/layout/navigation/sidebar'
-import { MobileNav } from '@/components/layout/navigation/mobile-nav'
-import { Header } from '@/components/layout/header'
+import { SessionProvider } from 'next-auth/react'
 import { ToastContainer } from 'react-toastify'
+import { auth } from '@/auth'
+import { Header } from '@/components/layout/header'
+import { MobileNav } from '@/components/layout/navigation/mobile-nav'
+import { Sidebar } from '@/components/layout/navigation/sidebar'
+import { LoginDialogWrapper } from '@/components/providers/login-dialog-wrapper'
+
+
 import 'react-toastify/dist/ReactToastify.css'
 import { LoginDialogProvider } from '@/contexts/login-dialog-context'
-import { SessionProvider } from 'next-auth/react'
-import { auth } from '@/auth'
+import { ThemeProvider } from '@/contexts/theme-context'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',

@@ -1,12 +1,12 @@
 'use client'
 
-import { useState } from 'react'
 import { Draggable } from '@hello-pangea/dnd'
+import { Task } from '@prisma/client'
+import { useState } from 'react'
+import { Button } from '@/components/core/Button'
+import { DeleteButtonWithDialog } from '@/components/core/DeleteButtonWithDialog'
 import { Input } from '@/components/core/Input'
 import { Textarea } from '@/components/core/Textarea'
-import { Button } from '@/components/core/Button'
-import { Task } from '@prisma/client'
-import { DeleteButtonWithDialog } from '@/components/core/DeleteButtonWithDialog'
 import { ActionResult } from '@/types'
 
 interface TaskCardProps {
@@ -139,20 +139,23 @@ export function TaskCard({
                     ? new Date(task.dueDate).toLocaleDateString()
                     : '無'}
                 </span>
-                <span
-                  className={`rounded px-2 py-1 ${
-                    task.priority === 'high'
-                      ? 'bg-red-100 text-red-800'
+                <span>
+                  優先級:
+                  <span
+                    className={`rounded px-2 py-1 ${
+                      task.priority === 'high'
+                        ? 'bg-red-100 text-red-800'
+                        : task.priority === 'medium'
+                          ? 'bg-orange-100 text-orange-800'
+                          : 'bg-gray-100 text-gray-800'
+                    }`}
+                  >
+                    {task.priority === 'high'
+                      ? '高'
                       : task.priority === 'medium'
-                        ? 'bg-orange-100 text-orange-800'
-                        : 'bg-gray-100 text-gray-800'
-                  }`}
-                >
-                  {task.priority === 'high'
-                    ? '高'
-                    : task.priority === 'medium'
-                      ? '中'
-                      : '低'}
+                        ? '中'
+                        : '低'}
+                  </span>
                 </span>
               </div>
             </>

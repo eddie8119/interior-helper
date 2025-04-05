@@ -1,27 +1,29 @@
 'use client'
 
-import { Button } from '@mui/material'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { LoadingButton } from '@mui/lab'
+import { Button } from '@mui/material'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+import { FormProvider, useForm } from 'react-hook-form'
+import { registerUser } from '@/actions/authActions'
+import ProfileForm from '@/components/auth/profile-form'
+import UserDetailsForm from '@/components/auth/user-details-form'
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
 } from '@/components/core/Dialog'
-import { FormProvider, useForm } from 'react-hook-form'
+import { useLoginDialog } from '@/contexts/login-dialog-context'
 import {
   profileSchema,
   RegisterSchema,
   registerSchema,
 } from '@/lib/schemas/registerSchema'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { registerUser } from '@/actions/authActions'
-import { useRouter } from 'next/navigation'
 import { handleFormServerErrors } from '@/lib/utils'
-import { useLoginDialog } from '@/contexts/login-dialog-context'
-import { useState } from 'react'
-import UserDetailsForm from '@/components/auth/user-details-form'
-import ProfileForm from '@/components/auth/profile-form'
+
+
 
 const stepSchemas = [registerSchema, profileSchema]
 

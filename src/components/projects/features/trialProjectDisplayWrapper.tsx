@@ -1,8 +1,8 @@
 'use client'
 
-import { TrialProjectDisplay } from './TrialProjectDisplay'
 import { projectStorage } from '@/lib/projectStorage'
 import { CreateProjectDialogClient } from './CreateProjectDialogClient'
+import { TrialProjectDisplay } from './TrialProjectDisplay'
 
 export default function TrialProjectDisplayWrapper() {
   const projectsResponse = projectStorage.getProjects()

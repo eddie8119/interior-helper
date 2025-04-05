@@ -1,10 +1,10 @@
 'use server'
 
-import { ProjectBasic } from '@/types/project'
 import {
   defaultProjects,
   constructionContainer,
 } from '@/constants/default-data'
+import { ProjectBasic } from '@/types/project'
 
 // Storage keys
 const STORAGE_KEYS = {

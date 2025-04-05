@@ -1,9 +1,9 @@
 'use client'
 
-import { BaseProjectsDisplay } from './BaseProjectsDisplay'
 import { Project } from '@prisma/client'
 import { useProjects } from '@/hooks/useProjects'
 import { AddProjectDialogClient } from '../features/CreateProjectDialogClient'
+import { BaseProjectsDisplay } from './BaseProjectsDisplay'
 
 interface WithClientDeleteProps {
   projects: Project[]

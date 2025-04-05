@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
-import { Task } from '@/types/project'
 import { defaultTasks } from '@/constants/default-data'
+import { Task } from '@/types/project'
 
 // Storage keys
 const STORAGE_KEYS = {

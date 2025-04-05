@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
-import { getProject } from '@/actions/projectActions'
 import { getContainer } from '@/actions/containerActions'
+import { getProject } from '@/actions/projectActions'
 import { getProjectTasks } from '@/actions/taskActions'
 import { ProjectContainerPremium } from '@/components/projects/features/ProjectContainerPremium'
 

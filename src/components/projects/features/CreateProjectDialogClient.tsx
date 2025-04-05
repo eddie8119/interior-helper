@@ -1,7 +1,7 @@
 'use client'
 
-import { CreateProjectDialogClientWrapper } from './CreateProjectDialogClientWrapper'
 import { BaseCreateProjectDialog } from '../shared/BaseCreateProjectDialog'
+import { CreateProjectDialogClientWrapper } from './CreateProjectDialogClientWrapper'
 
 export const CreateProjectDialogClient = CreateProjectDialogClientWrapper(
   BaseCreateProjectDialog

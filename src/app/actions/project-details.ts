@@ -1,7 +1,7 @@
 'use server'
 
-import { ProjectBasic } from '@/types/project'
 import { defaultProjects } from '@/constants/default-data'
+import { ProjectBasic } from '@/types/project'
 
 const STORAGE_KEYS = {
   PROJECTS: 'projects',

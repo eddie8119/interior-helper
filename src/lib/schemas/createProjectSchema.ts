@@ -1,5 +1,5 @@
-import { z } from 'zod'
 import { ProjectType } from '@prisma/client'
+import { z } from 'zod'
 
 const projectTypeSchema = z.nativeEnum(ProjectType)
 

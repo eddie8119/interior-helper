@@ -1,7 +1,7 @@
+import { auth } from '@/auth'
 import { LoginRegisterArea } from '@/components/layout/LoginRegisterArea'
 import { ThemeToggle } from './ThemeToggle'
 import UserMenu from './UserMenu'
-import { auth } from '@/auth'
 
 export async function HeaderRightSection() {
   const session = await auth()

@@ -1,6 +1,6 @@
 import { Metadata } from 'next'
-import { ProjectContainerTrial } from '@/components/projects/features/ProjectContainerTrial'
 import { getProjectById } from '@/app/actions/project-details'
+import { ProjectContainerTrial } from '@/components/projects/features/ProjectContainerTrial'
 
 interface ProjectPageProps {
   params: {

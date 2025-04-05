@@ -1,3 +1,4 @@
+import { Button } from '@/components/core/Button'
 import {
   Dialog,
   DialogContent,
@@ -6,7 +7,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/core/Dialog'
-import { Button } from '@/components/core/Button'
 
 interface DeleteDialogProps {
   isOpen: boolean

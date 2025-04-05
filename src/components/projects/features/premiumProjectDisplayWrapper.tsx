@@ -1,6 +1,6 @@
-import PremiumProjectDisplay from './PremiumProjectDisplay'
 import { getProjects } from '@/actions/projectActions'
 import { CreateProjectDialogServer } from './CreateProjectDialogServer'
+import PremiumProjectDisplay from './PremiumProjectDisplay'
 
 export default async function PremiumProjectDisplayWrapper() {
   const projectsResponse = await getProjects()

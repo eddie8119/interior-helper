@@ -1,7 +1,7 @@
 'use client'
 
-import { useState } from 'react'
 import { Menu, X } from 'lucide-react'
+import { useState } from 'react'
 import { LogoArea } from '@/components/layout/navigation/logo-area'
 import { MobileSidebar } from '@/components/layout/navigation/mobile-sidebar'
 
