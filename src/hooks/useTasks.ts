@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { defaultTasks } from '@/constants/default-data'
 import { Task } from '@/types/project'
 

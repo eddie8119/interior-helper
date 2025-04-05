@@ -1,5 +1,5 @@
 import { Project } from '@prisma/client'
-import { Task, ProjectBasic, Container } from '@/types/project'
+import { Container, Task } from '@/types/project'
 
 export const constructionContainer: Container[] = [
   {

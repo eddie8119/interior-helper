@@ -1,16 +1,16 @@
 import { initializeApp } from 'firebase/app'
 import {
-  getFirestore,
   collection,
+  deleteDoc,
   doc,
-  setDoc,
+  DocumentData,
   getDoc,
   getDocs,
-  deleteDoc,
+  getFirestore,
   query,
-  where,
+  setDoc,
   updateDoc,
-  DocumentData,
+  where,
 } from 'firebase/firestore'
 import { ProjectBasic, ProjectDetail, Task } from '@/types/project'
 

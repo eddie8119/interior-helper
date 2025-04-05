@@ -1,7 +1,7 @@
 'use client'
 
 import { Project } from '@prisma/client'
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 const LOCAL_STORAGE_KEY = 'free_user_projects'
 

@@ -10,7 +10,6 @@ import { Button } from '@/components/core/Button'
 import { Input } from '@/components/core/Input'
 import { LoginSchema, loginSchema } from '@/lib/schemas/loginSchema'
 
-
 interface LoginFormProps {
   onSuccess?: () => void
   onRegisterClick?: () => void

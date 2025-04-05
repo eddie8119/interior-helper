@@ -3,7 +3,7 @@
 import { TokenType, User } from '@prisma/client'
 import bcrypt from 'bcryptjs'
 import { AuthError } from 'next-auth'
-import { signIn, signOut, auth } from '@/auth'
+import { auth, signIn, signOut } from '@/auth'
 import { sendPasswordResetEmail, sendVerificationEmail } from '@/lib/mail'
 import { prisma } from '@/lib/prisma'
 import { LoginSchema, loginSchema } from '@/lib/schemas/loginSchema'
@@ -14,8 +14,6 @@ import {
 } from '@/lib/schemas/registerSchema'
 import { generateToken } from '@/lib/tokens'
 import { ActionResult } from '@/types'
-
-
 
 export async function signInUser(
   data: LoginSchema

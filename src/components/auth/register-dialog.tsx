@@ -23,8 +23,6 @@ import {
 } from '@/lib/schemas/registerSchema'
 import { handleFormServerErrors } from '@/lib/utils'
 
-
-
 const stepSchemas = [registerSchema, profileSchema]
 
 export function RegisterDialog() {

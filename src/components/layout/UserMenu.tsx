@@ -3,12 +3,12 @@
 import { Edit as EditIcon, Logout as LogoutIcon } from '@mui/icons-material'
 import {
   Avatar,
-  Menu,
-  MenuItem,
   Divider,
+  IconButton,
   ListItemIcon,
   ListItemText,
-  IconButton,
+  Menu,
+  MenuItem,
 } from '@mui/material'
 import Link from 'next/link'
 import React, { useState } from 'react'

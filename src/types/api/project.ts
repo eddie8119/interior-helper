@@ -1,4 +1,4 @@
-import { ProjectType, Container } from '../project'
+import { Container, ProjectType } from '../project'
 
 export interface CreateProjectData {
   title: string

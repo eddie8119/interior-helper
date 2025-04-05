@@ -4,7 +4,6 @@ import Credentials from 'next-auth/providers/credentials'
 import { getUserByEmail } from './actions/authActions'
 import { loginSchema } from './lib/schemas/loginSchema'
 
-
 export default {
   providers: [
     Credentials({

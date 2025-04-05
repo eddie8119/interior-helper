@@ -1,16 +1,16 @@
 'use client'
 
 import {
-  Dialog as MuiDialog,
-  DialogTitle as MuiDialogTitle,
-  DialogContent as MuiDialogContent,
-  DialogContentText,
   DialogActions,
+  DialogContentText,
   IconButton,
+  Dialog as MuiDialog,
+  DialogContent as MuiDialogContent,
+  DialogTitle as MuiDialogTitle,
 } from '@mui/material'
 import { X } from 'lucide-react'
-import { forwardRef } from 'react'
 import * as React from 'react'
+import { forwardRef } from 'react'
 
 interface DialogProps {
   open?: boolean
@@ -128,11 +128,11 @@ DialogClose.displayName = 'DialogClose'
 
 export {
   Dialog,
-  DialogTrigger,
-  DialogContent,
-  DialogHeader,
-  DialogFooter,
-  DialogTitle,
-  DialogDescription,
   DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
 }

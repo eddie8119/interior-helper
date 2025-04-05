@@ -1,7 +1,7 @@
 import { Project } from '@prisma/client'
 import {
-  defaultProjects,
   constructionContainer,
+  defaultProjects,
 } from '@/constants/default-data'
 
 // Storage keys
