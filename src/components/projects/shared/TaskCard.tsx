@@ -5,43 +5,52 @@ import { Draggable } from '@hello-pangea/dnd'
 import { Input } from '@/components/core/Input'
 import { Textarea } from '@/components/core/Textarea'
 import { Button } from '@/components/core/Button'
-import { Check, X } from 'lucide-react'
 import { Task } from '@prisma/client'
+import { DeleteButtonWithDialog } from '@/components/core/DeleteButtonWithDialog'
+import { ActionResult } from '@/types'
 
 interface TaskCardProps {
   task: Task
   index: number
+  onCancelTask: (taskId: string) => Promise<ActionResult<Task>>
+  onUpdateTask: (
+    taskId: string,
+    updates: Partial<Task>
+  ) => Promise<ActionResult<Task>>
 }
 
-export function TaskCard({ task, index }: TaskCardProps) {
+export function TaskCard({
+  task,
+  index,
+  onCancelTask,
+  onUpdateTask,
+}: TaskCardProps) {
   const [isEditing, setIsEditing] = useState<boolean>(false)
   const [editedTitle, setEditedTitle] = useState<string>(task.title)
   const [editedContent, setEditedContent] = useState<string | undefined>(
-    task.content || ''
+    task.description || ''
   )
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!editedTitle.trim()) {
       return
     }
 
     const titleChanged = editedTitle !== task.title
-    const contentChanged = editedContent !== (task.content || '')
+    const contentChanged = editedContent !== (task.description || '')
 
     if (titleChanged || contentChanged) {
-      // onUpdate(task.id, {
-      //   title: editedTitle,
-      //   content: editedContent,
-      // })
+      await onUpdateTask(task.id, {
+        title: editedTitle,
+        description: editedContent,
+      })
     }
 
     setIsEditing(false)
   }
 
-  const handleCancel = () => {
-    setEditedTitle(task.title)
-    setEditedContent(task.content || '')
-    setIsEditing(false)
+  const handleCancel = async () => {
+    await onCancelTask(task.id)
   }
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -84,16 +93,18 @@ export function TaskCard({ task, index }: TaskCardProps) {
                 placeholder="任務內容"
                 className="min-h-[60px] w-full"
               />
+
               <div className="flex justify-end gap-2">
+                <DeleteButtonWithDialog
+                  deleteItem={handleCancel}
+                  title="確認刪除"
+                  description={`您確定要刪除任務 "${task.title}" 嗎？此操作無法復原。`}
+                  className="!relative !right-0 !top-0 !block !opacity-100"
+                />
                 <Button
-                  className="hover:bg-cancel/90 bg-cancel text-white"
-                  onClick={handleCancel}
+                  onClick={handleSave}
+                  className="h-8 rounded-md bg-blue-300 text-black hover:bg-[var(--main-light)]"
                 >
-                  <X className="mr-1 h-4 w-4" />
-                  取消
-                </Button>
-                <Button onClick={handleSave}>
-                  <Check className="mr-1 h-4 w-4" />
                   儲存
                 </Button>
               </div>
@@ -119,7 +130,7 @@ export function TaskCard({ task, index }: TaskCardProps) {
                 </span>
               </div>
               <p className="mt-2 min-h-[24px] text-sm text-gray-600 dark:text-gray-400">
-                {task.content || '點擊編輯內容'}
+                {task.description || '點擊編輯內容'}
               </p>
               <div className="mt-2 flex items-center justify-between text-xs text-gray-500">
                 <span>

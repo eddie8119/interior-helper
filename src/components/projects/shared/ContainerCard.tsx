@@ -82,6 +82,41 @@ export function ContainerCard({
     [taskActions.createTask, container.id, container.type]
   )
 
+  const handleCancelTask = useCallback(
+    async (taskId: string): Promise<ActionResult<Task>> => {
+      try {
+        const result = await taskActions.deleteTask(taskId)
+        if (result.status === 'error') {
+          toast.error(result.error as string)
+        }
+        return result
+      } catch (error) {
+        console.error('Error deleting task:', error)
+        return { status: 'error', error: 'Failed to delete task' }
+      }
+    },
+    [taskActions.deleteTask]
+  )
+
+  const handleUpdateTask = useCallback(
+    async (
+      taskId: string,
+      updates: Partial<Task> & Partial<MaterialSchema>
+    ): Promise<ActionResult<Task>> => {
+      try {
+        const result = await taskActions.updateTask(taskId, updates)
+        if (result.status === 'error') {
+          toast.error(result.error as string)
+        }
+        return result
+      } catch (error) {
+        console.error('Error updating task:', error)
+        return { status: 'error', error: 'Failed to update task' }
+      }
+    },
+    [taskActions.updateTask]
+  )
+
   const {
     isEditing,
     editedValue,
@@ -105,7 +140,7 @@ export function ContainerCard({
     <div
       ref={dragProvided.innerRef}
       {...dragProvided.draggableProps}
-      className={`min-w-[300px] max-w-[300px] ${dragSnapshot.isDragging ? 'z-10' : ''}`}
+      className={`group min-w-[300px] max-w-[300px] ${dragSnapshot.isDragging ? 'z-10' : ''}`}
     >
       <Card
         {...dragProvided.dragHandleProps}
@@ -131,21 +166,22 @@ export function ContainerCard({
               {valueShow}({tasks.length})
             </h3>
           )}
-          {!isEditing && (
-            <DeleteButtonWithDialog
-              deleteItem={handleDeleteContainer} //deleteItem: project /container 共用
-              title="確認刪除"
-              description={`您確定要刪除此容器嗎？此操作無法復原。`}
-              className="!relative !right-0 !top-0 !block !opacity-100"
-            />
-          )}
+          <DeleteButtonWithDialog
+            deleteItem={handleDeleteContainer} //deleteItem: project /container 共用
+            title="確認刪除"
+            description={`您確定要刪除此容器嗎？此操作無法復原。`}
+            className="!relative !right-0 !top-0 !block"
+          />
         </div>
 
         {/* 任務列表 */}
         <TaskList
           droppableId={container.type}
           tasks={tasks}
-          taskActions={taskActions}
+          onCancelTask={(taskId: string) => handleCancelTask(taskId)}
+          onUpdateTask={(taskId: string, updates: Partial<Task>) =>
+            handleUpdateTask(taskId, updates)
+          }
         />
 
         {/* 添加任務按鈕 */}

@@ -4,26 +4,23 @@ import { Droppable } from '@hello-pangea/dnd'
 import { TaskCard } from '@/components/projects/shared/TaskCard'
 import { Task } from '@prisma/client'
 import { ActionResult } from '@/types'
-import { MaterialSchema, TaskSchema } from '@/lib/schemas/createTaskSchema'
 
 interface TaskListProps {
   droppableId: string
   tasks: Task[]
-  taskActions: {
-    createTask: (
-      containerId: string,
-      data: TaskSchema & Partial<MaterialSchema>,
-      constructionType: string
-    ) => Promise<ActionResult<Task>>
-    updateTask: (
-      taskId: string,
-      updates: Partial<Task> & Partial<MaterialSchema>
-    ) => Promise<ActionResult<Task>>
-    deleteTask: (taskId: string) => Promise<ActionResult<Task>>
-  }
+  onCancelTask: (taskId: string) => Promise<ActionResult<Task>>
+  onUpdateTask: (
+    taskId: string,
+    updates: Partial<Task>
+  ) => Promise<ActionResult<Task>>
 }
 
-export function TaskList({ droppableId, tasks }: TaskListProps) {
+export function TaskList({
+  droppableId,
+  tasks,
+  onCancelTask,
+  onUpdateTask,
+}: TaskListProps) {
   return (
     <Droppable droppableId={droppableId} type="task">
       {(provided, snapshot) => (
@@ -35,7 +32,13 @@ export function TaskList({ droppableId, tasks }: TaskListProps) {
           }`}
         >
           {tasks.map((task, index) => (
-            <TaskCard key={task.id} task={task} index={index} />
+            <TaskCard
+              key={task.id}
+              task={task}
+              index={index}
+              onCancelTask={onCancelTask}
+              onUpdateTask={onUpdateTask}
+            />
           ))}
           {provided.placeholder}
         </div>
