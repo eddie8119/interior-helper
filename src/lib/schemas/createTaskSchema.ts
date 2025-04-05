@@ -6,9 +6,7 @@ export const taskSchema = z.object({
   }),
   description: z
     .string()
-    .min(1, {
-      message: '至少1個字',
-    })
+    .transform((val) => (val === '' ? undefined : val))
     .optional()
     .nullable(), // 允許 `null`
 })
@@ -22,27 +20,33 @@ export const materialSchema = z.object({
     .optional()
     .nullable(),
   amount: z
-    .number()
-    .min(0, {
-      message: '不能低於0',
-    })
+    .union([
+      z.string().transform((val) => (val === '' ? undefined : Number(val))),
+      z.number().min(0, {
+        message: '不能低於0',
+      }),
+    ])
     .optional()
-    .default(0),
+    .nullable(),
   unit: z.string().optional().nullable(),
   costPrice: z
-    .number()
-    .min(0, {
-      message: '不能低於0',
-    })
+    .union([
+      z.string().transform((val) => (val === '' ? undefined : Number(val))),
+      z.number().min(0, {
+        message: '不能低於0',
+      }),
+    ])
     .optional()
-    .default(0),
+    .nullable(),
   sellingPrice: z
-    .number()
-    .min(0, {
-      message: '不能低於0',
-    })
+    .union([
+      z.string().transform((val) => (val === '' ? undefined : Number(val))),
+      z.number().min(0, {
+        message: '不能低於0',
+      }),
+    ])
     .optional()
-    .default(0),
+    .nullable(),
 })
 
 export type TaskSchema = z.infer<typeof taskSchema>

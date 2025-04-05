@@ -31,13 +31,7 @@ export function AddTask({ onCreateTask }: AddTaskProps) {
     resolver: zodResolver(
       isEditingMore ? taskSchema.and(materialSchema) : taskSchema
     ),
-    mode: 'onChange',
-    defaultValues: {
-      // 添加預設值
-      amount: 0,
-      costPrice: 0,
-      sellingPrice: 0,
-    },
+    mode: 'onTouched',
   })
 
   useEffect(() => {
@@ -106,28 +100,30 @@ export function AddTask({ onCreateTask }: AddTaskProps) {
                     材料資訊 (選填)
                   </span>
                 </div>
-                <div className="grid gap-3 md:grid-cols-2">
+                <div className="grid gap-3 md:grid-cols-1">
                   <FormInput
                     placeholder="材料名稱"
                     register={register}
                     name="material"
                     error={errors.material}
-                  />
-                  <FormInput
-                    placeholder="材料單位"
-                    register={register}
-                    name="unit"
-                    error={errors.unit}
+                    type="text"
                   />
                 </div>
 
-                <div className="grid gap-3 md:grid-cols-3">
+                <div className="grid gap-3 md:grid-cols-2">
                   <FormInput
                     placeholder="數量"
                     register={register}
                     name="amount"
                     error={errors.amount}
                     type="number"
+                    min="0"
+                  />
+                  <FormInput
+                    placeholder="單位"
+                    register={register}
+                    name="unit"
+                    error={errors.unit}
                   />
                   <FormInput
                     placeholder="單位成本"
@@ -135,6 +131,7 @@ export function AddTask({ onCreateTask }: AddTaskProps) {
                     name="costPrice"
                     error={errors.costPrice}
                     type="number"
+                    min="0"
                   />
                   <FormInput
                     placeholder="單位售價"
@@ -142,12 +139,13 @@ export function AddTask({ onCreateTask }: AddTaskProps) {
                     name="sellingPrice"
                     error={errors.sellingPrice}
                     type="number"
+                    min="0"
                   />
                 </div>
               </>
             )}
 
-            <div className="flex justify-end gap-2">
+            <div className="mt-4 flex justify-end gap-2">
               <DeleteButton
                 onDelete={() => {
                   handleCancel()
@@ -172,7 +170,7 @@ export function AddTask({ onCreateTask }: AddTaskProps) {
                   : 'bg-[var(--main)] hover:bg-[var(--main-light)]'
               } text-black`}
             >
-              {isSubmitting ? '新增任務' : '新增中...'}
+              新增
             </Button>
           </div>
         </form>

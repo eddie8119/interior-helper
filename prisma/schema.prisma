@@ -129,9 +129,9 @@ model Task {
   container        Container   @relation(fields: [containerId], references: [id], onDelete: Cascade)
   material         String?
   unit             String?
-  amount           Float?      @default(0)
-  costPrice        Float?      @default(0)
-  sellingPrice     Float?      @default(0)
+  amount           Float?      
+  costPrice        Float?      
+  sellingPrice     Float?      
 
   @@index([containerId])
 }
