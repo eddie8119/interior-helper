@@ -1,7 +1,6 @@
-import { Input } from '@/components/core/Input'
 import { MaterialSchema, TaskSchema } from '@/lib/schemas/createTaskSchema'
-
 import { FieldError, UseFormRegister } from 'react-hook-form'
+import { TextField } from '@mui/material'
 
 interface FormInputProps {
   placeholder: string
@@ -23,21 +22,35 @@ export function FormInput({
   min,
 }: FormInputProps) {
   return (
-    <div className="relative space-y-1">
-      <Input
-        type={type}
-        min={min}
-        placeholder={placeholder}
-        {...register(name)}
-        className={`h-8 rounded-md border ${
-          error ? 'border-red-500' : 'border-gray-300'
-        } ${className}`}
-      />
-      {error && (
-        <p className="absolute right-1 top-1 text-sm text-red-500">
-          {error.message}
-        </p>
-      )}
-    </div>
+    <TextField
+      fullWidth
+      label={placeholder}
+      variant="outlined"
+      type={type}
+      {...register(name)}
+      error={!!error}
+      helperText={error?.message as string}
+      inputProps={{ min }}
+      sx={{
+        '& .MuiOutlinedInput-root': {
+          height: '40px', // 設定外框高度
+          display: 'flex',
+          alignItems: 'center',
+        },
+        '& .MuiInputBase-input': {
+          height: '40px', // 讓輸入文字的框也等於 40px
+          padding: '0 14px', // 調整左右間距
+          display: 'flex',
+          alignItems: 'center',
+          lineHeight: '40px', // 讓文字內容對齊
+        },
+        '& .MuiInputLabel-root': {
+          top: '-5px', // 調整 label 位置
+        },
+        '& .MuiInputLabel-shrink': {
+          top: '0', // 當 label 上移時，位置調整
+        },
+      }}
+    />
   )
 }
