@@ -11,7 +11,7 @@ interface AddTaskProps {
 export function AddTask({ onCreateTask }: AddTaskProps) {
   const [isEditing, setIsEditing] = useState<boolean>(false)
 
-  const handleCancel = () => {
+  const handleClose = () => {
     setIsEditing(false)
   }
 
@@ -19,7 +19,7 @@ export function AddTask({ onCreateTask }: AddTaskProps) {
     try {
       const result = await onCreateTask(data)
       if (result.status === 'success') {
-        handleCancel()
+        handleClose()
       }
     } catch (error) {
       console.error('Error creating task:', error)
@@ -28,9 +28,7 @@ export function AddTask({ onCreateTask }: AddTaskProps) {
 
   return (
     <div className="mt-4 flex flex-col gap-3">
-      {isEditing && (
-        <TaskForm onSubmit={handleSubmit} onCancel={handleCancel} />
-      )}
+      {isEditing && <TaskForm onSubmit={handleSubmit} onClose={handleClose} />}
 
       {/* 添加任務 */}
       <button

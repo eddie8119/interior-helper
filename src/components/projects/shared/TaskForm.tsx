@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material'
+import { X } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Button } from '@/components/core/Button'
@@ -15,10 +16,18 @@ import {
 
 interface TaskFormProps {
   onSubmit: (data: TaskSchema & MaterialSchema) => Promise<void>
-  onCancel: () => void
+  onCancel?: () => void
+  onClose: () => void
+  defaultValues?: Partial<TaskSchema & MaterialSchema>
+  showDeleteButton?: boolean
+  onDelete?: () => void
+  deleteDialogProps?: {
+    title: string
+    description: string
+  }
 }
 
-export function TaskForm({ onSubmit, onCancel }: TaskFormProps) {
+export function TaskForm({ onSubmit, onCancel, onClose }: TaskFormProps) {
   const [isEditingMore, setIsEditingMore] = useState<boolean>(false)
   const {
     register,
@@ -35,15 +44,14 @@ export function TaskForm({ onSubmit, onCancel }: TaskFormProps) {
   })
 
   useEffect(() => {
-    const currentValues = getValues()
     reset(
       {
-        ...currentValues,
-        material: undefined,
-        amount: undefined,
-        unit: undefined,
-        costPrice: undefined,
-        sellingPrice: undefined,
+        ...getValues(),
+        material: isEditingMore ? getValues('material') : undefined,
+        amount: isEditingMore ? getValues('amount') : undefined,
+        unit: isEditingMore ? getValues('unit') : undefined,
+        costPrice: isEditingMore ? getValues('costPrice') : undefined,
+        sellingPrice: isEditingMore ? getValues('sellingPrice') : undefined,
       },
       {
         keepErrors: true,
@@ -58,18 +66,32 @@ export function TaskForm({ onSubmit, onCancel }: TaskFormProps) {
     setIsEditingMore(!isEditingMore)
   }
 
+  const onSubmitForm = async (data: TaskSchema & MaterialSchema) => {
+    await onSubmit(data)
+  }
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-      <div className="grid grid-cols-1 gap-2 rounded-lg bg-white p-4 shadow-sm dark:bg-gray-700">
+    <form onSubmit={handleSubmit(onSubmitForm)} className="space-y-4">
+      <div
+        className={`relative p-4 pt-10 grid grid-cols-1 gap-2 rounded-lg bg-white  shadow-sm dark:bg-gray-700 `}
+      >
+        <X
+          size={25}
+          className="absolute top-2 right-2 cursor-pointer"
+          onClick={() => {
+            onClose()
+            reset()
+          }}
+        />
         <FormInput
-          placeholder="任務"
+          placeholder="任務標題"
           register={register}
           name="title"
           error={errors.title}
         />
         <div className="relative space-y-1">
           <textarea
-            placeholder="新增內容"
+            placeholder="任務內容"
             {...register('description')}
             className={`h-20 w-full rounded-md border p-2 ${
               errors.description ? 'border-red-500' : 'border-gray-300'
@@ -182,13 +204,16 @@ export function TaskForm({ onSubmit, onCancel }: TaskFormProps) {
         )}
 
         <div className="mt-4 flex justify-end gap-2">
-          <DeleteButton
-            onDelete={() => {
-              onCancel()
-              reset()
-            }}
-            className="!relative !right-0 !top-0 !block !opacity-100"
-          />
+          {onCancel && (
+            <DeleteButton
+              onDelete={() => {
+                onClose()
+                reset()
+              }}
+              className="!relative !right-0 !top-0 !block !opacity-100"
+            />
+          )}
+
           <Button
             onClick={handleToggleMore}
             type="button" // 明確指定這不是提交按鈕
