@@ -3,11 +3,10 @@
 import { Draggable } from '@hello-pangea/dnd'
 import { Task } from '@prisma/client'
 import { useState } from 'react'
-import { Button } from '@/components/core/Button'
-import { DeleteButtonWithDialog } from '@/components/core/DeleteButtonWithDialog'
-import { Input } from '@/components/core/Input'
-import { Textarea } from '@/components/core/Textarea'
+import { toast } from 'react-toastify'
+import { MaterialSchema, TaskSchema } from '@/lib/schemas/createTaskSchema'
 import { ActionResult } from '@/types'
+import { TaskForm } from './TaskForm'
 
 interface TaskCardProps {
   task: Task
@@ -15,7 +14,7 @@ interface TaskCardProps {
   onCancelTask: (taskId: string) => Promise<ActionResult<Task>>
   onUpdateTask: (
     taskId: string,
-    updates: Partial<Task>
+    updates: Partial<TaskSchema> & Partial<MaterialSchema>
   ) => Promise<ActionResult<Task>>
 }
 
@@ -26,41 +25,54 @@ export function TaskCard({
   onUpdateTask,
 }: TaskCardProps) {
   const [isEditing, setIsEditing] = useState<boolean>(false)
-  const [editedTitle, setEditedTitle] = useState<string>(task.title)
-  const [editedContent, setEditedContent] = useState<string | undefined>(
-    task.description || ''
-  )
-
-  const handleSave = async () => {
-    if (!editedTitle.trim()) {
-      return
-    }
-
-    const titleChanged = editedTitle !== task.title
-    const contentChanged = editedContent !== (task.description || '')
-
-    if (titleChanged || contentChanged) {
-      await onUpdateTask(task.id, {
-        title: editedTitle,
-        description: editedContent,
-      })
-    }
-
-    setIsEditing(false)
-  }
 
   const handleCancel = async () => {
-    await onCancelTask(task.id)
-  }
-
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault()
-      handleSave()
-    } else if (e.key === 'Escape') {
-      handleCancel()
+    try {
+      const result = await onCancelTask(task.id)
+      if (result.status === 'success') {
+        setIsEditing(false)
+        toast.success('任務已刪除')
+      }
+    } catch (error) {
+      console.error('Error canceling task:', error)
+      toast.error('刪除任務時發生錯誤')
     }
   }
+
+  const handleSubmit = async (
+    data: Partial<TaskSchema> & Partial<MaterialSchema>
+  ) => {
+    try {
+      // 修復了空字串無法保存的問題
+      // 為空 ''  會無法成功存入 永遠會存1個字
+      const { description, material, amount, unit } = data
+      const updates = {
+        ...data,
+        description: description === '' ? null : description,
+        material: material === '' ? null : material,
+        amount,
+        unit: unit === '' ? null : unit,
+      }
+
+      const result = await onUpdateTask(task.id, updates)
+      if (result.status === 'success') {
+        setIsEditing(false)
+        toast.success('任務已更新')
+      }
+    } catch (error) {
+      console.error('Error updating task:', error)
+      toast.error('更新任務時發生錯誤')
+    }
+  }
+
+  // const handleKeyDown = (e: React.KeyboardEvent) => {
+  //   if (e.key === 'Enter' && !e.shiftKey) {
+  //     e.preventDefault()
+  //     handleSave()
+  //   } else if (e.key === 'Escape') {
+  //     handleCancel()
+  //   }
+  // }
 
   return (
     <Draggable draggableId={task.id} index={index}>
@@ -69,7 +81,7 @@ export function TaskCard({
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
-          className={`cursor-pointer rounded-lg bg-white p-3 dark:bg-gray-700 ${
+          className={`cursor-pointer rounded-lg bg-white  dark:bg-gray-700 ${
             snapshot.isDragging
               ? 'shadow-lg dark:bg-gray-700'
               : 'hover:bg-gray-50 dark:hover:bg-gray-800'
@@ -77,40 +89,22 @@ export function TaskCard({
           onClick={() => !isEditing && setIsEditing(true)}
         >
           {isEditing ? (
-            <div className="space-y-3" onClick={(e) => e.stopPropagation()}>
-              <Input
-                value={editedTitle}
-                onChange={(e) => setEditedTitle(e.target.value)}
-                onKeyDown={handleKeyDown}
-                placeholder="任務標題"
-                className="w-full"
-                autoFocus
-              />
-              <Textarea
-                value={editedContent}
-                onChange={(e) => setEditedContent(e.target.value)}
-                onKeyDown={handleKeyDown}
-                placeholder="任務內容"
-                className="min-h-[60px] w-full"
-              />
-
-              <div className="flex justify-end gap-2">
-                <DeleteButtonWithDialog
-                  deleteItem={handleCancel}
-                  title="確認刪除"
-                  description={`您確定要刪除任務 "${task.title}" 嗎？此操作無法復原。`}
-                  className="!relative !right-0 !top-0 !block !opacity-100"
-                />
-                <Button
-                  onClick={handleSave}
-                  className="h-8 rounded-md bg-blue-300 text-black hover:bg-[var(--main-light)]"
-                >
-                  儲存
-                </Button>
-              </div>
-            </div>
+            <TaskForm
+              onSubmit={handleSubmit}
+              onClose={() => setIsEditing(false)}
+              defaultValues={{
+                title: task.title,
+                description: task.description || '',
+                material: task.material || '',
+                amount: task.amount || undefined,
+                unit: task.unit || '',
+                costPrice: task.costPrice || undefined,
+                sellingPrice: task.sellingPrice || undefined,
+              }}
+              onDelete={handleCancel}
+            />
           ) : (
-            <>
+            <div className="p-3">
               <div className="flex items-center justify-between">
                 <h4 className="font-medium">{task.title}</h4>
                 <span
@@ -130,7 +124,7 @@ export function TaskCard({
                 </span>
               </div>
               <p className="mt-2 min-h-[24px] text-sm text-gray-600 dark:text-gray-400">
-                {task.description || '點擊編輯內容'}
+                {task.description || '(點擊編輯內容)'}
               </p>
               <div className="mt-2 flex items-center justify-between text-xs text-gray-500">
                 <span>
@@ -158,7 +152,7 @@ export function TaskCard({
                   </span>
                 </span>
               </div>
-            </>
+            </div>
           )}
         </div>
       )}

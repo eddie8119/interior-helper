@@ -4,7 +4,7 @@ import { X } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Button } from '@/components/core/Button'
-import { DeleteButton } from '@/components/core/DeleteButton'
+import { DeleteButtonWithDialog } from '@/components/core/DeleteButtonWithDialog'
 import { FormInput } from '@/components/core/FormInput'
 import { MATERIAL_UNITS } from '@/constants/selection'
 import {
@@ -16,18 +16,17 @@ import {
 
 interface TaskFormProps {
   onSubmit: (data: TaskSchema & MaterialSchema) => Promise<void>
-  onCancel?: () => void
   onClose: () => void
   defaultValues?: Partial<TaskSchema & MaterialSchema>
-  showDeleteButton?: boolean
   onDelete?: () => void
-  deleteDialogProps?: {
-    title: string
-    description: string
-  }
 }
 
-export function TaskForm({ onSubmit, onCancel, onClose }: TaskFormProps) {
+export function TaskForm({
+  onSubmit,
+  onDelete,
+  onClose,
+  defaultValues,
+}: TaskFormProps) {
   const [isEditingMore, setIsEditingMore] = useState<boolean>(false)
   const {
     register,
@@ -41,17 +40,28 @@ export function TaskForm({ onSubmit, onCancel, onClose }: TaskFormProps) {
       isEditingMore ? taskSchema.and(materialSchema) : taskSchema
     ),
     mode: 'onTouched',
+    defaultValues,
   })
 
   useEffect(() => {
+    const {
+      title,
+      description,
+      material,
+      amount,
+      unit,
+      costPrice,
+      sellingPrice,
+    } = getValues()
     reset(
       {
-        ...getValues(),
-        material: isEditingMore ? getValues('material') : undefined,
-        amount: isEditingMore ? getValues('amount') : undefined,
-        unit: isEditingMore ? getValues('unit') : undefined,
-        costPrice: isEditingMore ? getValues('costPrice') : undefined,
-        sellingPrice: isEditingMore ? getValues('sellingPrice') : undefined,
+        title: title?.trim(),
+        description: description?.trim(),
+        material: isEditingMore ? material : undefined,
+        amount: isEditingMore ? amount : undefined,
+        unit: isEditingMore ? unit : undefined,
+        costPrice: isEditingMore ? costPrice : undefined,
+        sellingPrice: isEditingMore ? sellingPrice : undefined,
       },
       {
         keepErrors: true,
@@ -204,12 +214,14 @@ export function TaskForm({ onSubmit, onCancel, onClose }: TaskFormProps) {
         )}
 
         <div className="mt-4 flex justify-end gap-2">
-          {onCancel && (
-            <DeleteButton
-              onDelete={() => {
-                onClose()
+          {onDelete && (
+            <DeleteButtonWithDialog
+              deleteItem={() => {
+                onDelete()
                 reset()
               }}
+              title="確認刪除"
+              description="您確定要刪除任務嗎？此操作無法復原。"
               className="!relative !right-0 !top-0 !block !opacity-100"
             />
           )}

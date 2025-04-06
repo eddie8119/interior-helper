@@ -72,7 +72,7 @@ export async function createTask(
 // 更新任務
 export async function updateTask(
   taskId: string,
-  updates: Partial<Task> & Partial<MaterialSchema>
+  updates: Partial<TaskSchema> & Partial<MaterialSchema>
 ): Promise<ActionResult<Task>> {
   try {
     const userId = await getAuthUserId()
