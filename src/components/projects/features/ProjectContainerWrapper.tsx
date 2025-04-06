@@ -5,15 +5,13 @@ import { getProjectTasks } from '@/actions/taskActions'
 import { ProjectContainerPremium } from '@/components/projects/features/ProjectContainerPremium'
 
 interface ProjectContainerWrapperProps {
-  params: {
-    id: string
-  }
+  params: Promise<{ id: string }>
 }
 
 export async function ProjectContainerWrapper({
   params,
 }: ProjectContainerWrapperProps) {
-  const id = params.id
+  const { id } = await params
   const responseProject = await getProject(id)
   if (responseProject.status === 'error' || !responseProject.data) {
     return notFound()

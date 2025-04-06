@@ -3,15 +3,14 @@ import { getProjectById } from '@/app/actions/project-details'
 import { ProjectContainerTrial } from '@/components/projects/features/ProjectContainerTrial'
 
 interface ProjectPageProps {
-  params: {
-    id: string
-  }
+  params: Promise<{ id: string }>
 }
 
 export async function generateMetadata({
   params,
 }: ProjectPageProps): Promise<Metadata> {
-  const project = await getProjectById(params.id)
+  const { id } = await params
+  const project = await getProjectById(id)
 
   if (!project) {
     return {
@@ -22,7 +21,7 @@ export async function generateMetadata({
 
   const title = `${project.title} | Interior Helper`
   const description = `查看和管理您的${project.title}專案的詳細信息、進度和任務。`
-  const url = `/projects/${params.id}`
+  const url = `/projects/${id}`
 
   return {
     title,
@@ -51,5 +50,5 @@ export async function generateMetadata({
 }
 
 export default async function ProjectPage({ params }: ProjectPageProps) {
-  return <ProjectContainerTrial projectId={params.id} />
+  return <ProjectContainerTrial projectId={id} />
 }

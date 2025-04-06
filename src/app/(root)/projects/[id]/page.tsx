@@ -3,15 +3,14 @@ import { getProject } from '@/actions/projectActions'
 import { ProjectContainerWrapper } from '@/components/projects/features/ProjectContainerWrapper'
 
 interface ProjectPageProps {
-  params: {
-    id: string
-  }
+  params: Promise<{ id: string }>
 }
 
 export async function generateMetadata({
   params,
 }: ProjectPageProps): Promise<Metadata> {
-  const response = await getProject(params.id)
+  const { id } = await params
+  const response = await getProject(id)
 
   if (response.status === 'error' || !response.data) {
     return {
@@ -23,7 +22,7 @@ export async function generateMetadata({
   const project = response.data
   const title = `${project.title} | Interior Helper`
   const description = `查看和管理您的${project.title}專案的詳細信息、進度和任務。`
-  const url = `/projects/${params.id}`
+  const url = `/projects/${id}`
 
   return {
     title,

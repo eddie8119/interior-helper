@@ -15,6 +15,7 @@ export function LogoArea({ width = 40, height = 40 }: LogoAreaProps) {
         height={height}
         alt="logo"
         priority
+        style={{ width: 'auto', height: 'auto' }}
       />
       <span className="ml-1 font-semibold text-foreground">DesignerHelper</span>
     </Link>
