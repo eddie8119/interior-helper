@@ -7,7 +7,6 @@ import { toast } from 'react-toastify'
 import { MaterialSchema, TaskSchema } from '@/lib/schemas/createTaskSchema'
 import { ActionResult } from '@/types'
 import { TaskForm } from './TaskForm'
-
 interface TaskCardProps {
   task: Task
   index: number
@@ -19,12 +18,13 @@ interface TaskCardProps {
 }
 
 export function TaskCard({
-  task,
+  task: initialTask,
   index,
   onCancelTask,
   onUpdateTask,
 }: TaskCardProps) {
   const [isEditing, setIsEditing] = useState<boolean>(false)
+  const [task, setTask] = useState<Task>(initialTask)
 
   const handleCancel = async () => {
     try {
@@ -56,6 +56,7 @@ export function TaskCard({
 
       const result = await onUpdateTask(task.id, updates)
       if (result.status === 'success') {
+        setTask(result.data)
         setIsEditing(false)
         toast.success('任務已更新')
       }
@@ -107,21 +108,18 @@ export function TaskCard({
             <div className="p-3">
               <div className="flex items-center justify-between">
                 <h4 className="font-medium">{task.title}</h4>
-                <span
-                  className={`rounded-full px-2 py-1 text-xs ${
-                    task.status === 'todo'
-                      ? 'bg-yellow-100 text-yellow-800'
-                      : task.status === 'in-progress'
-                        ? 'bg-blue-100 text-blue-800'
-                        : 'bg-green-100 text-green-800'
-                  }`}
-                >
-                  {task.status === 'todo'
-                    ? '待辦'
-                    : task.status === 'in-progress'
-                      ? '進行中'
-                      : '完成'}
-                </span>
+                {task.status === 'reviewing' ||
+                  (task.status === 'done' && (
+                    <span
+                      className={`rounded-full px-2 py-1 text-xs ${
+                        task.status === 'reviewing'
+                          ? 'bg-yellow-100 text-yellow-800'
+                          : 'bg-green-100 text-green-800'
+                      }`}
+                    >
+                      {task.status === 'reviewing' ? 'reviewing' : 'done'}
+                    </span>
+                  ))}
               </div>
               <p className="mt-2 min-h-[24px] text-sm text-gray-600 dark:text-gray-400">
                 {task.description || '(點擊編輯內容)'}
@@ -133,24 +131,18 @@ export function TaskCard({
                     ? new Date(task.dueDate).toLocaleDateString()
                     : '無'}
                 </span>
-                <span>
-                  優先級:
-                  <span
-                    className={`rounded px-2 py-1 ${
-                      task.priority === 'high'
-                        ? 'bg-red-100 text-red-800'
-                        : task.priority === 'medium'
-                          ? 'bg-orange-100 text-orange-800'
-                          : 'bg-gray-100 text-gray-800'
-                    }`}
-                  >
-                    {task.priority === 'high'
-                      ? '高'
-                      : task.priority === 'medium'
-                        ? '中'
-                        : '低'}
+                {task.priority !== 'high' && (
+                  <span>
+                    優先級:
+                    <span
+                      className={
+                        'rounded px-2 ml-1 py-1 bg-red-100 text-red-800'
+                      }
+                    >
+                      高
+                    </span>
                   </span>
-                </span>
+                )}
               </div>
             </div>
           )}
