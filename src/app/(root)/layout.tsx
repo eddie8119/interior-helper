@@ -7,6 +7,7 @@ import { Header } from '@/components/layout/header'
 import { MobileNav } from '@/components/layout/navigation/mobile-nav'
 import { Sidebar } from '@/components/layout/navigation/sidebar'
 import { LoginDialogWrapper } from '@/components/providers/login-dialog-wrapper'
+import { QueryProvider } from '@/components/providers/query-provider'
 import { LoginDialogProvider } from '@/contexts/login-dialog-context'
 import { ThemeProvider } from '@/contexts/theme-context'
 import '../../styles/main.scss'
@@ -37,33 +38,35 @@ export default async function RootLayout({
   const session = await auth()
 
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="zh-TW" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         {/* session，根組件配置 確保整個應用在服務器端和客戶端之間的狀態一致  避免Hydration Mismatch*/}
         <SessionProvider session={session}>
-          <ThemeProvider>
-            <LoginDialogProvider>
-              <ToastContainer
-                position="bottom-right"
-                hideProgressBar
-                className="z-50"
-              />
-              <div className="flex h-screen w-screen bg-background">
-                {/* mob */}
-                <MobileNav />
+          <QueryProvider>
+            <ThemeProvider>
+              <LoginDialogProvider>
+                <ToastContainer
+                  position="bottom-right"
+                  hideProgressBar
+                  className="z-50"
+                />
+                <div className="flex h-screen w-screen bg-background">
+                  {/* mob */}
+                  <MobileNav />
 
-                <Sidebar />
+                  <Sidebar />
 
-                <div className="mt-16 flex h-full flex-1 flex-col sm:mt-0">
-                  <Header />
-                  <main className="flex-1 p-4 sm:p-6 lg:p-8">{children}</main>
+                  <div className="mt-16 flex h-full flex-1 flex-col sm:mt-0">
+                    <Header />
+                    <main className="flex-1 p-4 sm:p-6 lg:p-8">{children}</main>
+                  </div>
                 </div>
-              </div>
-              <LoginDialogWrapper />
-            </LoginDialogProvider>
-          </ThemeProvider>
+                <LoginDialogWrapper />
+              </LoginDialogProvider>
+            </ThemeProvider>
+          </QueryProvider>
         </SessionProvider>
       </body>
     </html>
