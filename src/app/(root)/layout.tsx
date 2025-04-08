@@ -6,6 +6,7 @@ import { auth } from '@/auth'
 import { Header } from '@/components/layout/header'
 import { MobileNav } from '@/components/layout/navigation/mobile-nav'
 import { Sidebar } from '@/components/layout/navigation/sidebar'
+import { DatePickerProvider } from '@/components/providers/date-picker-provider'
 import { LoginDialogWrapper } from '@/components/providers/login-dialog-wrapper'
 import { QueryProvider } from '@/components/providers/query-provider'
 import { LoginDialogProvider } from '@/contexts/login-dialog-context'
@@ -46,25 +47,29 @@ export default async function RootLayout({
         <SessionProvider session={session}>
           <QueryProvider>
             <ThemeProvider>
-              <LoginDialogProvider>
-                <ToastContainer
-                  position="bottom-right"
-                  hideProgressBar
-                  className="z-50"
-                />
-                <div className="flex h-screen w-screen bg-background">
-                  {/* mob */}
-                  <MobileNav />
+              <DatePickerProvider>
+                <LoginDialogProvider>
+                  <ToastContainer
+                    position="bottom-right"
+                    hideProgressBar
+                    className="z-50"
+                  />
+                  <div className="flex h-screen w-screen bg-background">
+                    {/* mob */}
+                    <MobileNav />
 
-                  <Sidebar />
+                    <Sidebar />
 
-                  <div className="mt-16 flex h-full flex-1 flex-col sm:mt-0">
-                    <Header />
-                    <main className="flex-1 p-4 sm:p-6 lg:p-8">{children}</main>
+                    <div className="mt-16 flex h-full flex-1 flex-col sm:mt-0">
+                      <Header />
+                      <main className="flex-1 p-4 sm:p-6 lg:p-8">
+                        {children}
+                      </main>
+                    </div>
                   </div>
-                </div>
-                <LoginDialogWrapper />
-              </LoginDialogProvider>
+                  <LoginDialogWrapper />
+                </LoginDialogProvider>
+              </DatePickerProvider>
             </ThemeProvider>
           </QueryProvider>
         </SessionProvider>

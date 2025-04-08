@@ -1,10 +1,9 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material'
-import { SelectChangeEvent } from '@mui/material'
+import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import { X } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { Controller } from 'react-hook-form'
+import { useForm, Controller } from 'react-hook-form'
 import { Button } from '@/components/core/Button'
 import { DeleteButtonWithDialog } from '@/components/core/DeleteButtonWithDialog'
 import { FormInput } from '@/components/core/FormInput'
@@ -119,6 +118,135 @@ export function TaskForm({
             </p>
           )}
         </div>
+        {type === 'edit' && (
+          <Controller
+            name="dueDate"
+            control={control}
+            defaultValue={null}
+            render={({ field: { onChange, value } }) => (
+              <DatePicker
+                label="截止日期"
+                value={value}
+                onChange={(newValue) => {
+                  onChange(newValue)
+                }}
+                format="yyyy/MM/dd"
+                slotProps={{
+                  textField: {
+                    fullWidth: true,
+                    error: !!errors.dueDate,
+                    helperText: errors.dueDate?.message as string,
+                    sx: {
+                      '& .MuiInputBase-root': {
+                        height: '40px',
+                      },
+                    },
+                  },
+                }}
+              />
+            )}
+          />
+        )}
+        {type === 'edit' && (
+          <div className="grid gap-3 mt-2 md:grid-cols-2">
+            <FormControl
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  height: '40px',
+                  display: 'flex',
+                  alignItems: 'center',
+                },
+                '& .MuiInputBase-input': {
+                  height: '40px',
+                  padding: '0 14px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  lineHeight: '40px',
+                },
+                '& .MuiInputLabel-root': {
+                  top: '-5px',
+                },
+                '& .MuiInputLabel-shrink': {
+                  top: '0',
+                },
+              }}
+            >
+              <Controller
+                name="priority"
+                control={control}
+                defaultValue="low"
+                render={({ field: { onChange, value, ...field } }) => (
+                  <FormControl fullWidth>
+                    <InputLabel>優先度</InputLabel>
+                    <Select
+                      {...field}
+                      value={value}
+                      label="優先度"
+                      onChange={(e) => {
+                        onChange(e.target.value)
+                      }}
+                    >
+                      <MenuItem key="low" value="low">
+                        low
+                      </MenuItem>
+                      <MenuItem key="high" value="high">
+                        high
+                      </MenuItem>
+                    </Select>
+                  </FormControl>
+                )}
+              />
+            </FormControl>
+            <FormControl
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  height: '40px',
+                  display: 'flex',
+                  alignItems: 'center',
+                },
+                '& .MuiInputBase-input': {
+                  height: '40px',
+                  padding: '0 14px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  lineHeight: '40px',
+                },
+                '& .MuiInputLabel-root': {
+                  top: '-5px',
+                },
+                '& .MuiInputLabel-shrink': {
+                  top: '0',
+                },
+              }}
+            >
+              <Controller
+                name="status"
+                control={control}
+                defaultValue="todo"
+                render={({ field: { onChange, value, ...field } }) => (
+                  <FormControl fullWidth>
+                    <InputLabel>任務狀態</InputLabel>
+                    <Select
+                      {...field}
+                      value={value}
+                      label="任務狀態"
+                      onChange={(e) => {
+                        onChange(e.target.value)
+                      }}
+                    >
+                      <MenuItem key="todo" value="todo">
+                        todo
+                      </MenuItem>
+                      <MenuItem key="done" value="done">
+                        done
+                      </MenuItem>
+                    </Select>
+                  </FormControl>
+                )}
+              />
+            </FormControl>
+          </div>
+        )}
 
         {isEditingMore && (
           <>
