@@ -1,8 +1,10 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material'
+import { SelectChangeEvent } from '@mui/material'
 import { X } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { Controller } from 'react-hook-form'
 import { Button } from '@/components/core/Button'
 import { DeleteButtonWithDialog } from '@/components/core/DeleteButtonWithDialog'
 import { FormInput } from '@/components/core/FormInput'
@@ -19,6 +21,7 @@ interface TaskFormProps {
   onClose: () => void
   defaultValues?: Partial<TaskSchema & MaterialSchema>
   onDelete?: () => void
+  type: 'edit' | 'add'
 }
 
 export function TaskForm({
@@ -26,6 +29,7 @@ export function TaskForm({
   onDelete,
   onClose,
   defaultValues,
+  type,
 }: TaskFormProps) {
   const [isEditingMore, setIsEditingMore] = useState<boolean>(false)
   const {
@@ -35,6 +39,7 @@ export function TaskForm({
     getValues,
     formState: { errors, isValid, isSubmitting },
     trigger,
+    control,
   } = useForm<TaskSchema & MaterialSchema>({
     resolver: zodResolver(
       isEditingMore ? taskSchema.and(materialSchema) : taskSchema
@@ -163,35 +168,48 @@ export function TaskForm({
                   },
                 }}
               >
-                <InputLabel>材料單位</InputLabel>
-                <Select {...register('unit')} label="材料單位">
-                  {MATERIAL_UNITS.map((unit) => (
-                    <div key={unit.section}>
-                      <MenuItem
-                        disabled
-                        sx={{
-                          backgroundColor: 'rgb(243 244 246)',
-                          fontSize: '0.875rem',
-                          color: 'rgb(107 114 128)',
-                          fontWeight: 500,
+                <Controller
+                  name="unit"
+                  control={control}
+                  defaultValue=""
+                  render={({ field: { onChange, value, ...field } }) => (
+                    <FormControl fullWidth>
+                      <InputLabel>材料單位</InputLabel>
+                      <Select
+                        {...field}
+                        value={value}
+                        label="材料單位"
+                        onChange={(e) => {
+                          onChange(e.target.value)
                         }}
                       >
-                        {unit.section}
-                      </MenuItem>
-                      {unit.item.map((item) => (
-                        <MenuItem
-                          key={item.value}
-                          value={item.value}
-                          sx={{
-                            pl: 4,
-                          }}
-                        >
-                          {item.label}
-                        </MenuItem>
-                      ))}
-                    </div>
-                  ))}
-                </Select>
+                        {MATERIAL_UNITS.map((section) => [
+                          <MenuItem
+                            key={`header-${section.section}`}
+                            disabled
+                            sx={{
+                              backgroundColor: 'rgb(243 244 246)',
+                              fontSize: '0.875rem',
+                              color: 'rgb(107 114 128)',
+                              fontWeight: 500,
+                            }}
+                          >
+                            {section.section}
+                          </MenuItem>,
+                          ...section.item.map((item) => (
+                            <MenuItem
+                              key={item.value}
+                              value={item.value}
+                              sx={{ pl: 4 }}
+                            >
+                              {item.label}
+                            </MenuItem>
+                          )),
+                        ])}
+                      </Select>
+                    </FormControl>
+                  )}
+                />
               </FormControl>
               <FormInput
                 placeholder="單位成本"
