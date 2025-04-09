@@ -1,5 +1,12 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { FormControl, InputLabel, MenuItem, Select } from '@mui/material'
+import {
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  SxProps,
+  Theme,
+} from '@mui/material'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import { X } from 'lucide-react'
 import { useEffect, useState } from 'react'
@@ -21,6 +28,71 @@ interface TaskFormProps {
   defaultValues?: Partial<TaskSchema & MaterialSchema>
   onDelete?: () => void
   type: 'edit' | 'add'
+}
+
+interface SelectControlProps {
+  name: string
+  label: string
+  control: any
+  defaultValue: string
+  options: { key: string; value: string; label: string }[]
+}
+
+const SelectControl = ({
+  name,
+  label,
+  control,
+  defaultValue,
+  options,
+}: SelectControlProps) => (
+  <FormControl sx={formControlStyles}>
+    <Controller
+      name={name}
+      control={control}
+      defaultValue={defaultValue}
+      render={({ field: { onChange, value, ...field } }) => (
+        <FormControl fullWidth>
+          <InputLabel>{label}</InputLabel>
+          <Select
+            {...field}
+            value={value}
+            label={label}
+            onChange={(e) => {
+              onChange(e.target.value)
+            }}
+          >
+            {options.map((option) => (
+              <MenuItem key={option.key} value={option.value}>
+                {option.label}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      )}
+    />
+  </FormControl>
+)
+
+// 共用的表單控件樣式
+const formControlStyles: SxProps<Theme> = {
+  '& .MuiOutlinedInput-root': {
+    height: '40px',
+    display: 'flex',
+    alignItems: 'center',
+  },
+  '& .MuiInputBase-input': {
+    height: '40px',
+    padding: '0 14px',
+    display: 'flex',
+    alignItems: 'center',
+    lineHeight: '40px',
+  },
+  '& .MuiInputLabel-root': {
+    top: '-5px',
+  },
+  '& .MuiInputLabel-shrink': {
+    top: '0',
+  },
 }
 
 export function TaskForm({
@@ -137,9 +209,7 @@ export function TaskForm({
                     error: !!errors.dueDate,
                     helperText: errors.dueDate?.message as string,
                     sx: {
-                      '& .MuiInputBase-root': {
-                        height: '40px',
-                      },
+                      ...formControlStyles,
                     },
                   },
                 }}
@@ -149,102 +219,26 @@ export function TaskForm({
         )}
         {type === 'edit' && (
           <div className="grid gap-3 mt-2 md:grid-cols-2">
-            <FormControl
-              sx={{
-                '& .MuiOutlinedInput-root': {
-                  height: '40px',
-                  display: 'flex',
-                  alignItems: 'center',
-                },
-                '& .MuiInputBase-input': {
-                  height: '40px',
-                  padding: '0 14px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  lineHeight: '40px',
-                },
-                '& .MuiInputLabel-root': {
-                  top: '-5px',
-                },
-                '& .MuiInputLabel-shrink': {
-                  top: '0',
-                },
-              }}
-            >
-              <Controller
-                name="priority"
-                control={control}
-                defaultValue="low"
-                render={({ field: { onChange, value, ...field } }) => (
-                  <FormControl fullWidth>
-                    <InputLabel>優先度</InputLabel>
-                    <Select
-                      {...field}
-                      value={value}
-                      label="優先度"
-                      onChange={(e) => {
-                        onChange(e.target.value)
-                      }}
-                    >
-                      <MenuItem key="low" value="low">
-                        low
-                      </MenuItem>
-                      <MenuItem key="high" value="high">
-                        high
-                      </MenuItem>
-                    </Select>
-                  </FormControl>
-                )}
-              />
-            </FormControl>
-            <FormControl
-              sx={{
-                '& .MuiOutlinedInput-root': {
-                  height: '40px',
-                  display: 'flex',
-                  alignItems: 'center',
-                },
-                '& .MuiInputBase-input': {
-                  height: '40px',
-                  padding: '0 14px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  lineHeight: '40px',
-                },
-                '& .MuiInputLabel-root': {
-                  top: '-5px',
-                },
-                '& .MuiInputLabel-shrink': {
-                  top: '0',
-                },
-              }}
-            >
-              <Controller
-                name="status"
-                control={control}
-                defaultValue="todo"
-                render={({ field: { onChange, value, ...field } }) => (
-                  <FormControl fullWidth>
-                    <InputLabel>任務狀態</InputLabel>
-                    <Select
-                      {...field}
-                      value={value}
-                      label="任務狀態"
-                      onChange={(e) => {
-                        onChange(e.target.value)
-                      }}
-                    >
-                      <MenuItem key="todo" value="todo">
-                        todo
-                      </MenuItem>
-                      <MenuItem key="done" value="done">
-                        done
-                      </MenuItem>
-                    </Select>
-                  </FormControl>
-                )}
-              />
-            </FormControl>
+            <SelectControl
+              name="priority"
+              label="優先度"
+              control={control}
+              defaultValue="low"
+              options={[
+                { key: 'low', value: 'low', label: '低' },
+                { key: 'high', value: 'high', label: '高' },
+              ]}
+            />
+            <SelectControl
+              name="status"
+              label="任務狀態"
+              control={control}
+              defaultValue="todo"
+              options={[
+                { key: 'todo', value: 'todo', label: '待辦' },
+                { key: 'done', value: 'done', label: '完成' },
+              ]}
+            />
           </div>
         )}
 
@@ -274,28 +268,7 @@ export function TaskForm({
                 type="number"
                 min="0"
               />
-              <FormControl
-                sx={{
-                  '& .MuiOutlinedInput-root': {
-                    height: '40px',
-                    display: 'flex',
-                    alignItems: 'center',
-                  },
-                  '& .MuiInputBase-input': {
-                    height: '40px',
-                    padding: '0 14px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    lineHeight: '40px',
-                  },
-                  '& .MuiInputLabel-root': {
-                    top: '-5px',
-                  },
-                  '& .MuiInputLabel-shrink': {
-                    top: '0',
-                  },
-                }}
-              >
+              <FormControl sx={formControlStyles}>
                 <Controller
                   name="unit"
                   control={control}
