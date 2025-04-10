@@ -7,6 +7,8 @@ import {
   MaterialSchema,
   taskSchema,
   TaskSchema,
+  moreTaskSchema,
+  MoreTaskSchema,
 } from '@/lib/schemas/createTaskSchema'
 import { ActionResult } from '@/types'
 import { getAuthUserId } from './authActions'
@@ -53,12 +55,12 @@ export async function createTask(
         title,
         constructionType,
         containerId,
-        description: description || null,
-        material: material || null,
-        unit: unit || null,
-        amount: amount || null,
-        sellingPrice: sellingPrice || null,
-        costPrice: costPrice || null,
+        description,
+        material,
+        unit,
+        amount,
+        sellingPrice,
+        costPrice,
       },
     })
 
@@ -72,10 +74,23 @@ export async function createTask(
 // 更新任務
 export async function updateTask(
   taskId: string,
-  updates: Partial<TaskSchema> & Partial<MaterialSchema>
+  updates: Partial<TaskSchema> &
+    Partial<MaterialSchema> &
+    Partial<MoreTaskSchema>
 ): Promise<ActionResult<Task>> {
   try {
     const userId = await getAuthUserId()
+
+    const validationSchema = taskSchema
+      .partial()
+      .and(materialSchema.partial())
+      .and(moreTaskSchema.partial())
+    const resultValidation = validationSchema.safeParse(updates)
+
+    if (!resultValidation.success) {
+      console.error('Validation error:', resultValidation.error)
+      return { status: 'error', error: 'Invalid task data' }
+    }
 
     // 單一原子操作
     const updatedTask = await prisma.task.update({
@@ -87,7 +102,7 @@ export async function updateTask(
           },
         },
       },
-      data: updates,
+      data: resultValidation.data,
     })
     return { status: 'success', data: updatedTask }
   } catch (error) {
