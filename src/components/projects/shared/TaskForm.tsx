@@ -18,14 +18,18 @@ import { MATERIAL_UNITS } from '@/constants/selection'
 import {
   materialSchema,
   MaterialSchema,
+  moreTaskSchema,
+  MoreTaskSchema,
   taskSchema,
   TaskSchema,
 } from '@/lib/schemas/createTaskSchema'
 
+type FormData = TaskSchema & MaterialSchema & MoreTaskSchema
+
 interface TaskFormProps {
-  onSubmit: (data: TaskSchema & MaterialSchema) => Promise<void>
+  onSubmit: (data: FormData) => Promise<void>
   onClose: () => void
-  defaultValues?: Partial<TaskSchema & MaterialSchema>
+  defaultValues?: Partial<FormData>
   onDelete?: () => void
   type: 'edit' | 'add'
 }
@@ -111,9 +115,15 @@ export function TaskForm({
     formState: { errors, isValid, isSubmitting },
     trigger,
     control,
-  } = useForm<TaskSchema & MaterialSchema>({
+  } = useForm<FormData>({
     resolver: zodResolver(
-      isEditingMore ? taskSchema.and(materialSchema) : taskSchema
+      type === 'edit'
+        ? isEditingMore
+          ? taskSchema.and(moreTaskSchema).and(materialSchema)
+          : taskSchema.and(moreTaskSchema)
+        : isEditingMore
+          ? taskSchema.and(materialSchema)
+          : taskSchema
     ),
     mode: 'onTouched',
     defaultValues,
@@ -128,16 +138,24 @@ export function TaskForm({
       unit,
       costPrice,
       sellingPrice,
+      priority,
+      status,
+      dueDate,
     } = getValues()
     reset(
       {
         title: title?.trim(),
         description: description?.trim(),
-        material: isEditingMore ? material : undefined,
-        amount: isEditingMore ? amount : undefined,
-        unit: isEditingMore ? unit : undefined,
-        costPrice: isEditingMore ? costPrice : undefined,
-        sellingPrice: isEditingMore ? sellingPrice : undefined,
+        material,
+        amount,
+        unit,
+        costPrice,
+        sellingPrice,
+        ...(type === 'edit' && {
+          priority,
+          status,
+          dueDate,
+        }),
       },
       {
         keepErrors: true,
@@ -152,7 +170,7 @@ export function TaskForm({
     setIsEditingMore(!isEditingMore)
   }
 
-  const onSubmitForm = async (data: TaskSchema & MaterialSchema) => {
+  const onSubmitForm = async (data: FormData) => {
     await onSubmit(data)
   }
 
@@ -191,55 +209,55 @@ export function TaskForm({
           )}
         </div>
         {type === 'edit' && (
-          <Controller
-            name="dueDate"
-            control={control}
-            defaultValue={null}
-            render={({ field: { onChange, value } }) => (
-              <DatePicker
-                label="截止日期"
-                value={value}
-                onChange={(newValue) => {
-                  onChange(newValue)
-                }}
-                format="yyyy/MM/dd"
-                slotProps={{
-                  textField: {
-                    fullWidth: true,
-                    error: !!errors.dueDate,
-                    helperText: errors.dueDate?.message as string,
-                    sx: {
-                      ...formControlStyles,
+          <>
+            <Controller
+              name="dueDate"
+              control={control}
+              defaultValue={null}
+              render={({ field: { onChange, value } }) => (
+                <DatePicker
+                  label="截止日期"
+                  value={value}
+                  onChange={(newValue) => {
+                    onChange(newValue)
+                  }}
+                  format="yyyy/MM/dd"
+                  slotProps={{
+                    textField: {
+                      fullWidth: true,
+                      error: !!errors.dueDate,
+                      helperText: errors.dueDate?.message as string,
+                      sx: {
+                        ...formControlStyles,
+                      },
                     },
-                  },
-                }}
+                  }}
+                />
+              )}
+            />
+            <div className="grid gap-3 mt-2 md:grid-cols-2">
+              <SelectControl
+                name="priority"
+                label="優先度"
+                control={control}
+                defaultValue="low"
+                options={[
+                  { key: 'low', value: 'low', label: '低' },
+                  { key: 'high', value: 'high', label: '高' },
+                ]}
               />
-            )}
-          />
-        )}
-        {type === 'edit' && (
-          <div className="grid gap-3 mt-2 md:grid-cols-2">
-            <SelectControl
-              name="priority"
-              label="優先度"
-              control={control}
-              defaultValue="low"
-              options={[
-                { key: 'low', value: 'low', label: '低' },
-                { key: 'high', value: 'high', label: '高' },
-              ]}
-            />
-            <SelectControl
-              name="status"
-              label="任務狀態"
-              control={control}
-              defaultValue="todo"
-              options={[
-                { key: 'todo', value: 'todo', label: '待辦' },
-                { key: 'done', value: 'done', label: '完成' },
-              ]}
-            />
-          </div>
+              <SelectControl
+                name="status"
+                label="任務狀態"
+                control={control}
+                defaultValue="todo"
+                options={[
+                  { key: 'todo', value: 'todo', label: '待辦' },
+                  { key: 'done', value: 'done', label: '完成' },
+                ]}
+              />
+            </div>
+          </>
         )}
 
         {isEditingMore && (

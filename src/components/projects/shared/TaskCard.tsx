@@ -39,7 +39,7 @@ export function TaskCard({
     }
   }
 
-  const handleSubmit = async (
+  const handleEditTask = async (
     data: Partial<TaskSchema> & Partial<MaterialSchema>
   ) => {
     try {
@@ -75,6 +75,18 @@ export function TaskCard({
   //   }
   // }
 
+  const {
+    title,
+    description,
+    material,
+    amount,
+    unit,
+    costPrice,
+    sellingPrice,
+    priority,
+    status,
+    dueDate,
+  } = task
   return (
     <Draggable draggableId={task.id} index={index}>
       {(provided, snapshot) => (
@@ -91,18 +103,22 @@ export function TaskCard({
         >
           {isEditing ? (
             <TaskForm
-              onSubmit={handleSubmit}
+              onSubmit={handleEditTask}
               onClose={() => setIsEditing(false)}
               defaultValues={{
-                title: task.title,
-                description: task.description || '',
-                material: task.material || '',
-                amount: task.amount || undefined,
-                unit: task.unit || '',
-                costPrice: task.costPrice || undefined,
-                sellingPrice: task.sellingPrice || undefined,
+                title,
+                description,
+                material,
+                amount,
+                unit,
+                costPrice,
+                sellingPrice,
+                priority,
+                status,
+                dueDate,
               }}
               onDelete={handleCancel}
+              type="edit"
             />
           ) : (
             <div className="p-3">

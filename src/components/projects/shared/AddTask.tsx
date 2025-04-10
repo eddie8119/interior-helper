@@ -15,7 +15,7 @@ export function AddTask({ onCreateTask }: AddTaskProps) {
     setIsEditing(false)
   }
 
-  const handleSubmit = async (data: TaskSchema & MaterialSchema) => {
+  const handleCreateTask = async (data: TaskSchema & MaterialSchema) => {
     try {
       const result = await onCreateTask(data)
       if (result.status === 'success') {
@@ -28,7 +28,13 @@ export function AddTask({ onCreateTask }: AddTaskProps) {
 
   return (
     <div className="mt-4 flex flex-col gap-3">
-      {isEditing && <TaskForm onSubmit={handleSubmit} onClose={handleClose} />}
+      {isEditing && (
+        <TaskForm
+          onSubmit={handleCreateTask}
+          onClose={handleClose}
+          type="add"
+        />
+      )}
 
       {/* 添加任務 */}
       <button
