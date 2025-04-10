@@ -12,6 +12,7 @@ import { ActionResult } from '@/types'
 import { AddTask } from './AddTask'
 
 interface ContainerCardProps {
+  type: string
   tasks: Task[]
   container: Container
   onUpdateContainer: (
@@ -35,6 +36,7 @@ interface ContainerCardProps {
 }
 
 export function ContainerCard({
+  type,
   tasks,
   container,
   onUpdateContainer,

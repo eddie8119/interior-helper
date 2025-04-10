@@ -8,6 +8,7 @@ import {
   CreateProjectInputSchema,
 } from '@/lib/schemas/createProjectSchema'
 import { ActionResult } from '@/types'
+import { ProjectWithContainers } from '@/types/project'
 import { getAuthUserId } from './authActions'
 
 const { constructionContainer } = defaultData
@@ -124,8 +125,8 @@ export async function createProject(
 // 更新專案
 export async function updateProject(
   projectId: string,
-  updates: Partial<Project>
-): Promise<ActionResult<Project>> {
+  updates: Partial<ProjectWithContainers>
+): Promise<ActionResult<ProjectWithContainers>> {
   try {
     const userId = await getAuthUserId()
 

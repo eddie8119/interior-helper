@@ -6,14 +6,14 @@ import { AddContainer } from '@/components/projects/shared/AddContainer'
 import { ContainerCard } from '@/components/projects/shared/ContainerCard'
 import { useContainers } from '@/hooks/useContainers'
 import { dragEnd } from '@/lib/dragEnd'
-
+import { ProjectWithContainers } from '@/types/project'
 const DROPPABLE_TYPE = {
   CONTAINER: 'container',
   TASK: 'task',
 }
 
 interface DraggableContainerClientProps {
-  project: Project
+  project: ProjectWithContainers
   projectTasks: Task[]
   onUpdateTask?: (taskId: string, data: Partial<Task>) => void
   onUpdateProject?: (projectId: string, data: Partial<Project>) => void

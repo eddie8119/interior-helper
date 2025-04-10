@@ -1,4 +1,4 @@
-import { ProjectType } from '@prisma/client'
+import { Container, Project, ProjectType } from '@prisma/client'
 import { FC, SVGProps } from 'react'
 import { ProjectMenu } from './navigation'
 
@@ -10,10 +10,8 @@ export interface Menu {
   subMenu?: ProjectMenu[]
 }
 
-export interface Container {
-  id: string
-  type: string
-  order: number
+export type ProjectWithContainers = Project & {
+  containers: Container[]
 }
 
 export interface ProjectBasic {

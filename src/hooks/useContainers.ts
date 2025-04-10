@@ -1,18 +1,21 @@
-import { Container, ProjectBasic } from '@/types/project'
-
+import { Container, Project } from '@prisma/client'
+import { ProjectWithContainers } from '@/types/project'
 interface CreateContainerData {
   type: string
 }
 
 export function useContainers(
-  project: ProjectBasic | undefined,
-  onUpdateProject: (projectId: string, data: Partial<ProjectBasic>) => void
+  project: ProjectWithContainers,
+  onUpdateProject: (
+    projectId: string,
+    data: Partial<ProjectWithContainers>
+  ) => void
 ) {
   // 建立容器
   const createContainer = (data: CreateContainerData) => {
     if (!project) return
 
-    const newContainer: Container = {
+    const newContainer: Partial<Container> = {
       id: data.type,
       type: data.type,
       order: project.containers.length,
@@ -22,7 +25,6 @@ export function useContainers(
 
     onUpdateProject(project.id, {
       containers: updatedContainers,
-      editedAt: new Date(),
     })
 
     return newContainer
@@ -34,7 +36,6 @@ export function useContainers(
 
     onUpdateProject(project.id, {
       containers,
-      editedAt: new Date(),
     })
   }
 
@@ -48,12 +49,10 @@ export function useContainers(
 
     onUpdateProject(project.id, {
       containers: updatedContainers,
-      editedAt: new Date(),
     })
   }
 
   return {
-    containers: project?.containers || [],
     createContainer,
     updateContainers,
     deleteContainer,
