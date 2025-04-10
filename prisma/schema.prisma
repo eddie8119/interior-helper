@@ -120,7 +120,7 @@ model Task {
   title            String
   description      String?
   status           TaskStatus  @default(todo)
-  priority         Priority    @default(low)
+  priority         Priority    @default(normal)
   startDate        DateTime    @default(now())
   dueDate          DateTime?
   created          DateTime    @default(now())
@@ -145,13 +145,11 @@ enum ProjectType {
 
 enum TaskStatus {
   todo
-  progress
-  reviewing
   done
 }
 
 enum Priority {
-  low
+  normal
   high
 }
 

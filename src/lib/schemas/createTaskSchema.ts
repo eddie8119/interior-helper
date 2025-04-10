@@ -1,3 +1,4 @@
+import { Priority, TaskStatus } from '@prisma/client'
 import { z } from 'zod'
 
 export const taskSchema = z.object({
@@ -49,5 +50,12 @@ export const materialSchema = z.object({
     .nullable(),
 })
 
+export const moreTaskSchema = z.object({
+  dueDate: z.date().nullable().optional(),
+  status: z.enum([TaskStatus.todo, TaskStatus.done]).optional(),
+  priority: z.enum([Priority.normal, Priority.high]).optional(),
+})
+
 export type TaskSchema = z.infer<typeof taskSchema>
 export type MaterialSchema = z.infer<typeof materialSchema>
+export type MoreTaskSchema = z.infer<typeof moreTaskSchema>
