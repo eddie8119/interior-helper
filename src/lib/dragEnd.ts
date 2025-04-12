@@ -1,6 +1,5 @@
 import { DropResult } from '@hello-pangea/dnd'
 import { Container, Task } from '@prisma/client'
-import { MaterialSchema } from './schemas/createTaskSchema'
 
 const DROPPABLE_TYPE = {
   CONTAINER: 'container',
@@ -11,17 +10,14 @@ interface DragEndProps {
   projectContainers: Container[]
   projectTasks: Task[]
   onUpdateContainersOrder: (updates: Container[]) => Promise<void>
-  onUpdateTask: (
-    taskId: string,
-    updates: Partial<Task> & Partial<MaterialSchema>
-  ) => void
+  onUpdateTasksOrder: (updates: Task[]) => Promise<void>
 }
 
 export function dragEnd({
   projectContainers,
   projectTasks,
   onUpdateContainersOrder,
-  onUpdateTask,
+  onUpdateTasksOrder,
 }: DragEndProps) {
   const handleDragEnd = async (result: DropResult) => {
     const { destination, source, draggableId, type } = result
@@ -52,14 +48,26 @@ export function dragEnd({
     }
 
     // 處理任務拖拽
+    if (type === DROPPABLE_TYPE.TASK) {
+      const newTasks = [...projectTasks]
+      const [removed] = newTasks.splice(source.index, 1)
+      newTasks.splice(destination.index, 0, removed)
+
+      // 準備更新數據，只包含 id 和新的 order, constructionType
+      const updates = newTasks.map((task, index) => ({
+        ...task,
+        order: index,
+      }))
+
+      await onUpdateTasksOrder(updates)
+      return
+    }
     const task = projectTasks.find((t) => t.id === draggableId)
     if (!task) return
 
-    if (destination.droppableId !== source.droppableId) {
-      onUpdateTask(task.id, {
-        constructionType: destination.droppableId,
-      })
-    }
+    // if (destination.droppableId !== source.droppableId) {
+    //   onUpdateTaskOrder()
+    // }
   }
 
   return handleDragEnd

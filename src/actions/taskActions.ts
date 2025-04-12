@@ -71,6 +71,42 @@ export async function createTask(
   }
 }
 
+// 更新任務順序
+export async function updateTasksOrder(
+  updates: Partial<Task>[]
+): Promise<ActionResult<Task[]>> {
+  try {
+    const userId = await getAuthUserId()
+
+    // 使用 transaction 確保所有更新都成功或都失敗
+    const updatedTasks = await prisma.$transaction(async (tx) => {
+      // 批量更新所有任務
+      const updatePromises = updates.map((update) =>
+        tx.task.update({
+          where: {
+            id: update.id,
+            container: {
+              project: {
+                userId,
+              },
+            },
+          },
+          data: {
+            constructionType: update.constructionType,
+          },
+        })
+      )
+
+      return await Promise.all(updatePromises)
+    })
+
+    return { status: 'success', data: updatedTasks }
+  } catch (error) {
+    console.error('Error updating tasks order:', error)
+    return { status: 'error', error: 'Failed to update tasks order' }
+  }
+}
+
 // 更新任務
 export async function updateTask(
   taskId: string,

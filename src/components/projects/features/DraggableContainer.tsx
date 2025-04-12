@@ -43,6 +43,9 @@ interface DraggableContainersProps {
       taskId: string,
       updates: Partial<Task> & Partial<MaterialSchema>
     ) => Promise<ActionResult<Task>>
+    updateTasksOrder: (
+      updates: Partial<Task>[]
+    ) => Promise<ActionResult<Task[]>>
     deleteTask: (taskId: string) => Promise<ActionResult<Task>>
   }
 }
@@ -90,6 +93,20 @@ export function DraggableContainer({
       }
     },
     [containerActions, projectContainers, containerActions, project.id]
+  )
+
+  const handleUpdateTasksOrder = useCallback(
+    async (updates: Task[]) => {
+      try {
+        const result = await taskActions.updateTasksOrder(updates)
+        if (result.status === 'error') {
+          toast.error(result.error as string)
+        }
+      } catch (error) {
+        toast.error('Failed to update tasks order')
+      }
+    },
+    [taskActions.updateTasksOrder]
   )
 
   const handleCreateContainer = useCallback(
@@ -163,7 +180,7 @@ export function DraggableContainer({
     projectContainers: containers,
     projectTasks,
     onUpdateContainersOrder: handleUpdateContainersOrder,
-    onUpdateTask: taskActions.updateTask,
+    onUpdateTasksOrder: handleUpdateTasksOrder,
   })
   return (
     <DragDropContext onDragEnd={onDragEnd}>
