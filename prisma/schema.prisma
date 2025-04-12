@@ -117,6 +117,7 @@ model Container {
 model Task {
   id               String      @id @default(uuid())
   constructionType String
+  order            Int
   title            String
   description      String?
   status           TaskStatus  @default(todo)
