@@ -74,6 +74,8 @@ export function ContainerCard({
         )
         if (result.status === 'error') {
           toast.error(result.error as string)
+        } else {
+          toast.success('Task created successfully')
         }
         return result
       } catch (error) {
@@ -188,7 +190,9 @@ export function ContainerCard({
 
         {/* 添加任務按鈕 */}
         <AddTask
-          onCreateTask={(updates: Partial<Task>) => handleCreateTask(updates)}
+          onCreateTask={(updates: TaskSchema & Partial<MaterialSchema>) =>
+            handleCreateTask(updates)
+          }
         />
       </Card>
     </div>

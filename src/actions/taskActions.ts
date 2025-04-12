@@ -20,6 +20,10 @@ export async function createTask(
   constructionType: string
 ): Promise<ActionResult<Task>> {
   try {
+    const existingTasksCount = await prisma.task.count({
+      where: { containerId },
+    })
+
     const {
       title,
       description,
@@ -61,6 +65,7 @@ export async function createTask(
         amount,
         sellingPrice,
         costPrice,
+        order: existingTasksCount,
       },
     })
 

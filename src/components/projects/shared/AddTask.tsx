@@ -5,7 +5,9 @@ import { ActionResult } from '@/types'
 import { TaskForm } from './TaskForm'
 
 interface AddTaskProps {
-  onCreateTask: (updates: Partial<Task>) => Promise<ActionResult<Task>>
+  onCreateTask: (
+    updates: TaskSchema & Partial<MaterialSchema>
+  ) => Promise<ActionResult<Task>>
 }
 
 export function AddTask({ onCreateTask }: AddTaskProps) {
@@ -15,7 +17,9 @@ export function AddTask({ onCreateTask }: AddTaskProps) {
     setIsEditing(false)
   }
 
-  const handleCreateTask = async (data: TaskSchema & MaterialSchema) => {
+  const handleCreateTask = async (
+    data: TaskSchema & Partial<MaterialSchema>
+  ) => {
     try {
       const result = await onCreateTask(data)
       if (result.status === 'success') {
