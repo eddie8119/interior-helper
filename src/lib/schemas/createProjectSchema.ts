@@ -1,7 +1,11 @@
 import { ProjectType } from '@prisma/client'
 import { z } from 'zod'
 
-const projectTypeSchema = z.nativeEnum(ProjectType)
+const constructionSelectionSchema = z.object({
+  id: z.string(),
+  type: z.string(),
+  order: z.number(),
+})
 
 export const createProjectInputSchema = z.object({
   title: z.string().min(1, '請輸入專案標題').max(15, '標題不能超過15個字'),
@@ -11,6 +15,9 @@ export const createProjectInputSchema = z.object({
     ProjectType.commercial,
     ProjectType.office,
   ]),
+  constructionTypes: z
+    .array(constructionSelectionSchema)
+    .min(1, '至少選擇一個施工項目'),
 })
 
 export const createProjectSchema = createProjectInputSchema.extend({

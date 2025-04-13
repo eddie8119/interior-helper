@@ -12,7 +12,7 @@ export const PROJECT_TYPES: ProjectTypeSelection[] = [
 ]
 
 // default-data也有這筆 之後改過來
-export const constructionContainer: ConstructionSelection[] = [
+export const CONSTRUCTION_CONTAINER: ConstructionSelection[] = [
   {
     id: '拆除工程',
     type: '拆除工程',
