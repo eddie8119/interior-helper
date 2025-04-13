@@ -6,7 +6,6 @@ export const defaultProjects: Project[] = [
     title: '示範-台北市大安案',
     type: 'residential',
     progress: 30,
-    daysLeft: 45,
     updatedAt: new Date(),
     createdAt: new Date('2024-01-01'),
     containers: [

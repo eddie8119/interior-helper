@@ -3,7 +3,7 @@ import HomeIcon from '@public/icons/menu/home.svg'
 import ProjectIcon from '@public/icons/menu/project.svg'
 import { Menu } from '@/types/project'
 
-export const menuLists: Menu[] = [
+export const MENU_LISTS: Menu[] = [
   {
     id: '0',
     title: '首頁',

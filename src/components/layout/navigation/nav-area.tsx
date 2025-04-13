@@ -4,7 +4,7 @@ import { ChevronDown, ChevronRight } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { menuLists } from '@/constants/menu'
+import { MENU_LISTS } from '@/constants/menu'
 import { useProjects } from '@/hooks/useProjects'
 import { useProtectedNavigation } from '@/hooks/useProtectedNavigation'
 import { Menu } from '@/types/project'
@@ -16,7 +16,7 @@ interface NavAreaProps {
 export function NavArea({ isCollapsed }: NavAreaProps) {
   const pathname = usePathname()
   const { projects } = useProjects()
-  const [menus, setMenus] = useState<Menu[]>(menuLists)
+  const [menus, setMenus] = useState<Menu[]>(MENU_LISTS)
   const [activeMenu, setActiveMenu] = useState<string | null>(null)
   const { handleNavigation } = useProtectedNavigation()
 
@@ -29,7 +29,7 @@ export function NavArea({ isCollapsed }: NavAreaProps) {
     }))
 
     // 更新 menuLists 中的 subMenu
-    const updatedMenus = menuLists.map((menu) => {
+    const updatedMenus = MENU_LISTS.map((menu) => {
       if (menu.title.includes('工程專案列表')) {
         return {
           ...menu,
