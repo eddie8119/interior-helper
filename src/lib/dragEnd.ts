@@ -49,25 +49,52 @@ export function dragEnd({
 
     // 處理任務拖拽
     if (type === DROPPABLE_TYPE.TASK) {
-      const newTasks = [...projectTasks]
-      const [removed] = newTasks.splice(source.index, 1)
-      newTasks.splice(destination.index, 0, removed)
+      // console.log('Moving task destination', destination)
+      // console.log('Moving task source', source)
+      // console.log('Moving task draggableId', draggableId)
+      // console.log('Moving task type', type)
 
-      // 準備更新數據，只包含 id 和新的 order, constructionType
-      const updates = newTasks.map((task, index) => ({
-        ...task,
-        order: index,
-      }))
+      try {
+        // 1. 找到目標容器
+        const targetContainer = projectContainers.find(
+          (container) => container.type === destination.droppableId
+        )
+        // console.log('Target container:', targetContainer)
+        if (!targetContainer) {
+          console.error('Target container not found:', destination.droppableId)
+          return
+        }
 
-      await onUpdateTasksOrder(updates)
-      return
+        // 3. 準備更新數據
+        const updatedTasks = projectTasks.map((task) => {
+          // 如果是被移動的任務
+          if (task.id === draggableId) {
+            return {
+              ...task,
+              // order: destination.index,
+              constructionType: destination.droppableId,
+              containerId: targetContainer.id,
+            }
+          }
+
+          // 如果是目標容器中的其他任務，需要調整順序
+          // if (task.constructionType === destination.droppableId) {
+          //   if (task.order >= destination.index) {
+          //     return { ...task, order: task.order + 1 }
+          //   }
+          // }
+
+          return task
+        })
+
+        console.log('Updated tasks:', updatedTasks)
+        // 4. 執行更新
+        await onUpdateTasksOrder(updatedTasks)
+        return
+      } catch (error) {
+        console.error('Error in drag end handler:', error)
+      }
     }
-    const task = projectTasks.find((t) => t.id === draggableId)
-    if (!task) return
-
-    // if (destination.droppableId !== source.droppableId) {
-    //   onUpdateTaskOrder()
-    // }
   }
 
   return handleDragEnd

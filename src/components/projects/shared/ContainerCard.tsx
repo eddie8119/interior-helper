@@ -25,7 +25,8 @@ interface ContainerCardProps {
     createTask: (
       containerId: string,
       data: TaskSchema & Partial<MaterialSchema>,
-      constructionType: string
+      constructionType: string,
+      container: Container
     ) => Promise<ActionResult<Task>>
     updateTask: (
       taskId: string,
@@ -70,7 +71,8 @@ export function ContainerCard({
         const result = await taskActions.createTask(
           container.id,
           updates,
-          container.type
+          container.type,
+          container
         )
         if (result.status === 'error') {
           toast.error(result.error as string)

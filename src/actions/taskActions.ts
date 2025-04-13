@@ -1,6 +1,6 @@
 'use server'
 
-import { Task } from '@prisma/client'
+import { Container, Task } from '@prisma/client'
 import { prisma } from '@/lib/prisma'
 import {
   materialSchema,
@@ -17,13 +17,10 @@ import { getAuthUserId } from './authActions'
 export async function createTask(
   containerId: string,
   data: TaskSchema & Partial<MaterialSchema>,
-  constructionType: string
+  constructionType: string,
+  container: Container
 ): Promise<ActionResult<Task>> {
   try {
-    const existingTasksCount = await prisma.task.count({
-      where: { containerId },
-    })
-
     const {
       title,
       description,
@@ -54,6 +51,14 @@ export async function createTask(
       }
     }
 
+    const existingTasksCount = await prisma.task.count({
+      where: {
+        container: {
+          projectId: container.projectId,
+        },
+      },
+    })
+
     const task = await prisma.task.create({
       data: {
         title,
@@ -78,16 +83,15 @@ export async function createTask(
 
 // 更新任務順序
 export async function updateTasksOrder(
-  updates: Partial<Task>[]
+  updates: Task[]
 ): Promise<ActionResult<Task[]>> {
   try {
     const userId = await getAuthUserId()
-
+    // 有問題
     // 使用 transaction 確保所有更新都成功或都失敗
-    const updatedTasks = await prisma.$transaction(async (tx) => {
-      // 批量更新所有任務
-      const updatePromises = updates.map((update) =>
-        tx.task.update({
+    const updatedTasks = await prisma.$transaction(
+      updates.map((update) =>
+        prisma.task.update({
           where: {
             id: update.id,
             container: {
@@ -98,13 +102,11 @@ export async function updateTasksOrder(
           },
           data: {
             constructionType: update.constructionType,
+            containerId: update.containerId,
           },
         })
       )
-
-      return await Promise.all(updatePromises)
-    })
-
+    )
     return { status: 'success', data: updatedTasks }
   } catch (error) {
     console.error('Error updating tasks order:', error)

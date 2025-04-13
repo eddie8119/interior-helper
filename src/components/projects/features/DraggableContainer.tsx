@@ -43,9 +43,7 @@ interface DraggableContainersProps {
       taskId: string,
       updates: Partial<Task> & Partial<MaterialSchema>
     ) => Promise<ActionResult<Task>>
-    updateTasksOrder: (
-      updates: Partial<Task>[]
-    ) => Promise<ActionResult<Task[]>>
+    updateTasksOrder: (updates: Task[]) => Promise<ActionResult<Task[]>>
     deleteTask: (taskId: string) => Promise<ActionResult<Task>>
   }
 }
@@ -92,7 +90,7 @@ export function DraggableContainer({
         toast.error('Failed to update containers order')
       }
     },
-    [containerActions, projectContainers, containerActions, project.id]
+    [containerActions, projectContainers, project.id]
   )
 
   const handleUpdateTasksOrder = useCallback(
@@ -101,6 +99,8 @@ export function DraggableContainer({
         const result = await taskActions.updateTasksOrder(updates)
         if (result.status === 'error') {
           toast.error(result.error as string)
+        } else {
+          toast.success('Tasks order updated successfully')
         }
       } catch (error) {
         toast.error('Failed to update tasks order')
@@ -176,6 +176,7 @@ export function DraggableContainer({
     [containerActions, project.id, router]
   )
 
+  // 處理拖拽排序更新
   const onDragEnd = dragEnd({
     projectContainers: containers,
     projectTasks,
@@ -213,6 +214,7 @@ export function DraggableContainer({
                       container={container}
                       tasks={containerTasks}
                       onUpdateContainer={(updates: Partial<Container>) => {
+                        // 這裡不是處理排序更新，而是內容訊息的更新
                         handleUpdateContainer(container.id, updates)
                       }}
                       onDeleteContainer={() =>
