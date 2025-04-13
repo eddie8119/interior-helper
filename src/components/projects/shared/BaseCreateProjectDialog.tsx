@@ -129,7 +129,13 @@ export function BaseCreateProjectDialog({
         新增專案
       </Button>
 
-      <Dialog open={open} onOpenChange={() => {setOpen(false); reset()}}>
+      <Dialog
+        open={open}
+        onOpenChange={() => {
+          setOpen(false)
+          reset()
+        }}
+      >
         <DialogContent>
           <DialogHeader>
             <DialogTitle>新增專案</DialogTitle>

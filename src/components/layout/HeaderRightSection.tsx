@@ -1,5 +1,6 @@
 import { auth } from '@/auth'
 import { LoginRegisterArea } from '@/components/layout/LoginRegisterArea'
+import { LanguageToggle } from './LanguageToggle'
 import { ThemeToggle } from './ThemeToggle'
 import UserMenu from './UserMenu'
 
@@ -10,6 +11,7 @@ export async function HeaderRightSection() {
   return (
     <div className="flex items-center gap-2">
       <ThemeToggle />
+      <LanguageToggle />
 
       {/* Notifications */}
       <button className="relative p-2 text-gray-600 hover:text-gray-900">
