@@ -13,6 +13,7 @@ import {
   Chip,
   Checkbox,
   ListItemText,
+  FormHelperText,
 } from '@mui/material'
 import { Project } from '@prisma/client'
 import { Plus } from 'lucide-react'
@@ -85,24 +86,29 @@ export function BaseCreateProjectDialog({
     }
   }
 
+  // constructionContainer 不是一個響應式的值，它不會自動更新 UI
+  // watch 會在表單值變化時觸發重新渲染，確保 UI 和表單狀態保持同步
   const selectedTypes = watch('constructionContainer')
-  
-  const handleConstructionTypeChange = (event: any) => {
-    const selectedType = event.target.value as string[]
-    const selectedConstructions = selectedType
-      .map((id) => {
-        const construction = CONSTRUCTION_CONTAINER.find((c) => c.id === id)
-        return construction
-          ? {
-              id: construction.id,
-              type: construction.type,
-              order: construction.order,
-            }
-          : null
-      })
-      .filter((c): c is ConstructionSelection => c !== null)
 
-    setValue('constructionContainer', selectedConstructions)
+  const handleConstructionTypeChange = (event: any) => {
+    const selectedIds = event.target.value as string[]
+    const selectedConstructions = selectedIds.map((id) => {
+      const construction = CONSTRUCTION_CONTAINER.find((c) => c.id === id)
+      const { id: constructionId, type, order } = construction!
+      return {
+        id: constructionId,
+        type,
+        order,
+      }
+    })
+
+    // setValue 的更新是非同步的
+    setValue('constructionContainer', selectedConstructions, {
+      // onChange時 selectedTypes 值並沒有立即更新
+      shouldValidate: true, // 立即觸發驗證
+      shouldDirty: true, // 標記字段為已修改
+      shouldTouch: true, // 標記字段為已觸摸
+    })
   }
 
   return (
@@ -194,11 +200,19 @@ export function BaseCreateProjectDialog({
                   </MenuItem>
                 ))}
               </Select>
+              {errors.constructionContainer && (
+                <FormHelperText error>
+                  {errors.constructionContainer.message as string}
+                </FormHelperText>
+              )}
             </FormControl>
 
             <DialogFooter className="mt-6">
               <Button
-                onClick={() => setOpen(false)}
+                onClick={() => {
+                  reset()
+                  setOpen(false)
+                }}
                 className="hover:bg-cancel/90 mr-1 bg-cancel text-white"
               >
                 取消
