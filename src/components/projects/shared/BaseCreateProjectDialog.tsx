@@ -9,6 +9,10 @@ import {
   MenuItem,
   Select,
   TextField,
+  Box,
+  Chip,
+  Checkbox,
+  ListItemText,
 } from '@mui/material'
 import { Project } from '@prisma/client'
 import { Plus } from 'lucide-react'
@@ -22,12 +26,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/core/Dialog'
-import { PROJECT_TYPES } from '@/constants/selection'
+import { PROJECT_TYPES, CONSTRUCTION_CONTAINER } from '@/constants/selection'
 import {
   createProjectInputSchema,
   CreateProjectInputSchema,
 } from '@/lib/schemas/createProjectSchema'
 import { ActionResult } from '@/types'
+import { ConstructionSelection } from '@/types/selection'
 
 interface BaseCreateProjectDialogProps {
   onSubmit: (data: CreateProjectInputSchema) => Promise<ActionResult<Project>>
@@ -41,11 +46,16 @@ export function BaseCreateProjectDialog({
     register,
     handleSubmit,
     setError,
+    watch,
+    setValue,
     formState: { errors, isValid, isSubmitting },
     reset,
   } = useForm<CreateProjectInputSchema>({
     resolver: zodResolver(createProjectInputSchema),
     mode: 'onTouched',
+    defaultValues: {
+      constructionContainer: [],
+    },
   })
 
   // 專注於 UI 和表單邏輯
@@ -73,6 +83,26 @@ export function BaseCreateProjectDialog({
         })
       }
     }
+  }
+
+  const selectedTypes = watch('constructionContainer')
+  
+  const handleConstructionTypeChange = (event: any) => {
+    const selectedType = event.target.value as string[]
+    const selectedConstructions = selectedType
+      .map((id) => {
+        const construction = CONSTRUCTION_CONTAINER.find((c) => c.id === id)
+        return construction
+          ? {
+              id: construction.id,
+              type: construction.type,
+              order: construction.order,
+            }
+          : null
+      })
+      .filter((c): c is ConstructionSelection => c !== null)
+
+    setValue('constructionContainer', selectedConstructions)
   }
 
   return (
@@ -106,6 +136,7 @@ export function BaseCreateProjectDialog({
             onSubmit={handleSubmit(handleFormSubmit)}
             className="mt-4 space-y-4"
           >
+            {/* 專案名稱 */}
             <TextField
               fullWidth
               label="專案名稱"
@@ -114,6 +145,7 @@ export function BaseCreateProjectDialog({
               error={!!errors.title}
               helperText={errors.title?.message as string}
             />
+            {/* 專案類型 */}
             <FormControl fullWidth required>
               <InputLabel>專案類型</InputLabel>
               <Select {...register('type')} label="專案類型">
@@ -124,6 +156,46 @@ export function BaseCreateProjectDialog({
                 ))}
               </Select>
             </FormControl>
+            {/* 工程種類 */}
+            <FormControl
+              fullWidth
+              required
+              error={!!errors.constructionContainer}
+            >
+              <InputLabel>工程種類</InputLabel>
+              <Select
+                multiple
+                value={selectedTypes?.map((c) => c.id) || []}
+                onChange={handleConstructionTypeChange}
+                label="工程種類"
+                renderValue={(selected) => (
+                  <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                    {(selected as string[]).map((value) => (
+                      <Chip
+                        key={value}
+                        label={
+                          CONSTRUCTION_CONTAINER.find((c) => c.id === value)
+                            ?.type
+                        }
+                        size="small"
+                      />
+                    ))}
+                  </Box>
+                )}
+              >
+                {CONSTRUCTION_CONTAINER.map((container) => (
+                  <MenuItem key={container.id} value={container.id}>
+                    <Checkbox
+                      checked={(selectedTypes?.map((c) => c.id) || []).includes(
+                        container.id
+                      )}
+                    />
+                    <ListItemText primary={container.type} />
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+
             <DialogFooter className="mt-6">
               <Button
                 onClick={() => setOpen(false)}

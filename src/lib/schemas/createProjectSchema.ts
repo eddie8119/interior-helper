@@ -15,7 +15,7 @@ export const createProjectInputSchema = z.object({
     ProjectType.commercial,
     ProjectType.office,
   ]),
-  constructionTypes: z
+  constructionContainer: z
     .array(constructionSelectionSchema)
     .min(1, '至少選擇一個施工項目'),
 })

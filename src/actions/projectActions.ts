@@ -1,7 +1,6 @@
 'use server'
 
 import { Project } from '@prisma/client'
-import defaultData from '@/constants/default-data.json'
 import { prisma } from '@/lib/prisma'
 import {
   createProjectInputSchema,
@@ -10,8 +9,6 @@ import {
 import { ActionResult } from '@/types'
 import { ProjectWithContainers } from '@/types/project'
 import { getAuthUserId } from './authActions'
-
-const { constructionContainer } = defaultData
 
 // 獲取當前用戶的所有專案
 export async function getProjects(): Promise<ActionResult<Project[]>> {
@@ -72,7 +69,7 @@ export async function createProject(
       return { status: 'error', error: validated.error.errors }
     }
 
-    const { title, type } = validated.data
+    const { title, type, constructionContainer } = validated.data
 
     const userId = await getAuthUserId()
 
