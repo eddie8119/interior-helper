@@ -5,6 +5,12 @@ export interface ProjectTypeSelection {
   label: string
 }
 
+export interface ConstructionSelection {
+  id: string
+  type: string
+  order: number
+}
+
 export interface materialUnitSelection {
   section: string
   item: { value: string; label: string }[]
