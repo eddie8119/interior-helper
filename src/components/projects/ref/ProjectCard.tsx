@@ -10,8 +10,8 @@ import {
   CardHeader,
 } from '@/components/core/Card'
 import { formatDateTime } from '@/lib/format'
-import { useProjectFeatures } from '../hooks/useProjectFeatures'
-import { useProjectPermissions } from '../hooks/useProjectPermissions'
+import { useProjectFeatures } from '../../../hooks/useProjectFeatures'
+import { useProjectPermissions } from '../../../hooks/useProjectPermissions'
 
 interface ProjectCardProps {
   project: Project

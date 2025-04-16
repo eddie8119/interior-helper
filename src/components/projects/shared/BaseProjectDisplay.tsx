@@ -1,9 +1,9 @@
 'use client'
 
 import { Project } from '@prisma/client'
+import { useProjectFeatures } from '../../../hooks/useProjectFeatures'
+import { useProjectPermissions } from '../../../hooks/useProjectPermissions'
 import { UserTier } from '../constants/projectLimits'
-import { useProjectFeatures } from '../hooks/useProjectFeatures'
-import { useProjectPermissions } from '../hooks/useProjectPermissions'
 import { ProjectCard } from './ProjectCard'
 
 interface BaseProjectDisplayProps {

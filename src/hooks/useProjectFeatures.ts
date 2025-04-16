@@ -1,4 +1,7 @@
-import { PROJECT_LIMITS, UserTier } from '../constants/projectLimits'
+import {
+  PROJECT_LIMITS,
+  UserTier,
+} from '../components/projects/constants/projectLimits'
 
 export function useProjectFeatures(userTier: UserTier) {
   return {

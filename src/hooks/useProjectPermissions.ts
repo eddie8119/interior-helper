@@ -2,7 +2,7 @@ import {
   PROJECT_LIMITS,
   ProjectFeature,
   UserTier,
-} from '../constants/projectLimits'
+} from '../components/projects/constants/projectLimits'
 
 export function useProjectPermissions(userTier: UserTier) {
   return {
